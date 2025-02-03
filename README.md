@@ -1,4 +1,12 @@
-# IT342-CineCity
+# IT342 - CINECITY
+feature-myprofile-llavan
+# Member1
+### Name: Al Prince Llavan
+### Course and Year: BSIT-3  
+
+
+# Short description:
+## I AM WHO I AM
 
 ## Team Members: Amar A. Flores Jr., Felix Joseph U. Castañeda, Al Prince G. Llavan
 
