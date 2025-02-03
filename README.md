@@ -1,6 +1,9 @@
-# IT342-CineCity
+#IT342 - CINECITY
 
-## Members:
-### -Amar A. Flores Jr.
-### -Felix Joseph U. Castañeda
-### -Al Prince G. Llavan
+#Member1
+###Name: Al Prince Llavan
+###Course and Year: BSIT-3  
+
+
+#Short description:
+##I am very
