@@ -1,9 +1,9 @@
-#IT342 - CINECITY
+# IT342 - CINECITY
 
-#Member1
-###Name: Al Prince Llavan
-###Course and Year: BSIT-3  
+# Member1
+### Name: Al Prince Llavan
+### Course and Year: BSIT-3  
 
 
-#Short description:
-##I am very
+# Short description:
+## I am very
