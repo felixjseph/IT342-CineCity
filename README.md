@@ -1,6 +1,6 @@
 # IT342-CineCity
 
-## Team Members:Amar A. Flores Jr., Felix Joseph U. Castañeda, Al Prince G. Llavan
+## Team Members: Amar A. Flores Jr., Felix Joseph U. Castañeda, Al Prince G. Llavan
 
 #### Name: Amar A. Flores Jr.
 #### Course and Year: BSIT - 3
