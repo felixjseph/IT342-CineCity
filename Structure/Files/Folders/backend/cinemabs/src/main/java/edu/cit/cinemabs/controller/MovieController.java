@@ -34,96 +34,15 @@ public class MovieController {
     }
 
 
-    @PostMapping(value = "/postMovieDetails", consumes = {"multipart/form-data"})
-    public ResponseEntity<Movie> postMovieDetails(
-            @RequestParam(value = "photo", required = false) MultipartFile photo,
-            @RequestParam("title") String title,
-            @RequestParam("duration") int duration,
-            @RequestParam("synopsis") String synopsis,
-            @RequestParam("genreId") int genreId) {
-        try {
-            byte[] photoBytes = null;
-
-            // Validate and process the photo
-            if (photo != null) {
-                String contentType = photo.getContentType();
-                if (contentType == null || (!contentType.startsWith("image/") &&
-                        !photo.getOriginalFilename().matches(".*\\.(jpg|jpeg|png|svg)$"))) {
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                            .body(null);
-                }
-                photoBytes = photo.getBytes();
-            }
-
-            // Create a new Movie object
-            Movie movie = new Movie();
-            movie.setPhoto(photoBytes); // Set photo (or null if not provided)
-            movie.setTitle(title);
-            movie.setDuration(duration);
-            movie.setSynopsis(synopsis);
-
-            // Fetch the Genre object
-            Genre genre = genreService.getGenreById(genreId); // Implement this
-            if (genre == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-            movie.setGenre(genre);
-
-            // Save the Movie object
-            Movie savedMovie = mserv.postMovieDetails(movie);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+    @PostMapping("/addmovie")
+    public Movie addMovie(@RequestBody Movie movie){
+        return mserv.postMovieDetails(movie);
     }
 
 
-    @PutMapping(value = "/updateMovieDetails/{id}", consumes = {"multipart/form-data"})
-    public ResponseEntity<Movie> updateMovieDetails(
-            @RequestParam(value = "photo", required = false) MultipartFile photo,
-            @RequestParam("title") String title,
-            @RequestParam("duration") int duration,
-            @RequestParam("synopsis") String synopsis,
-            @RequestParam("genreId") int genreId,
-            @PathVariable int id) {
-        try {
-            // Fetch the existing movie record
-            Movie existingMovie = mserv.getMovieDetail(id); // Implement findById in your MovieService
-            if (existingMovie == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-
-            // Process and validate the photo if provided
-            if (photo != null) {
-                String contentType = photo.getContentType();
-                if (contentType == null || (!contentType.startsWith("image/") &&
-                        !photo.getOriginalFilename().matches(".*\\.(jpg|jpeg|png|gif)$"))) {
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                            .body(null);
-                }
-                existingMovie.setPhoto(photo.getBytes());
-            }
-
-            // Update other movie details
-            existingMovie.setTitle(title);
-            existingMovie.setDuration(duration);
-            existingMovie.setSynopsis(synopsis);
-
-            // Fetch and set the Genre object
-            Genre genre = genreService.getGenreById(genreId); // Implement this in your GenreService
-            if (genre == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-            existingMovie.setGenre(genre);
-
-            // Save updated movie
-            Movie updatedMovie = mserv.updateMovieDetails(existingMovie, id);
-
-            return ResponseEntity.status(HttpStatus.OK).body(updatedMovie);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+    @PutMapping("/updatemovie/{id}")
+    public Movie updateMovie(@PathVariable int id, @RequestBody Movie movie){
+        return mserv.updateMovieDetails(movie, id);
     }
 
 
@@ -148,5 +67,11 @@ public class MovieController {
     @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getCoverPhoto(@PathVariable int id) {
         return mserv.getCoverPhoto(id);
+    }
+
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Movie addImage(@PathVariable int id, @RequestParam("image") MultipartFile image) throws IOException {
+        byte[] imageBytes = image.getBytes();
+        return mserv.addImage(id, imageBytes);
     }
 }

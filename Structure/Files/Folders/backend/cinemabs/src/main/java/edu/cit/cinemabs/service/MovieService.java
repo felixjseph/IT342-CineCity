@@ -57,4 +57,10 @@ public class MovieService {
         Movie movie = mrepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find movie"));
         return movie.getPhoto();
     }
+
+    public Movie addImage(int id, byte[] imageBytes) {
+        Movie movie = mrepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find movie"));
+        movie.setPhoto(imageBytes);
+        return mrepo.save(movie);
+    }
 }
