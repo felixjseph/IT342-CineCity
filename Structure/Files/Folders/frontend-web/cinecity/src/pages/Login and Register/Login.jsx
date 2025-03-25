@@ -12,7 +12,7 @@ export default function Login(){
                 <form className="flex flex-col items-center justify-center w-full">
                     <input type="text" placeholder="Username" className="border-1 bg-white my-2 py-2 px-4 w-full rounded-3xl font-medium"/>
                     <input type="password" placeholder="Password" className="border-1 bg-white my-2 py-2 px-4 w-full rounded-3xl font-medium"/>
-                    <button className="bg-[#2FBD59] w-full py-2 rounded-3xl my-2 text-white font-medium">Login</button>
+                    <button className="bg-[#2FBD59] w-full py-2 rounded-3xl my-2 text-white font-medium cursor-pointer">Login</button>
                 </form>
                 <div className="flex border-1 border-white text-white w-full my-2 py-2 rounded-3xl justify-between px-8">
                     <p className="cursor-pointer hover:text-[#2FBD59]" onClick={()=>navigate('/login')}>SIGN IN</p>
