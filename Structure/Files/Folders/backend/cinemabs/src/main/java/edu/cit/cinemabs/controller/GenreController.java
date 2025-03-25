@@ -15,27 +15,27 @@ public class GenreController {
     @Autowired
     GenreService gserv;
 
-    @PostMapping("/addNewGenre")
+    @PostMapping("/")
     public Genre addNewGenre(@RequestBody Genre genre){
         return gserv.addNewGenre(genre);
     }
 
-    @GetMapping("/getAllGenre")
+    @GetMapping("/all")
     public List<Genre> getAllGenres(){
         return gserv.getAllGenre();
     }
 
-    @GetMapping("/searchGenres")
+    @GetMapping("/search")
     public List<Genre> searchGenres(@RequestParam String name) {
         return gserv.searchGenresByName(name);
     }
 
-    @PutMapping("/updateGenre/{id}")
+    @PutMapping("/{id}")
     public Genre updateGenre(@RequestBody Genre genre, @PathVariable int id){
         return gserv.updateGenre(genre, id);
     }
 
-    @DeleteMapping("/deleteGenre/{id}")
+    @DeleteMapping("/{id}")
     public void deleteGenre(@PathVariable int id){
         gserv.deleteGenre(id);
     }

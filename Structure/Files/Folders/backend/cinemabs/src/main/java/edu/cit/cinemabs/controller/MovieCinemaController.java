@@ -22,27 +22,27 @@ public class MovieCinemaController {
     @Autowired
     MovieCinemaService mcserv;
 
-    @GetMapping("/getAllMovieCinema")
+    @GetMapping("/all")
     public List<MovieCinema> getAllMovieCinema(){
         return mcserv.getAllMovieCinema();
     }
 
-    @PostMapping("/postMovieCinema")
+    @PostMapping("/")
     public MovieCinema postMovieCinema(@RequestBody MovieCinema movieCinema){
         return mcserv.postMovieCinema(movieCinema);
     }
 
-    @PutMapping("/updateMovieCinema/{movie_cinema_id}")
+    @PutMapping("/{movie_cinema_id}")
     public MovieCinema updatMovieCinema(@RequestBody MovieCinema movieCinema, @PathVariable int movie_cinema_id){
         return mcserv.updateMovieCinema(movieCinema, movie_cinema_id);
     }
 
-    @DeleteMapping("/deleteMovieCinema/{movie_cinema_id}")
+    @DeleteMapping("/{movie_cinema_id}")
     public void deleteMovieCinema(@PathVariable int movie_cinema_id){
         mcserv.deleteMovieCineme(movie_cinema_id);
     }
 
-    @GetMapping("/getmoviecinema/{movie_cinema_id}")
+    @GetMapping("/{movie_cinema_id}")
     public MovieCinema getShowtime(@PathVariable int movie_cinema_id){
         return mcserv.getShowtimeById(movie_cinema_id);
     }

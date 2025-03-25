@@ -28,13 +28,13 @@ public class MovieController {
     @Autowired
     GenreService genreService;
 
-    @GetMapping("/getMovieDetails")
+    @GetMapping("/all")
     public List<Movie> getAllMovies() {
         return mserv.getAllMovie();
     }
 
 
-    @PostMapping(value = "/postMovieDetails", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/", consumes = {"multipart/form-data"})
     public ResponseEntity<Movie> postMovieDetails(
             @RequestParam(value = "photo", required = false) MultipartFile photo,
             @RequestParam("title") String title,
@@ -79,7 +79,7 @@ public class MovieController {
     }
 
 
-    @PutMapping(value = "/updateMovieDetails/{id}", consumes = {"multipart/form-data"})
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
     public ResponseEntity<Movie> updateMovieDetails(
             @RequestParam(value = "photo", required = false) MultipartFile photo,
             @RequestParam("title") String title,
@@ -127,12 +127,12 @@ public class MovieController {
     }
 
 
-    @DeleteMapping("/deleteMovie/{id}")
+    @DeleteMapping("/{id}")
     public void deleteMovie(@PathVariable int id) {
         mserv.deleteMovie(id);
     }
 
-    @GetMapping("/getmovie/{id}")
+    @GetMapping("/{id}")
     public Movie getMovieDetail(@PathVariable int id){
         return mserv.getMovieDetail(id);
     }
