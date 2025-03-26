@@ -4,6 +4,7 @@ import Signup from "./pages/Login and Register/Signup"
 import Navbar from "./components/Navbar/Navbar"
 import Home from "./pages/Home/Home"
 import Movies from "./pages/Admin/Movies/Movies"
+import Movie from "./pages/Movie/Movie"
 import ProtectedRoute from "./components/Protected/ProtectedRoute"
 import AdminLogin from "./pages/Admin/Login/AdminLogin"
 
@@ -16,6 +17,7 @@ export default function Routess() {
             <Route element={<ProtectedRoute />}>
                 <Route path="/" element={<Navbar />}>
                     <Route path="home" element={<Home />}></Route>
+                    <Route path="movie" element = {<Movie />}></Route>
                 </Route>
             </Route>
             <Route path="/admin/movies" element={<Movies />}></Route>
