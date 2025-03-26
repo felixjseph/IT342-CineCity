@@ -18,7 +18,6 @@ export default function Signup() {
     });
 
     const validateEmail = (email) => {
-        // Regular expression for basic email validation
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
