@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 export default function AdminLogin() {
@@ -15,6 +16,8 @@ export default function AdminLogin() {
         })
     }
 
+    const navigate = useNavigate();
+
     const handleSubmit = async(e) =>{
         e.preventDefault();
         try {
@@ -23,16 +26,27 @@ export default function AdminLogin() {
                 headers:{
                     "Content-Type":"application/json"
                 },
-                body: JSON.stringify(admin)
+                body: JSON.stringify(admin),
+                credentials:'include'
             })
             const data = await response.json();
             if(response.ok){
-                
+                const status = await fetch('http://localhost:8080/auth/check',{
+                    credentials:'include'
+                })
+                const stat = await status.json();
+                if(status.ok){
+                    console.log(stat)
+                }else{
+                    console.log(stat)
+                }
                 console.log(data)
                 setAdmin({
                     email:"",
                     password:""
                 })
+
+                navigate('/admin/data/dashboard')
             }else{
                 console.log(data)
             }

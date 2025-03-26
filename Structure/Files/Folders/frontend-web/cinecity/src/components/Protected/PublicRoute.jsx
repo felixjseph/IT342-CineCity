@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const ProtectedRoute = () => {
+const PublicRoute = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
 
     useEffect(() => {
@@ -17,7 +17,6 @@ const ProtectedRoute = () => {
                 console.error('Error checking authentication:', error);
                 setIsAuthenticated(false);
             }
-
         };
 
         checkAuth();
@@ -27,7 +26,7 @@ const ProtectedRoute = () => {
         return <div>Loading...</div>;
     }
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+    return isAuthenticated ? <Navigate to="/home" /> : <Outlet />;
 };
 
-export default ProtectedRoute;
+export default PublicRoute;
