@@ -7,10 +7,10 @@ import { MdDelete } from "react-icons/md";
 
 export default function Movies() {
   const [addMovie, setAddMovie] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-  const [successAddToast, setSuccessAddToast] = useState(false); // Toast state
-  const [successUpdateToast, setSuccessUpdateToast] = useState(false); // Toast state
-  const [successDeleteToast, setSuccessDeleteToast] = useState(false); // Toast state
+  const [isLoading, setIsLoading] = useState(false);
+  const [successAddToast, setSuccessAddToast] = useState(false); 
+  const [successUpdateToast, setSuccessUpdateToast] = useState(false); 
+  const [successDeleteToast, setSuccessDeleteToast] = useState(false);
   const [genre, setGenre] = useState([]);
   const [updateModal, setUpdateModal] = useState(false)
   const [updateMovie, setUpdateMovie] = useState(null)
@@ -74,8 +74,8 @@ export default function Movies() {
       if (response.ok) {
         console.log(data);
         console.log("Movie added successfully");
-        setAddMovie(false); // Close the modal
-        setSuccessAddToast(true); // Show success toast
+        setAddMovie(false); 
+        setSuccessAddToast(true);
         setTimeout(() => setSuccessAddToast(false), 3000);
         fetchMovies();
       } else {
@@ -85,7 +85,7 @@ export default function Movies() {
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(false); // Stop loading animation
+      setIsLoading(false);
     }
   };
 
@@ -146,10 +146,10 @@ export default function Movies() {
       if (response.ok) {
         console.log(data)
         console.log("movie updated successfully")
-        setUpdateModal(false); // Close the modal
-        setSuccessUpdateToast(true); // Show success toast
+        setUpdateModal(false);
+        setSuccessUpdateToast(true); 
         fetchMovies();
-        setTimeout(() => setSuccessUpdateToast(false), 3000); // Hide toast after 3 seconds
+        setTimeout(() => setSuccessUpdateToast(false), 3000);
         setIsLoading(false)
       } else {
         console.log(data)
@@ -458,10 +458,10 @@ export default function Movies() {
               <button
                 className="bg-green-500 px-4 py-2 rounded text-white ml-2 hover:bg-green-600 transition flex items-center"
                 onClick={handleEditSubmit}
-                disabled={isLoading} // Disable button while loading
+                disabled={isLoading}
               >
                 Save
-                {isLoading && <span className="loader ml-2"></span>} {/* Loader after Save */}
+                {isLoading && <span className="loader ml-2"></span>}
               </button>
             </div>
           </div>
