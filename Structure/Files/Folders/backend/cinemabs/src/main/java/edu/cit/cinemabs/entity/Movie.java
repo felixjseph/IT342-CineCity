@@ -15,7 +15,7 @@ public class Movie {
     @Lob
     private byte[] photo;
     private String title;
-    private int duration; //in minutes
+    private int duration;
     private String synopsis;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -24,7 +24,7 @@ public class Movie {
     private Genre genre;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MovieCinema> movie_cinema;
+    private List<Showtime> movie_cinema;
 
     public Movie(byte[] photo){
         super();

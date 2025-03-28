@@ -2,7 +2,7 @@ package edu.cit.cinemabs.controller;
 
 import java.util.List;
 
-import edu.cit.cinemabs.entity.MovieCinema;
+import edu.cit.cinemabs.entity.Showtime;
 import edu.cit.cinemabs.service.MovieCinemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,23 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/moviecinema")
+@RequestMapping("/showtime")
 public class MovieCinemaController {
     @Autowired
     MovieCinemaService mcserv;
 
-    @GetMapping("/all")
-    public List<MovieCinema> getAllMovieCinema(){
+    @GetMapping("/")
+    public List<Showtime> getAllMovieCinema(){
         return mcserv.getAllMovieCinema();
     }
 
     @PostMapping("/")
-    public MovieCinema postMovieCinema(@RequestBody MovieCinema movieCinema){
+    public Showtime postMovieCinema(@RequestBody Showtime movieCinema){
         return mcserv.postMovieCinema(movieCinema);
     }
 
     @PutMapping("/{movie_cinema_id}")
-    public MovieCinema updatMovieCinema(@RequestBody MovieCinema movieCinema, @PathVariable int movie_cinema_id){
+    public Showtime updatMovieCinema(@RequestBody Showtime movieCinema, @PathVariable int movie_cinema_id){
         return mcserv.updateMovieCinema(movieCinema, movie_cinema_id);
     }
 
@@ -43,7 +43,7 @@ public class MovieCinemaController {
     }
 
     @GetMapping("/{movie_cinema_id}")
-    public MovieCinema getShowtime(@PathVariable int movie_cinema_id){
+    public Showtime getShowtime(@PathVariable int movie_cinema_id){
         return mcserv.getShowtimeById(movie_cinema_id);
     }
 }

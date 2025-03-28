@@ -3,6 +3,7 @@ package edu.cit.cinemabs.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Booking {
@@ -11,54 +12,53 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookingId;
 
-    private int movieCinemaId;
-    private int userId;
-    private int seatId;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "showtimeId", nullable = false)
+    private Showtime showtime;
+
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeatBooking> seatBooking;
+
     public Booking() {
-        this.createdAt = new Date(); // Auto-set creation date
+        this.createdAt = new Date();
     }
 
-    public Booking(int movieCinemaId, int userId, int seatId) {
-        this.movieCinemaId = movieCinemaId;
-        this.userId = userId;
-        this.seatId = seatId;
+    public Booking(int bookingId, Showtime showtime, User user) {
+        this.bookingId = bookingId;
         this.createdAt = new Date();
+        this.showtime = showtime;
+        this.user = user;
     }
 
     public int getBookingId() {
         return bookingId;
     }
 
+    public void setUser(User user){
+        this.user = user;
+    }
+
+    public User getUser(){
+        return user;
+    }
+
+    public void setShowtime(Showtime showtime){
+        this.showtime = showtime;
+    }
+
+    public Showtime getShowtime(){
+        return showtime;
+    }
+
     public void setBookingId(int bookingId) {
         this.bookingId = bookingId;
-    }
-
-    public int getMovieCinemaId() {
-        return movieCinemaId;
-    }
-
-    public void setMovieCinemaId(int movieCinemaId) {
-        this.movieCinemaId = movieCinemaId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getSeatId() {
-        return seatId;
-    }
-
-    public void setSeatId(int seatId) {
-        this.seatId = seatId;
     }
 
     public Date getCreatedAt() {

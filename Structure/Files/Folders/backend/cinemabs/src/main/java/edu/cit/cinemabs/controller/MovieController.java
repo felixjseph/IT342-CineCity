@@ -21,17 +21,17 @@ public class MovieController {
     @Autowired
     GenreService genreService;
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Movie> getAllMovies() {
         return mserv.getAllMovie();
     }
 
-    @PostMapping("/addmovie")
+    @PostMapping("/")
     public Movie addMovie(@RequestBody Movie movie) {
         return mserv.postMovieDetails(movie);
     }
 
-    @PutMapping("/updatemovie/{id}")
+    @PutMapping("/{id}")
     public Movie updateMovie(@PathVariable int id, @RequestBody Movie movie){
         return mserv.updateMovieDetails(movie, id);
     }

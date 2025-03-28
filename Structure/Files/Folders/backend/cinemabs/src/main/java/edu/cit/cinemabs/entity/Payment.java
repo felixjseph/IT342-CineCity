@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Payment {
@@ -17,18 +19,31 @@ public class Payment {
     private String status;
     private String paymentMethod;
 
+    @ManyToOne
+    @JoinColumn(name = "seatBookingId" , nullable = false)
+    private SeatBooking seatBooking;
+
     public Payment() {
     }
 
-    public Payment(int bookingId, float amount, String status, String paymentMethod) {
+    public Payment(int bookingId, float amount, String status, String paymentMethod, SeatBooking seatBooking) {
         this.bookingId = bookingId;
         this.amount = amount;
         this.status = status;
         this.paymentMethod = paymentMethod;
+        this.seatBooking = seatBooking;
     }
 
     public int getPaymentId() {
         return paymentId;
+    }
+
+    public void setSeatBooking(SeatBooking seatBooking) {
+        this.seatBooking = seatBooking;
+    }
+
+    public SeatBooking seatBooking() {
+        return seatBooking;
     }
 
     public void setPaymentId(int paymentId) {
