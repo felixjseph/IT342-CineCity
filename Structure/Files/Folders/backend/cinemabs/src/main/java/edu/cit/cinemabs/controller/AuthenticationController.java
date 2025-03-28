@@ -25,7 +25,8 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final UserDetailsService userDetailsService;
 
-    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService, UserDetailsService userDetailsService) {
+    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService,
+            UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
         this.userDetailsService = userDetailsService;
@@ -37,8 +38,15 @@ public class AuthenticationController {
         return ResponseEntity.ok(registeredUser);
     }
 
+    @PostMapping("/signup/admin")
+    public ResponseEntity<User> registerAdmin(@RequestBody RegisterUserDto registerUserDto) {
+        User registeredAdmin = authenticationService.signupAdmin(registerUserDto);
+        return ResponseEntity.ok(registeredAdmin);
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto, HttpServletResponse response) {
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto,
+            HttpServletResponse response) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
@@ -49,7 +57,8 @@ public class AuthenticationController {
         cookie.setMaxAge((int) jwtService.getExpirationTime());
         response.addCookie(cookie);
 
-        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken)
+                .setExpiresIn(jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);
     }
 

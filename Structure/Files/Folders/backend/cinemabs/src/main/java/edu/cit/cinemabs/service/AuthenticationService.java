@@ -49,4 +49,14 @@ public class AuthenticationService {
         return userRepository.findByEmail(input.getEmail())
                 .orElseThrow();
     }
+
+    public User signupAdmin(RegisterUserDto input) {
+        User admin = new User()
+                .setUsername(input.getUsername())
+                .setEmail(input.getEmail())
+                .setPassword(passwordEncoder.encode(input.getPassword()));
+        admin.setRole("ADMIN");
+    
+        return userRepository.save(admin);
+    }
 }

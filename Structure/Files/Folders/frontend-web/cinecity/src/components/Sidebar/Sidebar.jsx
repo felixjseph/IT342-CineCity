@@ -24,6 +24,23 @@ export default function SideBar() {
     { name: "Showtimes", icon: <SiShowtime /> },
   ];
 
+  const handleLogout = async (e) => {
+    try {
+      const response = await fetch('http://localhost:8080/auth/logout', {
+        method:"POST",
+        credentials: 'include'
+      })
+
+      if (response.ok) {
+        navigate('/login')
+      } else {
+        console.log("error has occured")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="h-screen w-screen flex border-white">
       <div className="side bg-[#2E2F33] w-[20rem] flex flex-col items-center p-4">
@@ -31,12 +48,11 @@ export default function SideBar() {
         {menuItems.map((item) => (
           <div
             key={item.name}
-            className={`px-4 py-2 mt-2 w-[80%] flex items-center font-medium text-white rounded cursor-pointer transition duration-100 ease-in-out ${
-              active === item.name ? "bg-gray-500" : "hover:bg-gray-500"
-            }`}
+            className={`px-4 py-2 mt-2 w-[80%] flex items-center font-medium text-white rounded cursor-pointer transition duration-100 ease-in-out ${active === item.name ? "bg-gray-500" : "hover:bg-gray-500"
+              }`}
             onClick={() => {
-                setActive(item.name)
-                navigate(`${item.name}`)
+              setActive(item.name)
+              navigate(`${item.name}`)
             }}
           >
             <span className="text-xl text-white opacity-50 mr-4">{item.icon}</span>
@@ -50,6 +66,7 @@ export default function SideBar() {
         </div>
         <div
           className="px-4 py-2 mt-2 w-[80%] flex items-center font-medium text-white rounded cursor-pointer hover:bg-gray-500 transition duration-100 ease-in-out"
+          onClick={handleLogout}
         >
           <IoLogOut className="text-xl text-white opacity-50 mr-4" /> Logout
         </div>
