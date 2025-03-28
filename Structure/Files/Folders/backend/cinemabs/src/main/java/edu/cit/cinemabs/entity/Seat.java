@@ -1,5 +1,7 @@
 package edu.cit.cinemabs.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,15 +14,19 @@ public class Seat {
     @Column(name = "seatNo", nullable = false)
     private String seatNo;
 
-    @Column(name = "cinemaId", nullable = false)
-    private int cinemaId;
+    @ManyToOne
+    @JoinColumn(name = "cinemaId", nullable = false)
+    private Cinema cinema;
+
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeatBooking> seatBookings;
 
     public Seat() {}
 
-    public Seat(int seatId, String seatNo, int cinemaId) {
+    public Seat(int seatId, String seatNo, Cinema cinema) {
         this.seatId = seatId;
         this.seatNo = seatNo;
-        this.cinemaId = cinemaId;
+        this.cinema = cinema;
     }
 
     public int getSeatId() {
@@ -39,11 +45,11 @@ public class Seat {
         this.seatNo = seatNo;
     }
 
-    public int getCinemaId() {
-        return cinemaId;
+    public Cinema getCinema() {
+        return cinema;
     }
 
-    public void setCinemaId(int cinemaId) {
-        this.cinemaId = cinemaId;
+    public void setCinema(Cinema cinema) {
+        this.cinema = cinema;
     }
 }

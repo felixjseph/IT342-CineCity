@@ -35,7 +35,7 @@ public class SeatService {
         if (existingSeat.isPresent()) {
             Seat seat = existingSeat.get();
             seat.setSeatNo(updatedSeat.getSeatNo());
-            seat.setCinemaId(updatedSeat.getCinemaId());
+            seat.setCinema(updatedSeat.getCinema());
             return seatRepository.save(seat);
         }
         return null;

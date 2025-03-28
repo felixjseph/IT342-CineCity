@@ -1,9 +1,10 @@
 package edu.cit.cinemabs.repository;
-
-import edu.cit.cinemabs.entity.MovieGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import edu.cit.cinemabs.entity.SeatBooking;
+
 @Repository
-public interface MovieGenreRepository extends JpaRepository<MovieGenre, Integer> {
+public interface SeatBookingRepository extends JpaRepository<SeatBooking, Long>{
+    
 }

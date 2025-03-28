@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/genre")
+@RequestMapping("/genre")
 public class GenreController {
     @Autowired
     GenreService gserv;
@@ -20,7 +20,7 @@ public class GenreController {
         return gserv.addNewGenre(genre);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Genre> getAllGenres(){
         return gserv.getAllGenre();
     }

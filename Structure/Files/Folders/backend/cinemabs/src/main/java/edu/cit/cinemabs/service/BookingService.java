@@ -27,11 +27,11 @@ public class BookingService {
     }
 
     public Booking updateBooking(int id, Booking newBooking) {
-        if (bookingRepository.existsById(id)) {
-            newBooking.setBookingId(id);
-            return bookingRepository.save(newBooking);
-        }
-        return null;
+        return bookingRepository.findById(id).map(existingBooking -> {
+            existingBooking.setUser(newBooking.getUser());
+            existingBooking.setShowtime(newBooking.getShowtime());
+            return bookingRepository.save(existingBooking);
+        }).orElseThrow(() -> new IllegalArgumentException("Booking with id " + id + " not found"));
     }
 
     public void deleteBooking(int id) {

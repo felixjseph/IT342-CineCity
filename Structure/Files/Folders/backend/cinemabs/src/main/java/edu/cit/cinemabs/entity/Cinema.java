@@ -16,28 +16,29 @@ public class Cinema {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cinema_ID;
+    private int cinemaId;
 
     private String cinema_name;
 
     @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MovieCinema> movieCinemas; // Plural for clarity
+    private List<Showtime> movieCinemas;
 
-    // Constructors
+    @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Seat> seats;
+
     public Cinema() {}
 
-    public Cinema(int cinema_ID, String cinema_name) {
-        this.cinema_ID = cinema_ID;
+    public Cinema(int cinemaId, String cinema_name) {
+        this.cinemaId = cinemaId;
         this.cinema_name = cinema_name;
     }
 
-    // Getters and Setters
     public int getCinema_ID() {
-        return cinema_ID;
+        return cinemaId;
     }
 
-    public void setCinema_ID(int cinema_ID) {
-        this.cinema_ID = cinema_ID;
+    public void setCinema_ID(int cinemaId) {
+        this.cinemaId = cinemaId;
     }
 
     public String getCinema_name() {
@@ -48,16 +49,16 @@ public class Cinema {
         this.cinema_name = cinema_name;
     }
 
-    public List<MovieCinema> getMovieCinemas() {
+    public List<Showtime> getMovieCinemas() {
         return movieCinemas;
     }
 
-    public void setMovieCinemas(List<MovieCinema> movieCinemas) {
+    public void setMovieCinemas(List<Showtime> movieCinemas) {
         this.movieCinemas = movieCinemas;
     }
 
     // Business method
     public String getCinemaDetails() {
-        return "Cinema ID: " + cinema_ID + ", Name: " + cinema_name;
+        return "Cinema ID: " + cinemaId + ", Name: " + cinema_name;
     }
 }

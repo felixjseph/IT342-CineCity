@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cinemas")
+@RequestMapping("/cinemas")
 public class CinemaController {
 
     @Autowired
     private CinemaService cserv;
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Cinema> getAllCinemas() {
         return cserv.getAllCinemas();
     }
