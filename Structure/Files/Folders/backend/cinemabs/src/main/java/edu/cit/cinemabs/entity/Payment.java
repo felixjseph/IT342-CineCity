@@ -14,48 +14,39 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentId;
 
-    private int bookingId;
     private float amount;
     private String status;
     private String paymentMethod;
 
     @ManyToOne
-    @JoinColumn(name = "seatBookingId" , nullable = false)
-    private SeatBooking seatBooking;
+    @JoinColumn(name = "bookingId" , nullable = false)
+    private Booking booking;
 
     public Payment() {
     }
 
-    public Payment(int bookingId, float amount, String status, String paymentMethod, SeatBooking seatBooking) {
-        this.bookingId = bookingId;
+    public Payment(int bookingId, float amount, String status, String paymentMethod, Booking booking) {
+        this.booking = booking;
         this.amount = amount;
         this.status = status;
         this.paymentMethod = paymentMethod;
-        this.seatBooking = seatBooking;
     }
 
     public int getPaymentId() {
         return paymentId;
     }
 
-    public void setSeatBooking(SeatBooking seatBooking) {
-        this.seatBooking = seatBooking;
-    }
-
-    public SeatBooking seatBooking() {
-        return seatBooking;
-    }
 
     public void setPaymentId(int paymentId) {
         this.paymentId = paymentId;
     }
 
-    public int getBookingId() {
-        return bookingId;
+    public Booking getBooking() {
+        return booking;
     }
 
-    public void setBookingId(int bookingId) {
-        this.bookingId = bookingId;
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
     public float getAmount() {

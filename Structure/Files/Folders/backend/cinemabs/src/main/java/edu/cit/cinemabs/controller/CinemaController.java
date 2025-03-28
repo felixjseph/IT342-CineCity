@@ -15,7 +15,7 @@ public class CinemaController {
     @Autowired
     private CinemaService cserv;
 
-    @GetMapping("/")
+    @GetMapping
     public List<Cinema> getAllCinemas() {
         return cserv.getAllCinemas();
     }
@@ -25,19 +25,16 @@ public class CinemaController {
         return cserv.getCinemaById(id);
     }
 
-    // Create new cinema
-    @PostMapping("/")
+    @PostMapping
     public Cinema createCinema(@RequestBody Cinema cinema) {
         return cserv.createCinema(cinema);
     }
 
-    // Update cinema
     @PutMapping("/{id}")
     public Cinema updateCinema(@PathVariable int id, @RequestBody Cinema updatedCinema) {
         return cserv.updateCinema(id, updatedCinema);
     }
 
-    // Delete cinema
     @DeleteMapping("/{id}")
     public void deleteCinema(@PathVariable int id) {
         cserv.deleteCinema(id);

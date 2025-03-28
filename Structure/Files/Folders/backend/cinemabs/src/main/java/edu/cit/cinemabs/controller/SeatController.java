@@ -18,6 +18,11 @@ public class SeatController {
         return seatService.addNewSeat(seat);
     }
 
+    @PostMapping("/default-seats/{showtimeId}")
+    public void insertDefaultSeats(@PathVariable int showtimeId) {
+        seatService.insertDefaultSeats(showtimeId);
+    }
+
     @GetMapping
     public List<Seat> getAllSeats() {
         return seatService.getAllSeats();

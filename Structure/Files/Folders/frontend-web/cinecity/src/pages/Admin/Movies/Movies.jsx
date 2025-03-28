@@ -8,8 +8,8 @@ import { MdDelete } from "react-icons/md";
 export default function Movies() {
   const [addMovie, setAddMovie] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [successAddToast, setSuccessAddToast] = useState(false); 
-  const [successUpdateToast, setSuccessUpdateToast] = useState(false); 
+  const [successAddToast, setSuccessAddToast] = useState(false);
+  const [successUpdateToast, setSuccessUpdateToast] = useState(false);
   const [successDeleteToast, setSuccessDeleteToast] = useState(false);
   const [genre, setGenre] = useState([]);
   const [updateModal, setUpdateModal] = useState(false)
@@ -34,7 +34,8 @@ export default function Movies() {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/movie/all", {
+      const response = await fetch("http://localhost:8080/movie", {
+        method: "GET",
         credentials: "include",
       });
 
@@ -61,7 +62,7 @@ export default function Movies() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/api/movie/addmovie", {
+      const response = await fetch("http://localhost:8080/movie", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -74,7 +75,7 @@ export default function Movies() {
       if (response.ok) {
         console.log(data);
         console.log("Movie added successfully");
-        setAddMovie(false); 
+        setAddMovie(false);
         setSuccessAddToast(true);
         setTimeout(() => setSuccessAddToast(false), 3000);
         fetchMovies();
@@ -109,7 +110,7 @@ export default function Movies() {
     e.preventDefault();
     setIsLoading(true)
     try {
-      const response = await fetch(`http://localhost:8080/api/movie/${updateMovie}`, {
+      const response = await fetch(`http://localhost:8080/movie/${updateMovie}`, {
         method: "DELETE",
         credentials: 'include'
       })
@@ -133,7 +134,7 @@ export default function Movies() {
     e.preventDefault();
     setIsLoading(true)
     try {
-      const response = await fetch(`http://localhost:8080/api/movie/updatemovie/${updateMovie}`, {
+      const response = await fetch(`http://localhost:8080/movie/${updateMovie}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -147,10 +148,18 @@ export default function Movies() {
         console.log(data)
         console.log("movie updated successfully")
         setUpdateModal(false);
-        setSuccessUpdateToast(true); 
+        setSuccessUpdateToast(true);
         fetchMovies();
         setTimeout(() => setSuccessUpdateToast(false), 3000);
         setIsLoading(false)
+        setMovie({
+          title: "",
+          duration: "",
+          synopsis: "",
+          genre: {
+            id: ""
+          }
+        })
       } else {
         console.log(data)
         console.log("movie updated failed")
@@ -162,7 +171,8 @@ export default function Movies() {
 
   const fetchMovie = async (movieid) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/movie/${movieid}`, {
+      const response = await fetch(`http://localhost:8080/movie/${movieid}`, {
+        method: "GET",
         credentials: 'include'
       })
 
@@ -183,7 +193,8 @@ export default function Movies() {
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/genre/all", {
+        const response = await fetch("http://localhost:8080/genre", {
+          method: "GET",
           credentials: "include"
         });
 
@@ -214,7 +225,7 @@ export default function Movies() {
 
     try {
       setIsLoading(true); // Show loading state
-      const response = await fetch(`http://localhost:8080/api/movie/${movieId}/cover`, {
+      const response = await fetch(`http://localhost:8080/movie/${movieId}/cover`, {
         method: "PUT",
         body: formData,
         credentials: "include",
@@ -267,34 +278,49 @@ export default function Movies() {
                 <h1 className="text-xl">{movie.title}</h1>
                 <div><p className="text-xm font-medium opacity-30">Duration</p><p className="text-sm font-medium">{movie.duration} minutes</p></div>
                 <div className="mt-4"><p className="text-xm font-medium opacity-30">Genre</p><p className="text-sm font-medium">{movie.genre.genreName}</p></div>
-                <div className="flex items-center mt-2">
-                  <button className="flex items-center px-4 py-1 mr-4 rounded bg-[#2FBD59] cursor-pointer transition duration-300 ease-in-out hover:bg-gray-500"
+                <div className="flex items-center mt-2 w-fit">
+                  <button className="flex items-center px-4 py-1 mr-4 rounded bg-gray-500 cursor-pointer transition duration-300 ease-in-out"
                     onClick={() => handleEdit(movie.id)}
                   ><FaEdit className="text-blue-500 text-xl mr-2" />Edit</button>
-                  <button className="flex items-center px-4 py-1 rounded bg-[#2FBD59] cursor-pointer transition duration-300 ease-in-out hover:bg-gray-500"
+                  <button className="flex mr-4 items-center px-4 py-1 rounded bg-gray-500 cursor-pointer transition duration-300 ease-in-out"
                     onClick={() => {
                       setConfirmDelete(true)
                       setUpdateMovie(movie.id)
                     }}
                   ><MdDelete className="text-red-500 text-xl mr-2" />Delete</button>
+                  {movie.photo !== null ? (
+                    <label className="w-full px-2 text-white mt-2 py-1 rounded cursor-pointer bg-gray-700 flex items-center justify-center">
+                      Change
+                      <input
+                        type="file"
+                        className="hidden"
+                        onChange={(e) => handleImageUpload(e, movie.id)}
+                      />
+                    </label>
+                  ) : (
+                    <label className="w-full px-2 text-white mt-2 rounded cursor-pointer bg-gray-700 flex items-center justify-center">
+                      Upload
+                      <input
+                        type="file"
+                        className="hidden"
+                        onChange={(e) => handleImageUpload(e, movie.id)}
+                      />
+                    </label>
+                  )}
                 </div>
               </div>
               <div className="bg-green-500/20 h-[80%] w-[7rem] rounded text-center content-center">
                 {movie.photo !== null ? (
                   <img
-                    src={`http://localhost:8080/api/movie/${movie.id}/cover`}
+                    src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
                     alt={`${movie.title} Cover`}
                     className="object-cover rounded mb-4"
                   />
-                  
+
                 ) : (
                   <div>
-                    <h1>Add cover photo</h1>
-                    <input
-                      type="file"
-                      className="w-full text-white mt-2"
-                      onChange={(e) => handleImageUpload(e, movie.id)}
-                    />
+                    <h1>Upload cover photo</h1>
+
                   </div>
                 )}
 

@@ -22,12 +22,12 @@ public class MovieCinemaController {
     @Autowired
     MovieCinemaService mcserv;
 
-    @GetMapping("/")
+    @GetMapping
     public List<Showtime> getAllMovieCinema(){
         return mcserv.getAllMovieCinema();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Showtime postMovieCinema(@RequestBody Showtime movieCinema){
         return mcserv.postMovieCinema(movieCinema);
     }

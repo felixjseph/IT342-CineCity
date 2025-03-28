@@ -11,6 +11,8 @@ import PublicRoute from "./components/Protected/PublicRoute";
 import SideBar from "./components/Sidebar/Sidebar";
 import Dashboard from "./pages/Admin/Dashboard/Dashboard";
 import ProtectedRouteAdmin from "./components/Protected/ProtectedRouteAdmin"
+import Cinemas from "./pages/Admin/Cinemas/Cinemas"
+import Showtime from "./pages/Admin/Showtime/Showtime"
 
 export default function Routess() {
     return (
@@ -29,6 +31,8 @@ export default function Routess() {
                     <Route path="/admin" element={<SideBar />}>
                         <Route path="movies" element={<Movies />} />
                         <Route path="dashboard" element={<Dashboard />} />
+                        <Route path="cinemas" element={<Cinemas/>}/>
+                        <Route path="showtimes" element={<Showtime/>}/>
                     </Route>
                 </Route>
             </Route>

@@ -30,6 +30,7 @@ public class BookingService {
         return bookingRepository.findById(id).map(existingBooking -> {
             existingBooking.setUser(newBooking.getUser());
             existingBooking.setShowtime(newBooking.getShowtime());
+            existingBooking.setSeat(newBooking.getSeat());
             return bookingRepository.save(existingBooking);
         }).orElseThrow(() -> new IllegalArgumentException("Booking with id " + id + " not found"));
     }

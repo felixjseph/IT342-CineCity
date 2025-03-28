@@ -20,18 +20,16 @@ C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\Movie.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\Payment.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\Seat.java
-C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\SeatBooking.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\Showtime.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\User.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\exception\GlobalExceptionHandler.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\BookingRepository.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\CinemaRepository.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\GenreRepository.java
-C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\MovieCinemaRepository.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\MovieRepo.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\PaymentRepository.java
-C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\SeatBookingRepository.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\SeatRepository.java
+C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\ShowtimeRepository.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\repository\UserRepository.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\service\AuthenticationService.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\service\BookingService.java
@@ -41,6 +39,5 @@ C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\service\MovieCinemaService.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\service\MovieService.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\service\PaymentService.java
-C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\service\SeatBookingService.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\service\SeatService.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\service\UserService.java
