@@ -23,22 +23,35 @@ public class Booking {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SeatBooking> seatBooking;
+    @ManyToOne
+    @JoinColumn(name = "seatId", nullable = false)
+    private Seat seat;
 
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments;
+    
     public Booking() {
         this.createdAt = new Date();
     }
 
-    public Booking(int bookingId, Showtime showtime, User user) {
+    public Booking(int bookingId, Showtime showtime, User user, Seat seat) {
         this.bookingId = bookingId;
         this.createdAt = new Date();
         this.showtime = showtime;
         this.user = user;
+        this.seat = seat;
     }
 
     public int getBookingId() {
         return bookingId;
+    }
+
+    public void setSeat(Seat seat){
+        this.seat = seat;
+    }
+
+    public Seat getSeat(){
+        return seat;
     }
 
     public void setUser(User user){

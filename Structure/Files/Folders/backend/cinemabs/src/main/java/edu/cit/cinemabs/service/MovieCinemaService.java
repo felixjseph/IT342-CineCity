@@ -3,7 +3,7 @@ package edu.cit.cinemabs.service;
 import java.util.List;
 
 import edu.cit.cinemabs.entity.Showtime;
-import edu.cit.cinemabs.repository.MovieCinemaRepository;
+import edu.cit.cinemabs.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class MovieCinemaService{
 
     @Autowired
-    MovieCinemaRepository mcrepo;
+    ShowtimeRepository mcrepo;
 
     public MovieCinemaService(){}
 
@@ -31,6 +31,7 @@ public class MovieCinemaService{
         existingMovieCinema.setMovie(updatedMovieCinema.getMovie());
         existingMovieCinema.setDate(updatedMovieCinema.getDate()); // Update date
         existingMovieCinema.setTime(updatedMovieCinema.getTime()); // Update time
+        existingMovieCinema.setPrice(updatedMovieCinema.getPrice());
         return mcrepo.save(existingMovieCinema);
     }
 

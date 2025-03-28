@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/movie")
+@RequestMapping("/movie")
 public class MovieController {
 
     @Autowired
@@ -21,12 +21,12 @@ public class MovieController {
     @Autowired
     GenreService genreService;
 
-    @GetMapping("/")
+    @GetMapping
     public List<Movie> getAllMovies() {
         return mserv.getAllMovie();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Movie addMovie(@RequestBody Movie movie) {
         return mserv.postMovieDetails(movie);
     }

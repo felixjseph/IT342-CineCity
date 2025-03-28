@@ -35,19 +35,23 @@ public class Showtime{
     private Cinema cinema;
 
     @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> booking;
+    private List<Booking> bookings;
+
+    @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Seat> seats;
 
     @Column(nullable = false)
     private float price;
 
     public Showtime(){}
 
-    public Showtime(int showtimeId, Cinema cinema, Movie movie,Time time, Date date){
+    public Showtime(int showtimeId, Cinema cinema, Movie movie,Time time, Date date, float price){
         this.showtimeId = showtimeId;
         this.cinema = cinema;
         this.movie = movie;
         this.date = date;
         this.time = time;
+        this.price = price;
     }
 
     public void setMovieCinemaId(int showtimeId){
@@ -88,6 +92,14 @@ public class Showtime{
 
     public void setTime(Time time) {
         this.time = time;
+    }
+
+    public void setPrice(float price){
+        this.price = price;
+    }
+
+    public float getPrice(){
+        return price;
     }
 
 }

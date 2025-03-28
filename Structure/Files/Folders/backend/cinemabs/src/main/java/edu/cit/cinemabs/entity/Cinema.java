@@ -21,10 +21,7 @@ public class Cinema {
     private String cinema_name;
 
     @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Showtime> movieCinemas;
-
-    @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Seat> seats;
+    private List<Showtime> showtimes;
 
     public Cinema() {}
 
@@ -49,16 +46,4 @@ public class Cinema {
         this.cinema_name = cinema_name;
     }
 
-    public List<Showtime> getMovieCinemas() {
-        return movieCinemas;
-    }
-
-    public void setMovieCinemas(List<Showtime> movieCinemas) {
-        this.movieCinemas = movieCinemas;
-    }
-
-    // Business method
-    public String getCinemaDetails() {
-        return "Cinema ID: " + cinemaId + ", Name: " + cinema_name;
-    }
 }

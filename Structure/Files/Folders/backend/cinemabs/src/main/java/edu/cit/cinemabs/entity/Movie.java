@@ -24,7 +24,7 @@ public class Movie {
     private Genre genre;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Showtime> movie_cinema;
+    private List<Showtime> showtime;
 
     public Movie(byte[] photo){
         super();

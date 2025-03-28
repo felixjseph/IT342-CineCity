@@ -15,12 +15,12 @@ public class GenreController {
     @Autowired
     GenreService gserv;
 
-    @PostMapping("/")
+    @PostMapping
     public Genre addNewGenre(@RequestBody Genre genre){
         return gserv.addNewGenre(genre);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<Genre> getAllGenres(){
         return gserv.getAllGenre();
     }
