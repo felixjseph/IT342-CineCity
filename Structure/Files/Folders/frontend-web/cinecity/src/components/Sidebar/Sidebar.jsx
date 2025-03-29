@@ -20,7 +20,7 @@ export default function SideBar() {
     { name: "Cinemas", icon: <RiMovie2Fill /> },
     { name: "Bookings", icon: <FaBookReader /> },
     { name: "Customers", icon: <FaUser /> },
-    { name: "Genre", icon: <SiMicrogenetics /> },
+    { name: "Genres", icon: <SiMicrogenetics /> },
     { name: "Showtimes", icon: <SiShowtime /> },
   ];
 
