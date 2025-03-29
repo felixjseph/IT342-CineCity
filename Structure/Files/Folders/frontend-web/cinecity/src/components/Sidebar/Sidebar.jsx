@@ -61,6 +61,7 @@ export default function SideBar() {
         ))}
         <div
           className="px-4 py-2 mt-16 w-[80%] flex items-center font-medium text-white rounded cursor-pointer hover:bg-gray-500 transition duration-100 ease-in-out"
+          onClick={()=>navigate('profile')}
         >
           <FaUserCircle className="text-xl text-white opacity-50 mr-4" /> Admin
         </div>
