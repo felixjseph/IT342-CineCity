@@ -15,6 +15,7 @@ import Cinemas from "./pages/Admin/Cinemas/Cinemas"
 import Showtime from "./pages/Admin/Showtime/Showtime"
 import Genres from "./pages/Admin/Genres/Genre"
 import MovieDetails from "./pages/Movie/MovieDetails";
+import Profile from "./pages/Admin/Profile/Profile"
 
 export default function Routess() {
     return (
@@ -37,6 +38,7 @@ export default function Routess() {
                         <Route path="cinemas" element={<Cinemas/>}/>
                         <Route path="showtimes" element={<Showtime/>}/>
                         <Route path="genres" element={<Genres/>}/>
+                        <Route path="profile" element={<Profile/>}/>
                     </Route>
                 </Route>
             </Route>
