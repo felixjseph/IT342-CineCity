@@ -13,6 +13,8 @@ import Dashboard from "./pages/Admin/Dashboard/Dashboard";
 import ProtectedRouteAdmin from "./components/Protected/ProtectedRouteAdmin"
 import Cinemas from "./pages/Admin/Cinemas/Cinemas"
 import Showtime from "./pages/Admin/Showtime/Showtime"
+import Genres from "./pages/Admin/Genres/Genre"
+import MovieDetails from "./pages/Movie/MovieDetails";
 
 export default function Routess() {
     return (
@@ -25,6 +27,7 @@ export default function Routess() {
                 <Route path="/" element={<Navbar />}>
                     <Route path="home" element={<Home />}></Route>
                     <Route path="movie" element={<Movie />}></Route>
+                    <Route path="/movie/:id" element={<MovieDetails />} />
                     <Route path="home" element={<Home />} />
                 </Route>
                 <Route element={<ProtectedRouteAdmin />}>
@@ -33,6 +36,7 @@ export default function Routess() {
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="cinemas" element={<Cinemas/>}/>
                         <Route path="showtimes" element={<Showtime/>}/>
+                        <Route path="genres" element={<Genres/>}/>
                     </Route>
                 </Route>
             </Route>

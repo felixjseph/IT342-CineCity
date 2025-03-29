@@ -15,7 +15,9 @@ export default function Movie() {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/movie/all");
+      const response = await fetch("http://localhost:8080/movie", {
+        credentials: "include",
+      });
       if (response.ok) {
         const data = await response.json();
         setMovies(data);
@@ -29,7 +31,9 @@ export default function Movie() {
 
   const fetchGenres = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/genre/all");
+      const response = await fetch("http://localhost:8080/genre", {
+        credentials: "include",
+      });
       if (response.ok) {
         const data = await response.json();
         setGenres(data);
@@ -49,31 +53,28 @@ export default function Movie() {
 
   const filteredMovies = movies.filter(
     (movie) =>
-      (selectedGenres.length === 0 || selectedGenres.includes(movie.genreId)) &&
+      (selectedGenres.length === 0 || selectedGenres.includes(movie.genre?.id)) &&
       movie.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="flex h-screen bg-[#2E2F33] text-white">
-      {/* Sidebar */}
-      <div className="w-1/6 p-8 bg-[#2E2F33] border-r border-gray-600">
-        <h2 className="text-2xl font-bold mb-4">GENRES</h2>
+    <div className="flex h-screen text-white">
+      <div className="w-1/6 p-8 border-r border-gray-600">
+        <h2 className="text-2xl font-bold mb-4">Genre</h2>
         {genres.map((genre) => (
-          <div key={genre.id} className="flex items-center mb-2">
+          <div key={genre.id} className="flex items-center mb-2 px-7 py-2 rounded-3xl bg-[#777777] hover:bg-gray-700 transition">
             <input
               type="checkbox"
               checked={selectedGenres.includes(genre.id)}
               onChange={() => toggleGenre(genre.id)}
-              className="mr-2 accent-[#2FBD59]"
+              className="mr-2 h-4 w-4 rounded-full border border-gray-700 bg-[#777777] appearance-none checked:bg-[#2fbd5ac5] checked:border-[#2fbd5ac5] cursor-pointer transition duration-300"
             />
-            <span>{genre.name}</span>
+            <span>{genre.genreName}</span>
           </div>
         ))}
       </div>
 
-      {/* Main Content */}
       <div className="w-5/6 p-7">
-        {/* Navbar */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-6xl font-bold text-[#FFF]">MOVIES</h1>
           <input
@@ -85,21 +86,22 @@ export default function Movie() {
           />
         </div>
 
-        {/* Movie Grid */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {filteredMovies.map((movie) => (
             <div
               key={movie.movie_cinema_id}
               className="bg-[#2FBD59] p-4 rounded-lg text-black cursor-pointer"
-              onClick={() => navigate(`/movie/${movie.movie_cinema_id}`)}
+              onClick={() => navigate(`/movie/${movie.id}`)}
             >
               <img
-                src={`http://localhost:8080/api/movie/${movie.movie_cinema_id}/cover`}
-                alt={movie.title}
-                className="w-full h-40 object-cover mb-2 rounded"
-              />
+                    src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                    alt={`${movie.title} Cover`}
+                    className="object-cover rounded mb-4"
+                  />
+
               <h3 className="text-lg font-bold">{movie.title}</h3>
               <p className="text-sm">{movie.synopsis}</p>
+              <p className="text-sm font-semibold">Genre: {movie.genre?.genreName || "Unknown"}</p>
             </div>
           ))}
         </div>

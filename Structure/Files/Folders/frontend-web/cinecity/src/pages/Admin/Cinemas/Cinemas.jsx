@@ -196,7 +196,7 @@ export default function Cinemas() {
                 </div>
             </div>
             <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden shadow-lg mt-4">
-                <thead className="bg-gray-900">
+                <thead>
                     <tr className="text-left text-gray-300 uppercase text-sm">
                         <th className="py-3 px-6">Cinema Name</th>
                         <th className="py-3 px-6 text-center">Action</th>
