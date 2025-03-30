@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
-
+import Seat from "../Seat/Seat";
 
 export default function Showtime() {
 
+    const [seatModal, setSeatModal] = useState(false);
+    const [selectedShowtime, setSelectedShowtime] = useState(null);
     const [addModal, setAddModal] = useState(false)
     const [movies, setMovies] = useState([])
     const [cinemas, setCinemas] = useState([])
@@ -69,7 +71,10 @@ export default function Showtime() {
         }
     }
 
-
+    const handleViewSeats = (showtime) => {
+        setSelectedShowtime(showtime);
+        setSeatModal(true);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -336,7 +341,8 @@ export default function Showtime() {
                                 <td className="py-4 px-6">{showtime.date}</td>
                                 <td className="py-4 px-6">{showtime.time}</td>
                                 <td className="py-4 px-6">{showtime.price}</td>
-                                <td className="py-4 px-6 underline text-blue-500 cursor-pointer">View</td>
+                                <td className="py-4 px-6 underline text-blue-500 cursor-pointer"
+                                    onClick={() => handleViewSeats(showtime)} > View  </td>
                                 <td className="py-4 px-6 flex justify-center gap-2">
                                     <button
                                         onClick={() => handleEdit(showtime.movieCinemaId)}
@@ -546,6 +552,10 @@ export default function Showtime() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {seatModal && (
+                <Seat showtime={selectedShowtime} onClose={() => setSeatModal(false)} />
             )}
         </div>
     )
