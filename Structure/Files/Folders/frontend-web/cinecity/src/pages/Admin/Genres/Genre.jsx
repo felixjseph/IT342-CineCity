@@ -115,8 +115,11 @@ export default function AdminGenres() {
           <IoIosAddCircle className="text-[#2FBD59] text-2xl mr-2" /> Add Genre
         </button>
       </div>
-
-      <div className="mb-4 w-[50%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33]">
+        <div className="text-white flex w-fit px-4 py-1 rounded mt-4 text-sm bg-[#2FBD59]">
+          <h1 className="text-white mr-8">All</h1>
+          <p className="bg-gray-500/30 px-2 rounded">0</p>
+        </div>
+      <div className="mt-4 mb-4 w-[50%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33]">
         <IoSearchSharp className="text-[#2FBD59] mr-2" />
         <input type="text" placeholder="Search genre" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
           className="text-white w-full border-gray-500 placeholder-gray-400 focus:outline-none" />
@@ -125,7 +128,7 @@ export default function AdminGenres() {
       {loading ? <p>Loading genres...</p> : (
         <table className="min-w-full bg-gray-800 text-white rounded-lg shadow-lg">
           <thead>
-            <tr className="text-gray-300 uppercase text-sm">
+            <tr className="text-gray-300 uppercase text-left text-bold">
               <th className="py-3 px-6">Genre Name</th>
               <th className="py-3 px-6 text-center">Actions</th>
             </tr>
