@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function Movie() {
-  const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedMovie, setSelectedMovie] = useState(null); // Modal State
 
   useEffect(() => {
     fetchMovies();
@@ -59,10 +58,14 @@ export default function Movie() {
 
   return (
     <div className="flex h-screen text-white">
+      {/* Sidebar */}
       <div className="w-1/6 p-8 border-r border-gray-600">
         <h2 className="text-2xl font-bold mb-4">Genre</h2>
         {genres.map((genre) => (
-          <div key={genre.id} className="flex items-center mb-2 px-7 py-2 rounded-3xl bg-[#777777] hover:bg-gray-700 transition">
+          <div
+            key={genre.id}
+            className="flex items-center mb-2 px-7 py-2 rounded-3xl bg-[#777777] hover:bg-gray-700 transition"
+          >
             <input
               type="checkbox"
               checked={selectedGenres.includes(genre.id)}
@@ -74,6 +77,7 @@ export default function Movie() {
         ))}
       </div>
 
+      {/* Main Content */}
       <div className="w-5/6 p-7">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-6xl font-bold text-[#FFF]">MOVIES</h1>
@@ -86,19 +90,19 @@ export default function Movie() {
           />
         </div>
 
+        {/* Movies Grid */}
         <div className="grid grid-cols-4 gap-4">
           {filteredMovies.map((movie) => (
             <div
               key={movie.movie_cinema_id}
               className="bg-[#2FBD59] p-4 rounded-lg text-black cursor-pointer"
-              onClick={() => navigate(`/movie/${movie.id}`)}
+              onClick={() => setSelectedMovie(movie)} // Open modal
             >
               <img
-                    src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
-                    alt={`${movie.title} Cover`}
-                    className="object-cover rounded mb-4"
-                  />
-
+                src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                alt={`${movie.title} Cover`}
+                className="object-cover rounded mb-4"
+              />
               <h3 className="text-lg font-bold">{movie.title}</h3>
               <p className="text-sm">{movie.synopsis}</p>
               <p className="text-sm font-semibold">Genre: {movie.genre?.genreName || "Unknown"}</p>
@@ -106,6 +110,52 @@ export default function Movie() {
           ))}
         </div>
       </div>
+
+      {/* Movie Details Modal */}
+      {selectedMovie && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black/70 z-50"
+          onClick={() => setSelectedMovie(null)} // Close modal when clicking outside
+        >
+          <div
+            className="relative bg-[#1E1E1E] text-white rounded-lg shadow-lg w-[80%] max-w-4xl flex"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+          >
+            {/* Movie Poster */}
+            <div className="w-1/3">
+              <img
+                src={`http://localhost:8080/movie/${selectedMovie.id}/cover?timestamp=${new Date().getTime()}`}
+                alt={`${selectedMovie.title} Cover`}
+                className="w-full h-full object-cover rounded-l-lg"
+              />
+            </div>
+
+            {/* Movie Details */}
+            <div className="w-2/3 p-6">
+              <h1 className="text-4xl font-extrabold">{selectedMovie.title}</h1>
+              <p className="mt-3 text-gray-300">{selectedMovie.synopsis}</p>
+              <p className="mt-2 text-lg font-semibold text-gray-400">
+                {selectedMovie.genre?.genreName}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="mt-5 flex gap-4">
+                <button className="px-6 py-3 bg-[#2FBD59] text-white font-semibold rounded-full hover:bg-[#2fbd5ad2] transition duration-300">
+                  Book Now
+                </button>
+              </div>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedMovie(null)}
+              className="absolute top-3 right-3 text-white text-2xl hover:text-gray-400"
+            >
+              ✖
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a37b95b4-fd2f-40fa-8375-25b5ffb8b746" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend-web/cinecity/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend-web/cinecity/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend-web/cinecity/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend-web/cinecity/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend-web/cinecity/src/pages/Movie/Movie.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend-web/cinecity/src/pages/Movie/Movie.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,16 +36,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.CinemabsApplication.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature-MovieListing-Flores",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Ryzen 5/Documents/GitHub/IT342-CineCity/Structure/Files/Folders/backend/cinemabs"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CinemabsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature-MovieListing-Flores&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ryzen 5/Documents/GitHub/IT342-CineCity/Structure/Files/Folders/backend/cinemabs&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
