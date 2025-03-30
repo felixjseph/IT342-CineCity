@@ -58,7 +58,8 @@ export default function MovieDetails() {
 
         {/* Action Buttons */}
         <div className="mt-6 flex gap-4">
-          <button className="px-6 py-3 bg-[#2FBD59] text-white font-semibold rounded-full hover:bg-[#2fbd5ad2] transition duration-300">
+          <button className="px-6 py-3 bg-[#2FBD59] text-white font-semibold rounded-full hover:bg-[#2fbd5ad2] transition duration-300 cursor-pointer"
+          onClick={() => navigate('/seat/selection')}>
             Book Now
           </button>
           
