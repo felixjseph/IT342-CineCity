@@ -6,9 +6,51 @@
   <component name="ChangeListManager">
     <list default="true" id="a37b95b4-fd2f-40fa-8375-25b5ffb8b746" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend-web/cinecity/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend-web/cinecity/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend-web/cinecity/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend-web/cinecity/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend-web/cinecity/src/pages/Movie/Movie.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend-web/cinecity/src/pages/Movie/Movie.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/CinemabsApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/CinemabsApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/config/ApplicationConfiguration$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/config/ApplicationConfiguration$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/config/ApplicationConfiguration.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/config/ApplicationConfiguration.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/config/JwtAuthenticationFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/config/JwtAuthenticationFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/config/SecurityConfiguration.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/config/SecurityConfiguration.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/AuthenticationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/AuthenticationController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/BookingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/BookingController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/CinemaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/CinemaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/GenreController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/GenreController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/MovieCinemaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/MovieCinemaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/MovieController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/MovieController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/PaymentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/PaymentController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/SeatController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/SeatController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/dto/LoginResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/dto/LoginResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/dto/LoginUserDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/dto/LoginUserDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/dto/RegisterUserDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/dto/RegisterUserDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Booking.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Booking.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Cinema.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Cinema.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Genre.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Genre.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Movie.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Movie.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Payment.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Payment.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Seat.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Seat.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Showtime.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/Showtime.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/entity/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/exception/GlobalExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/exception/GlobalExceptionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/BookingRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/BookingRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/CinemaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/CinemaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/GenreRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/GenreRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/MovieRepo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/MovieRepo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/PaymentRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/PaymentRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/SeatRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/SeatRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/ShowtimeRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/ShowtimeRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/repository/UserRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/AuthenticationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/AuthenticationService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/BookingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/BookingService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/CinemaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/CinemaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/GenreService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/GenreService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/JwtService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/JwtService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/MovieCinemaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/MovieCinemaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/MovieService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/MovieService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/PaymentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/PaymentService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/SeatService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/SeatService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/cit/cinemabs/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/edu/cit/cinemabs/CinemabsApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/edu/cit/cinemabs/CinemabsApplicationTests.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +91,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.1-openjdk-21.0.1-8336523bb0d9-657b72ed" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
       </set>
     </attachedChunks>
   </component>
