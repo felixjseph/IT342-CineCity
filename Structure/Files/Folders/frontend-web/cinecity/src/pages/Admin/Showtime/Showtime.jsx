@@ -374,7 +374,7 @@ export default function Showtime() {
                                 <td className="py-4 px-6">{showtime.cinema.cinema_name}</td>
                                 <td className="py-4 px-6">{showtime.date}</td>
                                 <td className="py-4 px-6">{showtime.time}</td>
-                                <td className="py-4 px-6">{showtime.price}</td>
+                                <td className="py-4 px-6">₱{showtime.price}</td>
                                 <td className="py-4 px-6 underline text-blue-500 cursor-pointer"
                                     onClick={() => fetchSeats(showtime.movieCinemaId)} > View  </td>
                                 <td className="py-4 px-6 flex justify-center gap-2">
@@ -608,7 +608,7 @@ export default function Showtime() {
                             {seats.map((seat) => (
                                 <div
                                     key={seat.movieCinemaId}
-                                    className={`w-12 h-12 flex items-center justify-center rounded-full text-white font-semibold ${seat.isAvailable ? "bg-green-500 cursor-pointer" : "bg-gray-500"
+                                    className={`w-12 h-12 flex items-center justify-center rounded-full text-white font-semibold ${seat.isAvailable ? "bg-gray-500" : "bg-red-500"
                                         }`}
                                 >
                                     {seat.seatNo}

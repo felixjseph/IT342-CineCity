@@ -1,4 +1,46 @@
+import { useEffect } from "react";
+import { useState } from "react"
+
 export default function Profile() {
+
+
+    const [user, setUser] = useState({
+        username:"",
+        email:"",
+        password:""
+    })
+
+    const handleChange = (e) =>{
+        setUser({
+            ...user,
+            [e.target.name]:e.target.value
+        })
+    }
+
+    const fetchData = async(url, setter)=>{
+        try {
+            const response = await fetch(url,{
+                credentials:'include'
+            })
+
+            const data = await response.json();
+            if(response.ok){
+                console.log(data)
+                console.log("data fetched successfully")
+                setter(data)
+            }else{
+                console.log(data)
+                console.log("error fetching data")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(()=>{
+        fetchData('http://localhost:8080/users/me',setUser)
+    },[])
+
     return (
         <div className="p-8 w-full relative overflow-y-scroll">
             <h1 className="text-white font-medium text-2xl">Admin Profile</h1>
@@ -22,6 +64,9 @@ export default function Profile() {
                             type="text"
                             placeholder="Username"
                             className="w-full p-2 rounded bg-gray-700 text-white focus:outline-none mb-4"
+                            onChange={handleChange}
+                            name="username"
+                            value={user.username}
                         />
                     </div>
                     <div>
@@ -30,6 +75,9 @@ export default function Profile() {
                             type="text"
                             placeholder="Email"
                             className="w-full p-2 rounded bg-gray-700 text-white focus:outline-none mb-4"
+                            onChange={handleChange}
+                            name="email"
+                            value={user.email}
                         />
                     </div>
                 </div>
@@ -40,6 +88,9 @@ export default function Profile() {
                             type="password"
                             placeholder="Password"
                             className="w-[50%] p-2 rounded bg-gray-700 text-white focus:outline-none mb-4"
+                            onChange={handleChange}
+                            name="password"
+                            value={user.password}
                         />
                     </div>
                 </div>
