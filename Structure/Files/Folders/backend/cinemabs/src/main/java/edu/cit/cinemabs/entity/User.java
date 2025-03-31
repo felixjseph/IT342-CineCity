@@ -25,17 +25,21 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String role;
 
+    @Lob
+    private byte[] photo;
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
 
     public User() {
     }
 
-    public User(String username, String password, String email, String role) {
+    public User(String username, String password, String email, String role, byte[] photo) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.photo = photo;
     }
 
     @Override
@@ -106,5 +110,13 @@ public class User implements UserDetails {
     public User setRole(String role) {
         this.role = role;
         return this;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 }
