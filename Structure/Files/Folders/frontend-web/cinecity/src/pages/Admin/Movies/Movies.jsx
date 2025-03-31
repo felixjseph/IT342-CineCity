@@ -79,6 +79,14 @@ export default function Movies() {
         setSuccessAddToast(true);
         setTimeout(() => setSuccessAddToast(false), 3000);
         fetchMovies();
+        setMovie({
+          title: "",
+          duration: "",
+          synopsis: "",
+          genre: {
+            id: ""
+          }
+        })
       } else {
         console.log(data);
         console.log("Error adding a movie");

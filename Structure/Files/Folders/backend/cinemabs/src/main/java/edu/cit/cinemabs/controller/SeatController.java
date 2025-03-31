@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/seats")
@@ -43,5 +44,11 @@ public class SeatController {
     public void deleteSeat(@PathVariable int id) {
         seatService.deleteSeat(id);
     }
+
+    @GetMapping("/showtime/{id}")
+    public List<Seat> getSeatsByShowtimeId(@PathVariable int id){
+        return seatService.getSeatsByShowtimeId(id);
+    }
+
 }
 

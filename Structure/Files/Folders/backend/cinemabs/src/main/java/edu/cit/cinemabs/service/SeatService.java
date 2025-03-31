@@ -71,4 +71,8 @@ public class SeatService {
             }
         });
     }
+
+    public List<Seat> getSeatsByShowtimeId(int id){
+        return seatRepository.findByShowtime_ShowtimeId(id);
+    }
 }
