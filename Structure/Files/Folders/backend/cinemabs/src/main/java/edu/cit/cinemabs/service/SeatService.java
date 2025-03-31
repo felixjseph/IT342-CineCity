@@ -65,8 +65,8 @@ public class SeatService {
             for (char row : rows) {
                 Seat seat = new Seat();
                 seat.setSeatNo(row + String.valueOf(seatNo));
-                seat.setIsAvaiable(false); // Set isAvailable to false
-                seat.setShowtime(showtime); // Associate the seat with the showtime
+                seat.setIsAvaiable(true);
+                seat.setShowtime(showtime);
                 seatRepository.save(seat);
             }
         });
