@@ -162,7 +162,7 @@ export default function Movie() {
               <p className="mt-4 font-semibold ">Showtimes:</p>
               {showtimes.filter(st => st.movie.id === selectedMovie.id).map(st => (
                 <p key={st.showtime_id} className="text-sm text-gray-400 border-b border-gray-600 py-2">
-                  {st.date} {st.time} - Price: ${st.price}
+                  {st.date} {st.time} - Price: ₱{st.price}
                 </p>
               ))}
                <button className="mt-3 ml-4 px-3 py-1 bg-green-500 text-black rounded-full hover:scale-105 transition duration-300">Book Now</button>
