@@ -2,6 +2,7 @@ package edu.cit.cinemabs.service;
 
 import java.util.List;
 
+import edu.cit.cinemabs.entity.Seat;
 import edu.cit.cinemabs.entity.Showtime;
 import edu.cit.cinemabs.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,6 @@ public class MovieCinemaService{
     public Showtime getShowtimeById(int movie_cinema_id){
         return mcrepo.findById(movie_cinema_id).orElseThrow(()-> new IllegalArgumentException("Showtime was not found"));
     }
+
 
 }

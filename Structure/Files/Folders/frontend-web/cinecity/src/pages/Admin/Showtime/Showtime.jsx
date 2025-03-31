@@ -18,6 +18,9 @@ export default function Showtime() {
     const [updateToast, setUpdateToast] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
     const [successDeleteToast, setSuccessDeleteToast] = useState(false)
+    const [viewSeatsModal, setViewSeatsModal] = useState(false)
+    const [seats, setSeats] = useState([])
+    const [movieCinema, setMovieCinema] = useState([])
     const [showtime, setShowtime] = useState({
         movie: {
             id: ""
@@ -30,6 +33,37 @@ export default function Showtime() {
         time: ""
     })
 
+    const fetchSeats = async (showtimeId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/seats/showtime/${showtimeId}`, {
+                credentials: 'include'
+            })
+
+            const data = await response.json();
+            if (response.ok) {
+                console.log(data)
+                setSeats(data)
+                setViewSeatsModal(true)
+                const response2 = await fetch(`http://localhost:8080/seats/showtime/${showtimeId}`,{
+                    credentials:'include'
+                })
+
+                const data2 = await response2.json();
+                if(response2.ok){
+                    console.log(data2)
+                    setMovieCinema(data2)
+                }else{
+                    console.log("error fetching showtime")
+                }
+                
+            } else {
+                console.log(data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleEdit = (showtimeId) => {
         setUpdateModal(true)
         fetchShowtime(showtimeId)
@@ -37,15 +71,15 @@ export default function Showtime() {
 
     const addDefaultSeats = async (showtimeId) => {
         try {
-            const response = await fetch (`http://localhost:8080/seats/default-seats/${showtimeId}`,{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
+            const response = await fetch(`http://localhost:8080/seats/default-seats/${showtimeId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                credentials:'include'
+                credentials: 'include'
             })
 
-            if(response.ok){
+            if (response.ok) {
                 setIsLoading(false)
                 setAddModal(false)
                 setAddToast(true)
@@ -63,7 +97,7 @@ export default function Showtime() {
                     time: ""
                 })
                 console.log(`seats added to ${showtimeId}`)
-            }else{
+            } else {
                 console.log(`error adding seats to ${showtimeId}`)
             }
         } catch (error) {
@@ -91,12 +125,12 @@ export default function Showtime() {
 
             const data = await response.json();
             if (response.ok) {
-                
+
                 console.log(data.movieCinemaId)
                 console.log("successful")
-                
+
                 addDefaultSeats(data.movieCinemaId)
-                
+
             } else {
                 console.log(showtime)
                 console.log("error")
@@ -342,7 +376,7 @@ export default function Showtime() {
                                 <td className="py-4 px-6">{showtime.time}</td>
                                 <td className="py-4 px-6">{showtime.price}</td>
                                 <td className="py-4 px-6 underline text-blue-500 cursor-pointer"
-                                    onClick={() => handleViewSeats(showtime)} > View  </td>
+                                    onClick={() => fetchSeats(showtime.movieCinemaId)} > View  </td>
                                 <td className="py-4 px-6 flex justify-center gap-2">
                                     <button
                                         onClick={() => handleEdit(showtime.movieCinemaId)}
@@ -554,8 +588,44 @@ export default function Showtime() {
                 </div>
             )}
 
-            {seatModal && (
-                <Seat showtime={selectedShowtime} onClose={() => setSeatModal(false)} />
+            {viewSeatsModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-[500px] flex flex-col items-center">
+                        <h2 className="text-white text-xl font-semibold mb-4">Seat Availability</h2>
+
+                        <p className="text-white">Movie: {movieCinema.date}</p>
+                        {/* <p className="text-white">Cinema: {movieCinema.cinema.cinema_name}</p> */}
+
+                        {/* TV Screen (Seat Container) */}
+                        <div className="mt-4 flex justify-center">
+                            <div className="bg-black w-[400px] h-[50px] rounded-lg border-4 border-gray-600 shadow-lg flex items-center justify-center">
+                                <p className="text-white">Screen</p>
+                            </div>
+                        </div>
+
+
+                        <div className="mt-6 flex flex-wrap justify-center gap-3">
+                            {seats.map((seat) => (
+                                <div
+                                    key={seat.movieCinemaId}
+                                    className={`w-12 h-12 flex items-center justify-center rounded-full text-white font-semibold ${seat.isAvailable ? "bg-green-500 cursor-pointer" : "bg-gray-500"
+                                        }`}
+                                >
+                                    {seat.seatNo}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-6 flex justify-end w-full">
+                            <button
+                                onClick={()=>setViewSeatsModal(false)}
+                                className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     )

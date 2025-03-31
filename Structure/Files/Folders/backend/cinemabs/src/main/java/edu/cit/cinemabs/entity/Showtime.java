@@ -20,6 +20,7 @@ import jakarta.persistence.Table;
 public class Showtime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "showtimeId")
     private int showtimeId;
 
     private Date date;
