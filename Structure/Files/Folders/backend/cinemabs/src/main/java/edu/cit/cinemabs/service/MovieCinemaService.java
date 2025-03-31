@@ -46,5 +46,9 @@ public class MovieCinemaService{
         return mcrepo.findById(movie_cinema_id).orElseThrow(()-> new IllegalArgumentException("Showtime was not found"));
     }
 
+    public List<Showtime> getShowtimeByMovieId(int id){
+        return mcrepo.findShowtimeByMovieId(id);
+    }
+
 
 }

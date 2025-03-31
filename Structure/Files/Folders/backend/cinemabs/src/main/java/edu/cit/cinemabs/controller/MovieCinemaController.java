@@ -46,4 +46,9 @@ public class MovieCinemaController {
     public Showtime getShowtime(@PathVariable int movie_cinema_id){
         return mcserv.getShowtimeById(movie_cinema_id);
     }
+
+    @GetMapping("/movie/{id}")
+    public List<Showtime> getShowtimeByMovieId(@PathVariable int id){
+        return mcserv.getShowtimeByMovieId(id);
+    }
 }
