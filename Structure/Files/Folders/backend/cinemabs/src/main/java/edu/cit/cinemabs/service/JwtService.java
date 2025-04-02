@@ -1,5 +1,6 @@
 package edu.cit.cinemabs.service;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,11 +18,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
-    @Value("${security.jwt.secret-key}")
-    private String secretKey;
+    private final Dotenv dotenv = Dotenv.load();
 
-    @Value("${security.jwt.expiration-time}")
-    private long jwtExpiration;
+    private final String secretKey = dotenv.get("JWT_SECRET_KEY");
+    private final long jwtExpiration = Long.parseLong(dotenv.get("security.jwt.expiration-time", "3600000"));
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

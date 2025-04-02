@@ -3,6 +3,7 @@ package edu.cit.cinemabs.controller;
 import edu.cit.cinemabs.entity.Seat;
 import edu.cit.cinemabs.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +26,13 @@ public class SeatController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Seat> getAllSeats() {
         return seatService.getAllSeats();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Seat getSeatById(@PathVariable int id) {
         return seatService.getSeatById(id);
     }
@@ -46,6 +49,7 @@ public class SeatController {
     }
 
     @GetMapping("/showtime/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Seat> getSeatsByShowtimeId(@PathVariable int id){
         return seatService.getSeatsByShowtimeId(id);
     }

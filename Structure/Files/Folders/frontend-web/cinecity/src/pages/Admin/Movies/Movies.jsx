@@ -34,7 +34,7 @@ export default function Movies() {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:8080/movie", {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie`, {
         method: "GET",
         credentials: "include",
       });
@@ -62,7 +62,7 @@ export default function Movies() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/movie", {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -118,7 +118,7 @@ export default function Movies() {
     e.preventDefault();
     setIsLoading(true)
     try {
-      const response = await fetch(`http://localhost:8080/movie/${updateMovie}`, {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie/${updateMovie}`, {
         method: "DELETE",
         credentials: 'include'
       })
@@ -142,7 +142,7 @@ export default function Movies() {
     e.preventDefault();
     setIsLoading(true)
     try {
-      const response = await fetch(`http://localhost:8080/movie/${updateMovie}`, {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie/${updateMovie}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -179,7 +179,7 @@ export default function Movies() {
 
   const fetchMovie = async (movieid) => {
     try {
-      const response = await fetch(`http://localhost:8080/movie/${movieid}`, {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie/${movieid}`, {
         method: "GET",
         credentials: 'include'
       })
@@ -201,7 +201,7 @@ export default function Movies() {
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = await fetch("http://localhost:8080/genre", {
+        const response = await fetch(`${import.meta.env.VITE_DATA_URL}/genre`, {
           method: "GET",
           credentials: "include"
         });
@@ -233,7 +233,7 @@ export default function Movies() {
 
     try {
       setIsLoading(true); // Show loading state
-      const response = await fetch(`http://localhost:8080/movie/${movieId}/cover`, {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie/${movieId}/cover`, {
         method: "PUT",
         body: formData,
         credentials: "include",
@@ -320,7 +320,7 @@ export default function Movies() {
               <div className="bg-green-500/20 h-[80%] w-[7rem] rounded text-center content-center">
                 {movie.photo !== null ? (
                   <img
-                    src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                    src={`${import.meta.env.VITE_DATA_URL}/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
                     alt={`${movie.title} Cover`}
                     className="object-cover rounded mb-4"
                   />

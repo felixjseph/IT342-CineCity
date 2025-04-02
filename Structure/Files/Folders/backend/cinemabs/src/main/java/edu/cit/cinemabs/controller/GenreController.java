@@ -5,6 +5,7 @@ import java.util.List;
 import edu.cit.cinemabs.entity.Genre;
 import edu.cit.cinemabs.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -21,11 +22,13 @@ public class GenreController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Genre> getAllGenres(){
         return gserv.getAllGenre();
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Genre> searchGenres(@RequestParam String name) {
         return gserv.searchGenresByName(name);
     }
