@@ -31,7 +31,6 @@ public class CinemaController {
     }
 
     @PutMapping("/{id}")
-    
     public Cinema updateCinema(@PathVariable int id, @RequestBody Cinema updatedCinema) {
         return cserv.updateCinema(id, updatedCinema);
     }
