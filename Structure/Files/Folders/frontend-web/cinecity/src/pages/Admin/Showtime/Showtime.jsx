@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
-import Seat from "../Seat/Seat";
 
 export default function Showtime() {
 
