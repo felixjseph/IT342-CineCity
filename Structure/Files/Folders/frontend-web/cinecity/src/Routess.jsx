@@ -31,7 +31,7 @@ export default function Routess() {
                     <Route path="movie" element={<Movie />}></Route>
                     <Route path="/movie/:id" element={<MovieDetails />} />
                     <Route path="home" element={<Home />} />
-                    <Route path="seat/selection" element={<SeatSelection />}/>
+                    <Route path="seat" element={<SeatSelection />}/>
                 </Route>
                 <Route element={<ProtectedRouteAdmin />}>
                     <Route path="/admin" element={<SideBar />}>
