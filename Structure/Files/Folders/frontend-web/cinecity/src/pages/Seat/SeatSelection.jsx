@@ -61,47 +61,55 @@ export default function SeatSelection() {
 
     return (
         <div className="flex h-screen text-white">
-            <div className="w-[25%] p-8 border-r border-gray-600">
-                <div className="movie-details flex items-center">
+            <div className="w-[25%] p-8 border-r border-gray-600 flex flex-col items-center">
                     <img
                         src={`http://localhost:8080/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
                         alt={`${showtime.movie.title} cover`}
-                        className="w-[6rem]"
+                        className="w-[12rem] rounded-lg shadow-lg"
                     />
-                    <div>
-                        <h1>{showtime.movie.title}</h1>
-                        <p>{showtime.cinema.cinema_name}</p>
-                        <p>{showtime.movie.duration} mins</p>
-                        <p>Genre: {showtime.movie.genre.genreName}</p>
+                    <div className="text-center mt-4">
+                        <h1 className="text-xl font-bold text-green-400">{showtime.movie.title}</h1>
+                        <p className="text-gray-400 mt-2">{showtime.cinema.cinema_name}</p>
+                        <p className="text-gray-400">{showtime.movie.duration} mins</p>
+                        <p className="text-gray-400">Genre: {showtime.movie.genre.genreName}</p>
                     </div>
-                </div>
-                <div className="showtime border">
-                    <select className="text-white bg-gray-700">
+              
+                <div className="mt-8 w-full">
+                    <select className="w-full p-2 bg-gray-800 text-white rounded border border-gray-700">
                         <option>Select Showtime</option>
                         {movieShowtime.map((mshow) => (
                             <option>{mshow.date} - {mshow.time}</option>
                         ))}
                     </select>
                 </div>
+
+                <button className="mt-[2rem] w-full px-5 py-2 bg-green-500 rounded-full text-white font-bold hover:bg-green-600 cursor-pointer">
+                        Proceed to Payment
+                </button>
             </div>
-            <div className="w-full p-7 border flex flex-col items-center">
+
+            <div className="w-full p-7 flex flex-col items-center">
+                <h2 className="text-4xl font-bold mb-[2rem] mt-3">Seat Selection</h2>
+
                 <div className="flex justify-around items-center mb-6">
-                    <div className="flex flex-col items-center mx-4">
+                    <div className="flex flex-col items-center mx-4 text-gray-200">
                         <h1>Available</h1>
-                        <div className="w-[1.5rem] h-[1.5rem] bg-gray-500 rounded"></div>
+                        <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-gray-500 rounded"></div>
                     </div>
-                    <div className="flex flex-col items-center mx-4">
+                    <div className="flex flex-col items-center mx-4 text-gray-200">
                         <h1>Selected</h1>
-                        <div className="w-[1.5rem] h-[1.5rem] bg-green-500 rounded"></div>
+                        <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-green-500 rounded"></div>
                     </div>
-                    <div className="flex flex-col items-center mx-4">
+                    <div className="flex flex-col items-center mx-4 text-gray-200">
                         <h1>Not Available</h1>
-                        <div className="w-[1.5rem] h-[1.5rem] bg-red-500 rounded"></div>
+                        <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-red-500 rounded"></div>
                     </div>
                 </div>
-                <div className="w-[60%] h-[1rem] bg-green-500 rounded-xl text-center"></div>
+
+                <div className="w-[50%] h-[1.2rem] bg-green-500 rounded-xl shadow-lg mb-6"></div>
+
                 <div className="grid grid-cols-11 gap-2 mb-2 items-center">
-                    <span className="w-10 text-center font-bold"></span>
+                    <span className="w-12 text-center font-bold"></span>
                     {[...Array(10)].map((_, i) => (
                         <span key={i} className="w-10 text-center font-bold">{i + 1}</span>
                     ))}
@@ -119,7 +127,7 @@ export default function SeatSelection() {
                                         <button
                                             key={seat.seatNo}
                                             onClick={() => toggleSeatSelection(seat.seatNo)}
-                                            className={`w-10 h-10 rounded flex items-center justify-center
+                                            className={`w-12 h-12 rounded flex items-center justify-center cursor-pointer
                                 ${selectedSeats.has(seat.seatNo) ? "bg-green-500" :
                                                     seat.reserved ? "bg-red-500" : "bg-gray-500"}`}
                                         />

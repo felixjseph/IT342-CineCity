@@ -17,6 +17,7 @@ import Genres from "./pages/Admin/Genres/Genre"
 import MovieDetails from "./pages/Movie/MovieDetails";
 import Profile from "./pages/Admin/Profile/Profile"
 import SeatSelection from "./pages/Seat/SeatSelection"
+import UserProfile from "./pages/Profile/userProfile"
 
 export default function Routess() {
     return (
@@ -32,6 +33,7 @@ export default function Routess() {
                     <Route path="/movie/:id" element={<MovieDetails />} />
                     <Route path="home" element={<Home />} />
                     <Route path="seat" element={<SeatSelection />}/>
+                    <Route path="account" element={<UserProfile />}/>
                 </Route>
                 <Route element={<ProtectedRouteAdmin />}>
                     <Route path="/admin" element={<SideBar />}>
