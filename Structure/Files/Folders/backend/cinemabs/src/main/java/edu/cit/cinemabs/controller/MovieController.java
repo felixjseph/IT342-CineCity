@@ -8,6 +8,7 @@ import edu.cit.cinemabs.service.GenreService;
 import edu.cit.cinemabs.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,31 +23,37 @@ public class MovieController {
     GenreService genreService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Movie> getAllMovies() {
         return mserv.getAllMovie();
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public Movie addMovie(@RequestBody Movie movie) {
         return mserv.postMovieDetails(movie);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public Movie updateMovie(@PathVariable int id, @RequestBody Movie movie){
         return mserv.updateMovieDetails(movie, id);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteMovie(@PathVariable int id) {
         mserv.deleteMovie(id);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Movie getMovieDetail(@PathVariable int id){
         return mserv.getMovieDetail(id);
     }
 
     // Set Cover Photo
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping(value = "/{id}/cover", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Movie setCoverPhoto(@PathVariable int id, @RequestParam("photo") MultipartFile photo) throws IOException {
         byte[] photoBytes = photo.getBytes();
@@ -54,6 +61,7 @@ public class MovieController {
     }
 
     // Get Cover Photo
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getCoverPhoto(@PathVariable int id) {
         return mserv.getCoverPhoto(id);

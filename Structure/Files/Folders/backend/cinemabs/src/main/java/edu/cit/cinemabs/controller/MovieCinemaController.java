@@ -5,6 +5,7 @@ import java.util.List;
 import edu.cit.cinemabs.entity.Showtime;
 import edu.cit.cinemabs.service.MovieCinemaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ public class MovieCinemaController {
     MovieCinemaService mcserv;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Showtime> getAllMovieCinema(){
         return mcserv.getAllMovieCinema();
     }
@@ -43,11 +45,13 @@ public class MovieCinemaController {
     }
 
     @GetMapping("/{movie_cinema_id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Showtime getShowtime(@PathVariable int movie_cinema_id){
         return mcserv.getShowtimeById(movie_cinema_id);
     }
 
     @GetMapping("/movie/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Showtime> getShowtimeByMovieId(@PathVariable int id){
         return mcserv.getShowtimeByMovieId(id);
     }
