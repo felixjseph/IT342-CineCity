@@ -2,7 +2,6 @@ package edu.cit.cinemabs.service;
 
 import java.util.List;
 
-import edu.cit.cinemabs.entity.Seat;
 import edu.cit.cinemabs.entity.Showtime;
 import edu.cit.cinemabs.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

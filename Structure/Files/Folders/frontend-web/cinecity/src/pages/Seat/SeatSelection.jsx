@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PaymentButton from './PaymentButton'
 
 export default function SeatSelection() {
 
@@ -83,9 +84,7 @@ export default function SeatSelection() {
                     </select>
                 </div>
 
-                <button className="mt-[2rem] w-full px-5 py-2 bg-green-500 rounded-full text-white font-bold hover:bg-green-600 cursor-pointer">
-                        Proceed to Payment
-                </button>
+                <PaymentButton/>
             </div>
 
             <div className="w-full p-7 flex flex-col items-center">
