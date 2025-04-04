@@ -1,47 +1,70 @@
 package edu.cit.cinemabs.service;
 
-import edu.cit.cinemabs.entity.Payment;
-import edu.cit.cinemabs.repository.PaymentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
+import io.github.cdimascio.dotenv.Dotenv;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.*;
+
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PaymentService {
 
-    @Autowired
-    private PaymentRepository paymentRepository;
 
-    @CacheEvict(value = "payments", allEntries = true)
-    public Payment createPayment(Payment payment) {
-        return paymentRepository.save(payment);
-    }
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String PAYMONGO_SECRET_KEY = dotenv.get("PAYMONGO_API_SECRET_KEY");
+    private static final String PAYMONGO_URL = dotenv.get("PAYMONGO_URL");
 
-    @Cacheable(value = "payments")
-    public List<Payment> getAllPayments() {
-        return paymentRepository.findAll();
-    }
-
-    @Cacheable(value = "paymentById", key = "#id")
-    public Optional<Payment> getPaymentById(int id) {
-        return paymentRepository.findById(id);
-    }
-
-    @CacheEvict(value = "payments", key = "#id")
-    public Payment updatePayment(int id, Payment newPayment) {
-        if (paymentRepository.existsById(id)) {
-            newPayment.setPaymentId(id);
-            return paymentRepository.save(newPayment);
+    public Map<String, Object> createPaymentIntent(String amount) {
+        if (PAYMONGO_SECRET_KEY == null || PAYMONGO_SECRET_KEY.isEmpty()) {
+            throw new IllegalArgumentException("PayMongo Secret Key is not set.");
         }
-        return null;
+        if (PAYMONGO_URL == null || PAYMONGO_URL.isEmpty()) {
+            throw new IllegalArgumentException("PayMongo URL is not set.");
+        }
+    
+        RestTemplate restTemplate = new RestTemplate();
+    
+        HttpHeaders headers = new HttpHeaders();
+    
+        // Correct Base64 Authorization header
+        String encodedAuth = Base64.getEncoder().encodeToString((PAYMONGO_SECRET_KEY + ":").getBytes());
+        headers.set("Authorization", "Basic " + encodedAuth);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+    
+        // Prepare the attributes for the Payment Intent
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("amount", Integer.parseInt(amount)); // e.g. 10000 = PHP 100.00
+        attributes.put("currency", "PHP");
+        attributes.put("payment_method_allowed", List.of("card", "paymaya", "gcash"));
+        attributes.put("description", "Cinema Booking Payment");
+        attributes.put("statement_descriptor", "CineCity Payment");
+    
+        // Wrap into request body
+        Map<String, Object> data = new HashMap<>();
+        data.put("attributes", attributes);
+    
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("data", data);
+    
+        try {
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                PAYMONGO_URL,
+                HttpMethod.POST,
+                entity,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            return response.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error creating payment intent: " + e.getMessage());
+        }
     }
-
-    @CacheEvict(value = "payments", key = "#id")
-    public void deletePayment(int id) {
-        paymentRepository.deleteById(id);
-    }
+    
 }
