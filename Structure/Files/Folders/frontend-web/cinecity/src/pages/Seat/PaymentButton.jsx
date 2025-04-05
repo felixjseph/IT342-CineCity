@@ -16,18 +16,17 @@ const PaymentButton = () => {
                 body: JSON.stringify({
                     amount: "20000"
                 }),
-                credentials:'include'
+                credentials: 'include'
             });
 
             const data = await response.json();
-
+            
             if (response.ok) {
                 setPaymentData(data);
                 console.log("Payment Intent created:", data);
-                alert("Payment Intent created. Check your backend logs or PayMongo dashboard.");
+                localStorage.setItem("intent",JSON.stringify(paymentData))
             } else {
                 console.error("Error:", data);
-                alert("Error: " + (data.error || "Something went wrong"));
             }
         } catch (error) {
             console.error("Payment Error:", error);
@@ -38,15 +37,14 @@ const PaymentButton = () => {
     };
 
     return (
-        <div>
-            <button onClick={handlePayment} disabled={loading}>
-                {loading ? "Processing..." : "Create Payment Intent"}
+        <div className="w-full my-4">
+            <button
+                onClick={handlePayment}
+                disabled={loading}
+                className="px-2 py-2 w-full rounded bg-green-700 cursor-pointer hover:bg-green-400"
+            >
+                {loading ? "Processing..." : "Proceed to payment"}
             </button>
-            {paymentData && (
-                <pre style={{ textAlign: "left" }}>
-                    {JSON.stringify(paymentData, null, 2)}
-                </pre>
-            )}
         </div>
     );
 };
