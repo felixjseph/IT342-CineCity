@@ -229,10 +229,10 @@ export default function Movies() {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append("photo", file); // Append the file to the form data
+    formData.append("photo", file);
 
     try {
-      setIsLoading(true); // Show loading state
+      setIsLoading(true);
       const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie/${movieId}/cover`, {
         method: "PUT",
         body: formData,
@@ -241,14 +241,14 @@ export default function Movies() {
 
       if (response.ok) {
         console.log(`Image uploaded successfully for movie ID: ${movieId}`);
-        fetchMovies(); // Refresh the movie list to show the updated image
+        fetchMovies();
       } else {
         console.error("Error uploading image:", await response.text());
       }
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
-      setIsLoading(false); // Hide loading state
+      setIsLoading(false);
     }
   };
 
