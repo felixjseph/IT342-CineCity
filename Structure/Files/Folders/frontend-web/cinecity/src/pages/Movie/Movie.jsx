@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
 
 export default function Movie() {
@@ -10,13 +10,128 @@ export default function Movie() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(false);
-
+  const [users, setUsers] = useState()
+  const seats = localStorage.getItem("seats") ? JSON.parse(localStorage.getItem("seats")) : null;
+  const showtime2 = localStorage.getItem("showtime2") ? JSON.parse(localStorage.getItem("showtime2")) : null;
+  const paymentMethod = localStorage.getItem("paymentMethod") ? JSON.parse(localStorage.getItem("paymentMethod")) : null;
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const updateSeatAvailability = async () => {
+    try {
+      for (const seat of seats) {
+        const response = await fetch(`${import.meta.env.VITE_DATA_URL}/seats/${seat.seatId}`, {
+          method: "PUT",
+          credentials: 'include'
+        })
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Seat updated successful: ", data)
+        } else {
+          console.log("error updating seat")
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleBooking = async (status) => {
+    try {
+      for (const seat of seats) {
+        const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings`, {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            showtime: {
+              movieCinemaId: showtime2.movieCinemaId
+            },
+            user: {
+              userId: users.userId
+            },
+            seat: {
+              seatId: seat.seatId
+            },
+            amount: showtime2.price,
+            status: status,
+            paymentMethod: paymentMethod.type
+          }),
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Booking Success: ", data);
+          if (status === "success") {
+            updateSeatAvailability();
+          }
+        } else {
+          console.log("Booking Failed for seat: ", seat.seatNo);
+        }
+      }
+    } catch (error) {
+      console.log("Error during booking: ", error);
+    }
+  };
+
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search)
+    const paymentIntent = queryParams.get("payment_intent_id")
+
+    if (paymentIntent) {
+      retrievePaymentIntent(paymentIntent);
+    }
+  }, [location.search, users])
+
+  const retrievePaymentIntent = async (paymentIntentId) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/payments/intent/${paymentIntentId}`, {
+        credentials: 'include'
+      })
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.data.attributes.status === "succeeded") {
+          handleBooking("success");
+          console.log(users)
+          console.log("success")
+          console.log(data)
+        } else {
+          console.log("payment failed")
+          handleBooking("failed");
+        }
+      }
+    } catch (error) {
+      console.log("Error retrieving payment intent:", error)
+    }
+  }
 
   useEffect(() => {
     fetchShowtimes();
     fetchGenres();
+    fetchUser();
   }, []);
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`, {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data)
+        setUsers(data)
+      } else {
+        console.log("Error user: ", data)
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
 
   const fetchGenres = async () => {
     try {
@@ -89,9 +204,9 @@ export default function Movie() {
       <div className="w-1/6 p-8 border-r border-gray-600 overflow-y-auto max-h-screen scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Genres</h2>
-            <button onClick={clearFilters} className="text-white transition duration-200 cursor-pointer underline">
-              Clear
-            </button>
+          <button onClick={clearFilters} className="text-white transition duration-200 cursor-pointer underline">
+            Clear
+          </button>
         </div>
         {genres.map((genre) => (
           <div

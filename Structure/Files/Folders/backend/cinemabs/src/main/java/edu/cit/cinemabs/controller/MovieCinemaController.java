@@ -55,4 +55,10 @@ public class MovieCinemaController {
     public List<Showtime> getShowtimeByMovieId(@PathVariable int id){
         return mcserv.getShowtimeByMovieId(id);
     }
+
+    @GetMapping("/stats/count")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public long getTotalShowtimes() {
+        return mcserv.getTotalShowtimes();
+    }
 }

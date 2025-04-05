@@ -1,9 +1,9 @@
 package edu.cit.cinemabs.controller;
 
-
 import edu.cit.cinemabs.entity.Cinema;
 import edu.cit.cinemabs.service.CinemaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,5 +38,11 @@ public class CinemaController {
     @DeleteMapping("/{id}")
     public void deleteCinema(@PathVariable int id) {
         cserv.deleteCinema(id);
+    }
+
+    @GetMapping("/stats/count")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public long getTotalCinemas() {
+        return cserv.getTotalCinemas();
     }
 }

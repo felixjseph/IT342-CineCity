@@ -15,6 +15,8 @@ export default function Movies() {
   const [updateModal, setUpdateModal] = useState(false)
   const [updateMovie, setUpdateMovie] = useState(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [countOfMovies, setCountOfMovies] = useState()
+  const [searchQuery, setSearchQuery] = useState("");
   const [movie, setMovie] = useState({
     title: "",
     duration: "",
@@ -29,7 +31,7 @@ export default function Movies() {
     setUpdateMovie(movieId)
     fetchMovie(movieId)
   }
-
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const [movies, setMovies] = useState([])
 
   const fetchMovies = async () => {
@@ -45,6 +47,7 @@ export default function Movies() {
         console.log(movieDatas);
         console.log("Movies fetched successfully");
         setMovies(movieDatas);
+        setFilteredMovies(movieDatas);
       } else {
         console.log(movieDatas);
         console.log("Movies fetch failed");
@@ -54,8 +57,36 @@ export default function Movies() {
     }
   };
 
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    const filtered = movies.filter((movie) =>
+      movie.title.toLowerCase().includes(query)
+    );
+    setFilteredMovies(filtered);
+  };
+
+  const numberOfMovies = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie/stats/count`, {
+        credentials: 'include'
+      })
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Number of movies: ", data)
+        setCountOfMovies(data)
+      } else {
+        console.log("Error")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchMovies();
+    numberOfMovies();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -73,6 +104,7 @@ export default function Movies() {
 
       const data = await response.json();
       if (response.ok) {
+        numberOfMovies();
         console.log(data);
         console.log("Movie added successfully");
         setAddMovie(false);
@@ -225,7 +257,7 @@ export default function Movies() {
 
   const handleImageUpload = async (e, movieId) => {
     e.preventDefault();
-    const file = e.target.files[0]; // Get the selected file
+    const file = e.target.files[0];
     if (!file) return;
 
     const formData = new FormData();
@@ -266,7 +298,7 @@ export default function Movies() {
       <div>
         <div className="text-white flex w-fit px-4 py-1 rounded mt-4 text-sm bg-[#2FBD59]">
           <h1 className="text-white mr-8">All</h1>
-          <p className="bg-gray-500/30 px-2 rounded">0</p>
+          <p className="bg-gray-500/30 px-2 rounded">{countOfMovies}</p>
         </div>
         <div className="w-[50%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33] mt-4">
           <IoSearchSharp className="text-[#2FBD59] mr-2" />
@@ -274,67 +306,48 @@ export default function Movies() {
             type="text"
             placeholder="Search movies"
             className="text-white focus:outline-none w-full border-l-1 pl-2 border-gray-500 placeholder-gray-400"
+            value={searchQuery} // Bind input value to searchQuery state
+            onChange={handleSearchChange} // Update searchQuery on input change
           />
         </div>
         <div className="grid grid-cols-2 gap-4 mt-8">
-          {movies.map((movie) => (
-            <div
-              key={movie.id}
-              className="text-white p-4 flex justify-between items-center bg-[#2E2F33] rounded"
-            >
-              <div>
-                <h1 className="text-xl">{movie.title}</h1>
-                <div><p className="text-xm font-medium opacity-30">Duration</p><p className="text-sm font-medium">{movie.duration} minutes</p></div>
-                <div className="mt-4"><p className="text-xm font-medium opacity-30">Genre</p><p className="text-sm font-medium">{movie.genre.genreName}</p></div>
-                <div className="flex items-center mt-2 w-fit">
-                  <button className="flex items-center px-4 py-1 mr-4 rounded bg-gray-500 cursor-pointer transition duration-300 ease-in-out"
-                    onClick={() => handleEdit(movie.id)}
-                  ><FaEdit className="text-blue-500 text-xl mr-2" />Edit</button>
-                  <button className="flex mr-4 items-center px-4 py-1 rounded bg-gray-500 cursor-pointer transition duration-300 ease-in-out"
-                    onClick={() => {
-                      setConfirmDelete(true)
-                      setUpdateMovie(movie.id)
-                    }}
-                  ><MdDelete className="text-red-500 text-xl mr-2" />Delete</button>
+          {filteredMovies.length > 0 ? (
+            filteredMovies.map((movie) => (
+              <div
+                key={movie.id}
+                className="text-white p-4 flex justify-between items-center bg-[#2E2F33] rounded"
+              >
+                <div>
+                  <h1 className="text-xl">{movie.title}</h1>
+                  <div>
+                    <p className="text-xm font-medium opacity-30">Duration</p>
+                    <p className="text-sm font-medium">{movie.duration} minutes</p>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-xm font-medium opacity-30">Genre</p>
+                    <p className="text-sm font-medium">{movie.genre.genreName}</p>
+                  </div>
+                </div>
+                <div className="bg-green-500/20 h-[80%] w-[7rem] rounded text-center content-center">
                   {movie.photo !== null ? (
-                    <label className="w-full px-2 text-white mt-2 py-1 rounded cursor-pointer bg-gray-700 flex items-center justify-center">
-                      Change
-                      <input
-                        type="file"
-                        className="hidden"
-                        onChange={(e) => handleImageUpload(e, movie.id)}
-                      />
-                    </label>
+                    <img
+                      src={`${import.meta.env.VITE_DATA_URL}/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                      alt={`${movie.title} Cover`}
+                      className="object-cover rounded mb-4"
+                    />
                   ) : (
-                    <label className="w-full px-2 text-white mt-2 rounded cursor-pointer bg-gray-700 flex items-center justify-center">
-                      Upload
-                      <input
-                        type="file"
-                        className="hidden"
-                        onChange={(e) => handleImageUpload(e, movie.id)}
-                      />
-                    </label>
+                    <div>
+                      <h1>Upload cover photo</h1>
+                    </div>
                   )}
                 </div>
               </div>
-              <div className="bg-green-500/20 h-[80%] w-[7rem] rounded text-center content-center">
-                {movie.photo !== null ? (
-                  <img
-                    src={`${import.meta.env.VITE_DATA_URL}/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
-                    alt={`${movie.title} Cover`}
-                    className="object-cover rounded mb-4"
-                  />
-
-                ) : (
-                  <div>
-                    <h1>Upload cover photo</h1>
-
-                  </div>
-                )}
-
-              </div>
+            ))
+          ) : (
+            <div className="text-center text-gray-400 col-span-2">
+              <p>No movies found matching your search.</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 

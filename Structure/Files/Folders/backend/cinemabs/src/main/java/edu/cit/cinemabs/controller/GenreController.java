@@ -42,4 +42,10 @@ public class GenreController {
     public void deleteGenre(@PathVariable int id){
         gserv.deleteGenre(id);
     }
+
+    @GetMapping("/stats/count")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public long getTotalGenres() {
+        return gserv.getTotalGenres();
+    }
 }

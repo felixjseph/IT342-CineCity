@@ -5,6 +5,7 @@ export default function SeatSelection() {
 
     const navigate = useNavigate();
     const showtime = JSON.parse(localStorage.getItem("showtime"));
+    const [showtime2, setShowtime2] = useState();
     const [loading, setLoading] = useState(false);
     const [paymentData, setPaymentData] = useState(null);
     const [paymentMethodId, setPaymentMethodId] = useState(null)
@@ -37,7 +38,7 @@ export default function SeatSelection() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    amount: "20000"
+                    amount: "35000"
                 }),
                 credentials: 'include'
             });
@@ -69,13 +70,15 @@ export default function SeatSelection() {
                 credentials: 'include',
                 body: JSON.stringify(paymentMethod)
             });
-    
+
             const data = await response.json();
-    
+
             if (response.ok) {
                 setPaymentMethodId(data.data.id);
                 console.log("Payment method created:", data);
-    
+                localStorage.setItem("seats", JSON.stringify(selectedSeats))
+                localStorage.setItem("showtime2", JSON.stringify(showtime2))
+                localStorage.setItem("paymentMethod", JSON.stringify(paymentMethod))
                 await handleAttachIntent(data.data.id);
             } else {
                 console.error("Error creating payment method:", data);
@@ -86,7 +89,7 @@ export default function SeatSelection() {
             setLoading(false);
         }
     };
-    
+
     const handleAttachIntent = async (paymentMethodId) => {
         setLoading(true);
         try {
@@ -102,9 +105,9 @@ export default function SeatSelection() {
                     return_url: "http://localhost:5173/movie"
                 })
             });
-    
+
             const data = await response.json();
-    
+
             if (response.ok) {
                 console.log("Intent attached successfully:", data);
                 window.location.href = data.data.attributes.next_action.redirect.url;
@@ -146,6 +149,7 @@ export default function SeatSelection() {
 
     useEffect(() => {
         fetchData(`http://localhost:8080/seats/showtime/${show}`, setSeats);
+        fetchData(`http://localhost:8080/showtime/${show}`, setShowtime2);
     }, [show])
 
     useEffect(() => {
@@ -175,7 +179,7 @@ export default function SeatSelection() {
 
     return (
         <div className={`flex h-screen text-white`}>
-            <div className="w-[25%] p-8 border-r border-gray-600 flex flex-col items-center">
+            <div className="w-[25%] p-8 border-r border-gray-600 flex flex-col items-center overflow-y-auto">
                 <img
                     src={`http://localhost:8080/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
                     alt={`${showtime.movie.title} cover`}
@@ -263,10 +267,12 @@ export default function SeatSelection() {
                                     .map((seat) => (
                                         <button
                                             key={seat.seatId}
+                                            disabled={!seat.isAvailable} // Disable the button if the seat is not available
                                             onClick={() => toggleSeatSelection(seat)}
-                                            className={`w-7 h-7 rounded flex items-center justify-center cursor-pointer
-                            ${selectedSeats.some((s) => s.seatId === seat.seatId) ? "bg-green-500" :
-                                                    seat.reserved ? "bg-red-500" : "bg-gray-500"}`}
+                                            className={`w-7 h-7 rounded flex items-center justify-center
+                                            ${!seat.isAvailable ? "bg-red-500 cursor-not-allowed" :
+                                                    selectedSeats.some((s) => s.seatId === seat.seatId) ? "bg-green-500 cursor-pointer" :
+                                                        "bg-gray-500 cursor-pointer"}`}
                                         >
                                         </button>
                                     ))}

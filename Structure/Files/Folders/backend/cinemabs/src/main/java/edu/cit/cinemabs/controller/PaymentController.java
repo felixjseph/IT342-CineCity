@@ -44,9 +44,8 @@ public class PaymentController {
 
     @PostMapping("/intent/attach/{id}")
     public ResponseEntity<Map<String, Object>> attachPaymentIntent(
-        @PathVariable("id") String intentId,
-        @RequestBody Map<String, String> request
-    ) {
+            @PathVariable("id") String intentId,
+            @RequestBody Map<String, String> request) {
         String paymentMethod = request.get("payment_method");
         String clientKey = request.get("client_key");
         String returnUrl = request.get("return_url");
@@ -55,10 +54,15 @@ public class PaymentController {
             return ResponseEntity.badRequest().body(Map.of("error", "Missing required fields"));
         }
 
-        Map<String, Object> response = paymentService.attachPaymentIntent(intentId, paymentMethod, clientKey, returnUrl);
+        Map<String, Object> response = paymentService.attachPaymentIntent(intentId, paymentMethod, clientKey,
+                returnUrl);
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping("/intent/{id}")
+    public ResponseEntity<Map<String, Object>> retrievePaymentIntent(@PathVariable("id") String intentId) {
+        Map<String, Object> response = paymentService.retrievePaymentIntent(intentId);
+        return ResponseEntity.ok(response);
+    }
 
 }

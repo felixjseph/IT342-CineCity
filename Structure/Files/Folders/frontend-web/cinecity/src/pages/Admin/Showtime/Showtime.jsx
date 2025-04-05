@@ -20,6 +20,7 @@ export default function Showtime() {
     const [viewSeatsModal, setViewSeatsModal] = useState(false)
     const [seats, setSeats] = useState([])
     const [movieCinema, setMovieCinema] = useState([])
+    const [countShowtimes, setCountShowtimes] = useState()
     const [showtime, setShowtime] = useState({
         movie: {
             id: ""
@@ -104,6 +105,23 @@ export default function Showtime() {
         }
     }
 
+    const numberOfShowtimes = async () => {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime/stats/count`, {
+            credentials: 'include'
+          })
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Number of showtimes: ", data)
+            setCountShowtimes(data)
+          } else {
+            console.log("Error")
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
     const handleViewSeats = (showtime) => {
         setSelectedShowtime(showtime);
         setSeatModal(true);
@@ -127,7 +145,7 @@ export default function Showtime() {
 
                 console.log(data.movieCinemaId)
                 console.log("successful")
-
+                numberOfShowtimes()
                 addDefaultSeats(data.movieCinemaId)
 
             } else {
@@ -299,6 +317,7 @@ export default function Showtime() {
         fetchCinemas();
         fetchMovies();
         fetchShowtimes();
+        numberOfShowtimes()
     }, [])
 
     const handleChange = (e) => {
@@ -344,7 +363,7 @@ export default function Showtime() {
             <div>
                 <div className="text-white flex w-fit px-4 py-1 rounded mt-4 text-sm bg-[#2FBD59]">
                     <h1 className="text-white mr-8">All</h1>
-                    <p className="bg-gray-500/30 px-2 rounded">0</p>
+                    <p className="bg-gray-500/30 px-2 rounded">{countShowtimes}</p>
                 </div>
                 <div className="w-[50%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33] mt-4">
                     <IoSearchSharp className="text-[#2FBD59] mr-2" />
