@@ -107,9 +107,9 @@ export default function UserProfile() {
 
             {updateModal && (
                 <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-2/8">
+                    <div className="bg-[#1E1E1E] p-6 rounded-lg shadow-lg w-2/8 text-white">
 
-                        <h2 className="text-3xl font-bold mb-4">Update Profile</h2>
+                        <h2 className="text-3xl font-bold mb-4 w">Update Profile</h2>
 
                         <h2 className="mb-2">Username</h2>
                         <input
@@ -118,7 +118,7 @@ export default function UserProfile() {
                             value={user.username}
                             onChange={handleChange}
                             placeholder="Username"
-                            className="w-full p-2 border border-gray-300 rounded mb-2"
+                            className="w-full p-2 border border-gray-600 rounded mb-2 bg-gray-600"
                         />
                         <h2 className="mb-2">Email</h2>
                         <input
@@ -127,7 +127,7 @@ export default function UserProfile() {
                             value={user.email}
                             onChange={handleChange}
                             placeholder="Email"
-                            className="w-full p-2 border border-gray-300 rounded mb-2"
+                            className="w-full p-2 border border-gray-600 rounded mb-2 bg-gray-600"
                         />
                         <h2 className="mb-2">Password</h2>
                         <input
@@ -136,7 +136,7 @@ export default function UserProfile() {
                             value={user.password}
                             onChange={handleChange}
                             placeholder="Password"
-                            className="w-full p-2 border border-gray-300 rounded mb-2"
+                            className="w-full p-2 border border-gray-600 rounded mb-2 bg-gray-600"
                         />
                         <h2 className="mb-2">Confirm Password</h2>
                         <input
@@ -145,7 +145,7 @@ export default function UserProfile() {
                             value={user.password}
                             onChange={handleChange}
                             placeholder="Confirm Password"
-                            className="w-full p-2 border border-gray-300 rounded mb-2"
+                            className="w-full p-2 border border-gray-600 rounded mb-2 bg-gray-600"
                         />
 
                         <div className="mt-[1rem] flex justify-end">
@@ -172,10 +172,11 @@ export default function UserProfile() {
                 <table className="w-full border-collapse">
                 <thead>
                     <tr className="bg-gray-600">
-                    <th className="p-2 text-left">Ticket ID</th>
-                    <th className="p-2 text-left">Movie</th>
+                    <th className="p-2 text-left">Booking ID</th>
+                    <th className="p-2 text-left">Movie Cinema</th>
                     <th className="p-2 text-left">Date & Time</th>
-                    <th className="p-2 text-left">Payment</th>
+                    <th className="p-2 text-left">Status</th>
+                    <th className="p-2 text-left">Payment Method</th>
                     <th className="p-2 text-left">Action</th>
                     </tr>
                 </thead>
@@ -184,6 +185,7 @@ export default function UserProfile() {
                     <td className="p-2">#12345</td>
                     <td className="p-2">The Batman</td>
                     <td className="p-2">April 5, 2025 - 7:00 PM</td>
+                    <td className="p-2">Confirmed</td>
                     <td className="p-2">Credit Card</td>
                     <td className="p-2">
                         <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 cursor-pointer">
