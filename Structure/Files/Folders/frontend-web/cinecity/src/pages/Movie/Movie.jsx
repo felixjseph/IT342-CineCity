@@ -4,9 +4,10 @@ import { IoSearchSharp } from "react-icons/io5";
 
 export default function Movie() {
   const [movies, setMovies] = useState([]);
+  const [movie, setMovie] = useState({})
   const [genres, setGenres] = useState([]);
   const [showtimes, setShowtimes] = useState([]);
-  const [showtime, setShowtime] = useState(null);
+  const [showtime, setShowtime] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(false);
@@ -17,6 +18,46 @@ export default function Movie() {
   const navigate = useNavigate();
 
   const location = useLocation();
+
+  const fetchMovieShowtime = (movieId) =>{
+    fetchMovie(movieId);
+    fetchShowtime(movieId);
+  }
+
+  const fetchMovie = async (movieId) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie/${movieId}`, {
+        credentials: 'include'
+      })
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Movie: ", data)
+        setMovie(data)
+      } else {
+        console.log("Error fetching movie id: ", movieId)
+      }
+    } catch (error) {
+      toast.error(error)
+    }
+  }
+
+  const fetchMovies = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie`, {
+        credentials: 'include'
+      })
+
+      if (response.ok) {
+        const data = await response.json();
+        setMovies(data);
+        console.log("Movies: ", data)
+      } else {
+        toast.error("Error fetching movies")
+      }
+    } catch (error) {
+      toast.error(error)
+    }
+  }
 
   const updateSeatAvailability = async () => {
     try {
@@ -114,6 +155,7 @@ export default function Movie() {
     fetchShowtimes();
     fetchGenres();
     fetchUser();
+    fetchMovies();
   }, []);
 
   const fetchUser = async () => {
@@ -140,7 +182,7 @@ export default function Movie() {
       });
       if (response.ok) {
         const data = await response.json();
-        setGenres(data.sort((a, b) => a.genreName.localeCompare(b.genreName))); // Sort genres alphabetically
+        setGenres(data.sort((a, b) => a.genreName.localeCompare(b.genreName)));
       } else {
         console.error("Error fetching genres:", response.statusText);
       }
@@ -149,9 +191,9 @@ export default function Movie() {
     }
   };
 
-  const fetchShowtime = async (showtimeId) => {
+  const fetchShowtime = async (movieId) => {
     try {
-      const response = await fetch(`http://localhost:8080/showtime/${showtimeId}`, {
+      const response = await fetch(`http://localhost:8080/showtime/movie/${movieId}`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -235,20 +277,20 @@ export default function Movie() {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4">
-          {filteredMovies.map((showtime) => (
+          {movies.map((movie) => (
             <div
-              key={showtime.movieCinemaId}
+              key={movie.id}
               className="bg-[#2FBD59] p-4 rounded-lg text-black cursor-pointer hover:shadow-lg hover:scale-105 transition duration-300"
-              onClick={() => fetchShowtime(showtime.movieCinemaId)}
+              onClick={() => fetchMovieShowtime(movie.id)}
             >
               <img
-                src={`http://localhost:8080/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
-                alt={`${showtime.movie.title} Cover`}
+                src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                alt={`${movie.title} Cover`}
                 className="object-cover rounded mb-4 w-full h-48"
               />
-              <h3 className="text-lg font-bold">{showtime.movie.title}</h3>
-              <p className="text-sm truncate">{showtime.movie.synopsis}</p>
-              <p className="text-sm font-semibold">Genre: {showtime.movie.genre?.genreName || "Unknown"}</p>
+              <h3 className="text-lg font-bold">{movie.title}</h3>
+              <p className="text-sm truncate">{movie.synopsis}</p>
+              <p className="text-sm font-semibold">Genre: {movie.genre?.genreName || "Unknown"}</p>
             </div>
           ))}
         </div>
@@ -261,22 +303,25 @@ export default function Movie() {
               className="absolute top-5 right-3 text-white text-2xl hover:text-gray-400"
             > ✖ </button>
             <img
-              src={`http://localhost:8080/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
-              alt={`${showtime.movie.title} Cover`}
+              src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+              alt={`${movie.title} Cover`}
               className="w-1/3 object-cover rounded-lg"
             />
             <div className="w-2/3">
-              <h1 className="text-4xl font-extrabold">{showtime.movie.title}</h1>
-              <p className="mt-3 text-gray-300">{showtime.movie.synopsis}</p>
+              <h1 className="text-4xl font-extrabold">{movie.title}</h1>
+              <p className="mt-3 text-gray-300">{movie.synopsis}</p>
               <p className="mt-4 font-semibold">Cinemas:</p>
-              <p className="text-lg font-bold text-gray-200">{showtime.cinema.cinema_name}</p>
+              {showtime.map((showtime)=>(
+                <p className="text-sm text-gray-200/50">{showtime.cinema.cinema_name}</p>
+              ))}
               <p className="mt-4 font-semibold">Showtimes:</p>
-              <p className="text-sm text-gray-400 border-b border-gray-600 py-2">
-                {showtime.date} {showtime.time} - Price: ₱{showtime.price}
-              </p>
+              {showtime.map((showtime)=>(
+                <p className="text-sm text-gray-200/50">{showtime.date} - {showtime.time}</p>
+              ))}
               <button className="mt-3 ml-4 px-3 py-1 bg-green-500 text-black rounded-full hover:scale-105 transition duration-300"
                 onClick={() => {
                   localStorage.setItem("showtime", JSON.stringify(showtime));
+                  localStorage.setItem("movie", JSON.stringify(movie));
                   navigate('/seat');
                 }}
               >Book Now</button>
