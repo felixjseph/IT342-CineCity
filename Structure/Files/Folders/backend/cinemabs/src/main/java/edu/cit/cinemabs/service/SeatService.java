@@ -21,24 +21,24 @@ public class SeatService {
     private SeatRepository seatRepository;
 
     // Create a new seat
-    @CacheEvict(value = "seats", allEntries = true)
+    //@CacheEvict(value = "seats", allEntries = true)
     public Seat addNewSeat(Seat seat) {
         return seatRepository.save(seat);
     }
 
     // Get all seats
-    @Cacheable(value = "seats")
+    //@Cacheable(value = "seats")
     public List<Seat> getAllSeats() {
         return seatRepository.findAll();
     }
 
-    @Cacheable(value = "seatsById", key = "#id")
+    //@Cacheable(value = "seatsById", key = "#id")
     public Seat getSeatById(int id) {
         return seatRepository.findById(id).orElse(null);
     }
 
     // Update seat
-    @CacheEvict(value = "seats", key = "#id")
+    //@CacheEvict(value = "seats", key = "#id")
     public Seat updateSeat(Seat updatedSeat, int id) {
         Optional<Seat> existingSeat = seatRepository.findById(id);
         if (existingSeat.isPresent()) {
@@ -51,17 +51,25 @@ public class SeatService {
         return null;
     }
 
-    @CacheEvict(value = "seats", key = "#id")
+    public Seat updateSeatAvailability(int id){
+        Optional<Seat> existingSeat = seatRepository.findById(id);
+        if (existingSeat.isPresent()) {
+            Seat sit = existingSeat.get();
+            sit.setIsAvaiable(false);
+            return seatRepository.save(sit);
+        }
+        return null;
+    }
+
+    //@CacheEvict(value = "seats", key = "#id")
     public void deleteSeat(int id) {
         seatRepository.deleteById(id);
     }
 
     @Autowired
-    private ShowtimeRepository showtimeRepository; // Assuming you have a repository for Showtime
+    private ShowtimeRepository showtimeRepository;
 
-    // Method to insert default seats with a specific showtime
     public void insertDefaultSeats(int showtimeId) {
-        // Fetch the showtime by ID
         Showtime showtime = showtimeRepository.findById(showtimeId)
                 .orElseThrow(() -> new IllegalArgumentException("Showtime with id " + showtimeId + " not found"));
 
@@ -77,7 +85,7 @@ public class SeatService {
         });
     }
 
-    @Cacheable(value = "seatsByShowtimeId", key = "#id")
+    //@Cacheable(value = "seatsByShowtimeId", key = "#id")
     public List<Seat> getSeatsByShowtimeId(int id){
         return seatRepository.findByShowtime_ShowtimeId(id);
     }

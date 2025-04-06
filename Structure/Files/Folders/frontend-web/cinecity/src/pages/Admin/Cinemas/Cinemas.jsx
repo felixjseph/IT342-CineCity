@@ -9,6 +9,7 @@ export default function Cinemas() {
     const [addCinema, setAddCinema] = useState({
         cinema_name: ""
     })
+    const [countCinemas, setCountCinemas] = useState()
     const [addModal, setAddModal] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [successAddToast, setSuccessAddToast] = useState(false)
@@ -23,6 +24,23 @@ export default function Cinemas() {
             ...addCinema,
             [e.target.name]: e.target.value
         })
+    }
+
+    const numberOfCinemas = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/cinemas/stats/count`, {
+                credentials: 'include'
+            })
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Number of cinemas: ", data)
+                setCountCinemas(data)
+            } else {
+                console.log("Error")
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleDelete = (cinemaId) => {
@@ -132,6 +150,7 @@ export default function Cinemas() {
                 setAddCinema({
                     cinema_name: ""
                 })
+                numberOfCinemas();
                 setSuccessAddToast(true)
                 setTimeout(() => setSuccessAddToast(false), 3000)
                 fetchCinemas()
@@ -168,6 +187,7 @@ export default function Cinemas() {
 
     useEffect(() => {
         fetchCinemas();
+        numberOfCinemas();
     }, [])
 
     return (
@@ -184,7 +204,7 @@ export default function Cinemas() {
             <div>
                 <div className="text-white flex w-fit px-4 py-1 rounded mt-4 text-sm bg-[#2FBD59]">
                     <h1 className="text-white mr-8">All</h1>
-                    <p className="bg-gray-500/30 px-2 rounded">0</p>
+                    <p className="bg-gray-500/30 px-2 rounded">{countCinemas}</p>
                 </div>
                 <div className="w-[50%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33] mt-4">
                     <IoSearchSharp className="text-[#2FBD59] mr-2" />

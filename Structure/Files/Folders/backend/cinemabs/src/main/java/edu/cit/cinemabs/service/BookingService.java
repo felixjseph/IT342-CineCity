@@ -20,17 +20,17 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    @Cacheable(value = "bookings")
+    //@Cacheable(value = "bookings")
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
-    @Cacheable(value = "bookings", key = "#id")
+    //@Cacheable(value = "bookings", key = "#id")
     public Optional<Booking> getBookingById(int id) {
         return bookingRepository.findById(id);
     }
 
-     @CacheEvict(value = "bookings", key = "#id")
+     //@CacheEvict(value = "bookings", key = "#id")
     public Booking updateBooking(int id, Booking newBooking) {
         return bookingRepository.findById(id).map(existingBooking -> {
             existingBooking.setUser(newBooking.getUser());

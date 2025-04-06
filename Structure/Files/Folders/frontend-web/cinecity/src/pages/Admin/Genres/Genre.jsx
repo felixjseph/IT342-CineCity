@@ -16,9 +16,11 @@ export default function AdminGenres() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [genreToDelete, setGenreToDelete] = useState(null);
+  const [countGenres,setCountGenres] = useState()
 
   useEffect(() => {
     fetchGenres();
+    numberOfGenres();
   }, []);
 
   const fetchGenres = async () => {
@@ -64,6 +66,23 @@ export default function AdminGenres() {
       toast.error(`Error: ${error.message}`);
     }
   };
+
+  const numberOfGenres = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/genre/stats/count`, {
+        credentials: 'include'
+      })
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Number of genres: ", data)
+        setCountGenres(data)
+      } else {
+        console.log("Error")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const updateGenre = async () => {
     if (!editGenre || !editName.trim()) return;
@@ -138,7 +157,7 @@ export default function AdminGenres() {
       </div>
       <div className="text-white flex w-fit px-4 py-1 rounded mt-4 text-sm bg-[#2FBD59]">
         <h1 className="text-white mr-8">All</h1>
-        <p className="bg-gray-500/30 px-2 rounded">0</p>
+        <p className="bg-gray-500/30 px-2 rounded">{countGenres}</p>
       </div>
       <div className="mt-4 mb-4 w-[50%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33]">
         <IoSearchSharp className="text-[#2FBD59] mr-2" />

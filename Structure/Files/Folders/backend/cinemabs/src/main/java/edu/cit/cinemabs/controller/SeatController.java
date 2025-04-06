@@ -38,8 +38,8 @@ public class SeatController {
 
 
     @PutMapping("/{id}")
-    public Seat updateSeat(@RequestBody Seat seat, @PathVariable int id) {
-        return seatService.updateSeat(seat, id);
+    public Seat updateSeat(@PathVariable int id) {
+        return seatService.updateSeatAvailability(id);
     }
 
     @DeleteMapping("/{id}")

@@ -28,6 +28,12 @@ public class MovieController {
         return mserv.getAllMovie();
     }
 
+    @GetMapping("/stats/count")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public long getTotalMovies() {
+        return mserv.getTotalMovies();
+    }
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
     public Movie addMovie(@RequestBody Movie movie) {
@@ -36,7 +42,7 @@ public class MovieController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public Movie updateMovie(@PathVariable int id, @RequestBody Movie movie){
+    public Movie updateMovie(@PathVariable int id, @RequestBody Movie movie) {
         return mserv.updateMovieDetails(movie, id);
     }
 
@@ -48,20 +54,16 @@ public class MovieController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public Movie getMovieDetail(@PathVariable int id){
+    public Movie getMovieDetail(@PathVariable int id) {
         return mserv.getMovieDetail(id);
     }
 
-    // Set Cover Photo
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping(value = "/{id}/cover", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Movie setCoverPhoto(@PathVariable int id, @RequestParam("photo") MultipartFile photo) throws IOException {
         byte[] photoBytes = photo.getBytes();
         return mserv.setCoverPhoto(id, photoBytes);
     }
 
-    // Get Cover Photo
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getCoverPhoto(@PathVariable int id) {
         return mserv.getCoverPhoto(id);

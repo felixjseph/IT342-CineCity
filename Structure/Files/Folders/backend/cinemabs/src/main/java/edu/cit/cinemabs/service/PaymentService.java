@@ -159,5 +159,37 @@ public class PaymentService {
             throw new RuntimeException("Error attaching payment intent: " + e.getMessage());
         }
     }
+
+    public Map<String, Object> retrievePaymentIntent(String intentId) {
+        if (PAYMONGO_SECRET_KEY == null || PAYMONGO_SECRET_KEY.isEmpty()) {
+            throw new IllegalArgumentException("PayMongo Secret Key is not set.");
+        }
+        if (PAYMONGO_PAYMENT_INTENT_URL == null || PAYMONGO_PAYMENT_INTENT_URL.isEmpty()) {
+            throw new IllegalArgumentException("PayMongo Payment Intent URL is not set.");
+        }
+    
+        RestTemplate restTemplate = new RestTemplate();
+    
+        HttpHeaders headers = new HttpHeaders();
+        String encodedAuth = Base64.getEncoder().encodeToString((PAYMONGO_SECRET_KEY + ":").getBytes());
+        headers.set("Authorization", "Basic " + encodedAuth);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+    
+        try {
+            String retrieveUrl = PAYMONGO_PAYMENT_INTENT_URL + "/" + intentId;
+    
+            HttpEntity<Void> entity = new HttpEntity<>(headers);
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                retrieveUrl,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            return response.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving payment intent: " + e.getMessage());
+        }
+    }
     
 }
