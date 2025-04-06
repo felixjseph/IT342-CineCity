@@ -3,6 +3,8 @@ import { IoIosAddCircle } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 export default function Movies() {
@@ -108,8 +110,7 @@ export default function Movies() {
         console.log(data);
         console.log("Movie added successfully");
         setAddMovie(false);
-        setSuccessAddToast(true);
-        setTimeout(() => setSuccessAddToast(false), 3000);
+        toast.success("Movie added successfully!");
         fetchMovies();
         setMovie({
           title: "",
@@ -125,6 +126,7 @@ export default function Movies() {
       }
     } catch (error) {
       console.log(error);
+      toast.error("Error adding movie");
     } finally {
       setIsLoading(false);
     }
@@ -159,14 +161,14 @@ export default function Movies() {
         console.log(`movie with id ${updateMovie} has been deleted`)
         setConfirmDelete(false)
         setIsLoading(false)
-        setSuccessDeleteToast(true)
+        toast.success("Movie deleted successfully!");
         fetchMovies();
-        setTimeout(() => setSuccessDeleteToast(false), 3000);
       } else {
         console.log(`error deleting movie id ${updateMovie}`)
       }
     } catch (error) {
       console.log(error)
+      toast.error("Error deleting movie");
     }
   }
 
@@ -187,10 +189,9 @@ export default function Movies() {
       if (response.ok) {
         console.log(data)
         console.log("movie updated successfully")
+        toast.success("Movie updated successfully!");
         setUpdateModal(false);
-        setSuccessUpdateToast(true);
         fetchMovies();
-        setTimeout(() => setSuccessUpdateToast(false), 3000);
         setIsLoading(false)
         setMovie({
           title: "",
@@ -206,6 +207,7 @@ export default function Movies() {
       }
     } catch (error) {
       console.log(error)
+      toast.error("Error updating movie");
     }
   }
 
@@ -306,8 +308,8 @@ export default function Movies() {
             type="text"
             placeholder="Search movies"
             className="text-white focus:outline-none w-full border-l-1 pl-2 border-gray-500 placeholder-gray-400"
-            value={searchQuery} // Bind input value to searchQuery state
-            onChange={handleSearchChange} // Update searchQuery on input change
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
         </div>
         <div className="grid grid-cols-2 gap-4 mt-8">
@@ -326,6 +328,36 @@ export default function Movies() {
                   <div className="mt-4">
                     <p className="text-xm font-medium opacity-30">Genre</p>
                     <p className="text-sm font-medium">{movie.genre.genreName}</p>
+                  </div>
+                  <div className="flex items-center mt-2 w-fit">
+                    <button className="flex items-center px-4 py-1 mr-4 rounded bg-gray-500 cursor-pointer transition duration-300 ease-in-out"
+                      onClick={() => handleEdit(movie.id)}
+                    ><FaEdit className="text-blue-500 text-xl mr-2" />Edit</button>
+                    <button className="flex mr-4 items-center px-4 py-1 rounded bg-gray-500 cursor-pointer transition duration-300 ease-in-out"
+                      onClick={() => {
+                        setConfirmDelete(true)
+                        setUpdateMovie(movie.id)
+                      }}
+                    ><MdDelete className="text-red-500 text-xl mr-2" />Delete</button>
+                    {movie.photo !== null ? (
+                      <label className="w-full px-2 text-white py-1 rounded cursor-pointer bg-gray-700 flex items-center justify-center">
+                        Change
+                        <input
+                          type="file"
+                          className="hidden"
+                          onChange={(e) => handleImageUpload(e, movie.id)}
+                        />
+                      </label>
+                    ) : (
+                      <label className="w-full px-2 text-white mt-2 rounded cursor-pointer bg-gray-700 flex items-center justify-center">
+                        Upload
+                        <input
+                          type="file"
+                          className="hidden"
+                          onChange={(e) => handleImageUpload(e, movie.id)}
+                        />
+                      </label>
+                    )}
                   </div>
                 </div>
                 <div className="bg-green-500/20 h-[80%] w-[7rem] rounded text-center content-center">
@@ -436,24 +468,6 @@ export default function Movies() {
         </div>
       )}
 
-      {successAddToast && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-          New movie added
-        </div>
-      )}
-
-      {successUpdateToast && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-          Movie updated successfully
-        </div>
-      )}
-
-      {successDeleteToast && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-          Movie deleted successfully
-        </div>
-      )}
-
       {updateModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black-500/20 backdrop-blur-sm">
           <div className="bg-[#2E2F33] p-6 rounded shadow-lg w-96 text-white">
@@ -514,6 +528,19 @@ export default function Movies() {
           </div>
         </div>
       )}
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeButton={true}
+        pauseOnFocusLoss
+        pauseOnHover
+        draggable
+        draggablePercent={60}
+        rtl={false}
+      />
     </div>
   );
 }
