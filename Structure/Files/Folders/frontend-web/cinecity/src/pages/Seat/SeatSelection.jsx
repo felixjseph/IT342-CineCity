@@ -286,7 +286,7 @@ export default function SeatSelection() {
                     <div className="relative bg-[#1E1E1E] h-[80%] flex flex-col w-[50%] rounded p-6 px-25 overflow-y-auto">
                         <h1 className="text-center text-2xl">PAYMENT METHOD</h1>
                         <hr className="my-4" />
-                        <div className="mb-8 w-full flex justify-evenly p-4 w-[50%]">
+                        <div className="mb-8 w-full flex justify-evenly p-4">
                             <img src="/images/gcash.png" alt="GCASH"
                                 className={`rounded-lg w-[3rem] cursor-pointer mt-4 ${active === "Gcash" ? "border-green-500 border-3 shadow-lg shadow-green-500/50" : "border-none"}`}
                                 onClick={() => {

@@ -18,6 +18,12 @@ export default function Movie() {
 
   const location = useLocation();
 
+  const handleBookNow = (movieId) => {
+    localStorage.setItem('movie_id', movieId);
+
+    navigate('/seat');
+  };
+
   const updateSeatAvailability = async () => {
     try {
       for (const seat of seats) {
@@ -114,6 +120,7 @@ export default function Movie() {
     fetchShowtimes();
     fetchGenres();
     fetchUser();
+
   }, []);
 
   const fetchUser = async () => {
@@ -149,9 +156,9 @@ export default function Movie() {
     }
   };
 
-  const fetchShowtime = async (showtimeId) => {
+  const fetchShowtime = async (movieId) => {
     try {
-      const response = await fetch(`http://localhost:8080/showtime/${showtimeId}`, {
+      const response = await fetch(`http://localhost:8080/showtime/movie/${movieId}`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -165,6 +172,7 @@ export default function Movie() {
       console.error("Error fetching showtimes:", error);
     }
   };
+
 
   const fetchShowtimes = async () => {
     try {
@@ -182,17 +190,38 @@ export default function Movie() {
     }
   };
 
+  const fetchMovies = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/movie", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setMovies(data);
+      } else {
+        console.error("Error fetching movies:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    }
+  };
+
   const toggleGenre = (id) => {
     setSelectedGenres((prev) =>
       prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]
     );
   };
 
-  const filteredMovies = showtimes.filter(
-    (showtime) =>
-      (selectedGenres.length === 0 || selectedGenres.includes(showtime.movie.genre?.id)) &&
-      showtime.movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredMovies = [...new Set(showtimes.map((showtime) => showtime.movie.id))]
+    .map((movieId) => {
+      return showtimes.find((showtime) => showtime.movie.id === movieId);
+    })
+    .filter(
+      (showtime) =>
+        (selectedGenres.length === 0 || selectedGenres.includes(showtime.movie.genre?.id)) &&
+        showtime.movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
 
   const clearFilters = () => {
     setSelectedGenres([]);
@@ -261,25 +290,36 @@ export default function Movie() {
               className="absolute top-5 right-3 text-white text-2xl hover:text-gray-400"
             > ✖ </button>
             <img
-              src={`http://localhost:8080/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
-              alt={`${showtime.movie.title} Cover`}
+              src={`http://localhost:8080/movie/${showtime[0].movie.id}/cover?timestamp=${new Date().getTime()}`}
+              alt={`${showtime[0].movie.title} Cover`}
               className="w-1/3 object-cover rounded-lg"
             />
             <div className="w-2/3">
-              <h1 className="text-4xl font-extrabold">{showtime.movie.title}</h1>
-              <p className="mt-3 text-gray-300">{showtime.movie.synopsis}</p>
+              <h1 className="text-4xl font-extrabold">{showtime[0].movie.title}</h1>
+              <p className="mt-3 text-gray-300">{showtime[0].movie.synopsis}</p>
               <p className="mt-4 font-semibold">Cinemas:</p>
-              <p className="text-lg font-bold text-gray-200">{showtime.cinema.cinema_name}</p>
+              <div>
+                {showtime.map((show, index) => (
+                  <p key={index} className="text-lg font-bold text-gray-200">
+                    {show.cinema.cinema_name}
+                  </p>
+                ))}
+              </div>
               <p className="mt-4 font-semibold">Showtimes:</p>
-              <p className="text-sm text-gray-400 border-b border-gray-600 py-2">
-                {showtime.date} {showtime.time} - Price: ₱{showtime.price}
-              </p>
-              <button className="mt-3 ml-4 px-3 py-1 bg-green-500 text-black rounded-full hover:scale-105 transition duration-300"
-                onClick={() => {
-                  localStorage.setItem("showtime", JSON.stringify(showtime));
-                  navigate('/seat');
-                }}
-              >Book Now</button>
+              <div>
+                {showtime.map((s, index) => (
+                  <p key={index} className="text-sm text-gray-400 border-b border-gray-600 py-2">
+                    {s.date} {s.time} - Price: ₱{s.price}
+                  </p>
+                ))}
+              </div>
+
+              <button
+                className="mt-3 ml-4 px-3 py-1 bg-green-500 text-black rounded-full hover:scale-105 transition duration-300"
+                onClick={() => handleBookNow(showtime[0].movie.id)}
+              >
+                Book Now
+              </button>
             </div>
           </div>
         </div>
