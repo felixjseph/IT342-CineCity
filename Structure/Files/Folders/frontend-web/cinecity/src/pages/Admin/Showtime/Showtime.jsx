@@ -590,11 +590,10 @@ export default function Showtime() {
 
             {viewSeatsModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-[500px] flex flex-col items-center">
+                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-[600px] flex flex-col items-center">
                         <h2 className="text-white text-xl font-semibold mb-4">Seat Availability</h2>
 
                         <p className="text-white">Movie: {movieCinema.date}</p>
-                        {/* <p className="text-white">Cinema: {movieCinema.cinema.cinema_name}</p> */}
 
                         {/* TV Screen (Seat Container) */}
                         <div className="mt-4 flex justify-center">
@@ -603,17 +602,24 @@ export default function Showtime() {
                             </div>
                         </div>
 
+                        {/* Seat Layout */}
+                        <div className="mt-6 w-full">
+                            {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((row, rowIndex) => {
+                                const seatsInRow = seats.filter(seat => seat.seatNo.startsWith(row));
 
-                        <div className="mt-6 flex flex-wrap justify-center gap-3">
-                            {seats.map((seat) => (
-                                <div
-                                    key={seat.movieCinemaId}
-                                    className={`w-12 h-12 flex items-center justify-center rounded-full text-white font-semibold ${seat.isAvailable ? "bg-gray-500" : "bg-red-500"
-                                        }`}
-                                >
-                                    {seat.seatNo}
-                                </div>
-                            ))}
+                                return (
+                                    <div key={rowIndex} className="flex justify-center gap-2 mb-2">
+                                        {seatsInRow.map(seat => (
+                                            <div
+                                                key={seat.seatId}
+                                                className={`w-20 h-12 flex items-center justify-center rounded-full text-white font-semibold ${seat.isAvailable ? "bg-gray-500" : "bg-red-500"}`}
+                                            >
+                                                {seat.seatNo}
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })}
                         </div>
 
                         <div className="mt-6 flex justify-end w-full">
@@ -627,6 +633,7 @@ export default function Showtime() {
                     </div>
                 </div>
             )}
+
 
             <ToastContainer
                 position="bottom-right"
