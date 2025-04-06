@@ -89,37 +89,61 @@ export default function Signup() {
     }
 
     return (
-        <div className="flex justify-center items-center overflow-y-hidden">
+        <div className="flex justify-center items-center min-h-screen px-4 overflow-y-hidden bg-[#1A1A1D]">
             {success ? (
-                <div className="login-container mt-16 w-[20rem] bg-[#2E2F33] p-8 rounded-lg flex flex-col justify-center items-center h-[28rem]">
+                <div className="login-container bg-[#2E2F33] p-8 rounded-lg flex flex-col justify-center items-center w-full sm:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[25%] h-[28rem]">
                     <FaCircleCheck className="text-[#2FBD59] text-7xl mb-4" />
                     <h1 className="text-white font-medium mb-2">Congratulations</h1>
                     <p className="text-white text-center mb-8">Your account has been successfully created!</p>
-                    <button className="bg-[#2FBD59] text-white w-full px-2 py-2 font-medium rounded-3xl cursor-pointer"
+                    <button
+                        className="bg-[#2FBD59] text-white w-full px-2 py-2 font-medium rounded-3xl cursor-pointer"
                         onClick={() => navigate('/login')}
-                    >Go to Login now</button>
+                    >
+                        Go to Login now
+                    </button>
                 </div>
             ) : (
-                <div className="login-container mt-16 w-[25%] bg-[#2E2F33] p-8 rounded-lg flex flex-col justify-center items-center h-[28rem]">
+                <div className="login-container bg-[#2E2F33] p-8 rounded-lg flex flex-col justify-center items-center w-full sm:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[25%] h-auto">
                     <img src="/images/logo.png" alt="logo" className="w-[8rem] mb-2" />
                     <h1 className="text-2xl text-white font-bold mt-2">Create an account</h1>
                     <p className="text-white/30 text-sm">Hello new comers!</p>
                     <form className="flex flex-col items-center justify-center w-full mt-2" onSubmit={handleSubmit}>
-                        <input type="text" placeholder="Username" className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
-                            onChange={handleChange} value={registerUser.username} name="username"
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
+                            onChange={handleChange}
+                            value={registerUser.username}
+                            name="username"
                         />
-                        <input type="text" placeholder="Email" className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
-                            onChange={handleChange} value={registerUser.email} name="email"
+                        <input
+                            type="text"
+                            placeholder="Email"
+                            className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
+                            onChange={handleChange}
+                            value={registerUser.email}
+                            name="email"
                         />
-                        <input type="password" placeholder="Password" className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
-                            onChange={handleChange} value={registerUser.password} name="password"
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
+                            onChange={handleChange}
+                            value={registerUser.password}
+                            name="password"
                         />
-                        <button className="bg-[#2FBD59] w-full py-2 rounded my-2 text-white font-medium cursor-pointer">Signup</button>
+                        <button className="bg-[#2FBD59] w-full py-2 rounded my-2 text-white font-medium cursor-pointer">
+                            Signup
+                        </button>
                     </form>
-                    <div className="flex border-1 border-white text-white w-full my-2 py-2 rounded justify-between px-8">
-                        <p className="cursor-pointer hover:text-[#2FBD59]" onClick={() => navigate('/login')}>SIGN IN</p>
+                    <div className="flex border border-white text-white w-full my-2 py-2 rounded justify-between px-8">
+                        <p className="cursor-pointer hover:text-[#2FBD59]" onClick={() => navigate('/login')}>
+                            SIGN IN
+                        </p>
                         <p>|</p>
-                        <p className="cursor-pointer hover:text-[#2FBD59]" onClick={() => navigate('/signup')}>SIGN UP</p>
+                        <p className="cursor-pointer hover:text-[#2FBD59]" onClick={() => navigate('/signup')}>
+                            SIGN UP
+                        </p>
                     </div>
                 </div>
             )}
@@ -136,5 +160,6 @@ export default function Signup() {
                 rtl={false}
             />
         </div>
-    )
+    );
+
 }

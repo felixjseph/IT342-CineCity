@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function SeatSelection() {
 
     const navigate = useNavigate();
+    const movie = JSON.parse(localStorage.getItem("movie"));
     const showtime = JSON.parse(localStorage.getItem("showtime"));
     const [showtime2, setShowtime2] = useState();
     const [loading, setLoading] = useState(false);
@@ -38,7 +39,7 @@ export default function SeatSelection() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    amount: "35000"
+                    amount: showtime2.price * selectedSeats.length+"00"
                 }),
                 credentials: 'include'
             });
@@ -143,11 +144,6 @@ export default function SeatSelection() {
     }
 
     useEffect(() => {
-        fetchData(`http://localhost:8080/showtime/movie/${showtime.movie.id}`, setMovieShowtime)
-
-    }, [])
-
-    useEffect(() => {
         fetchData(`http://localhost:8080/seats/showtime/${show}`, setSeats);
         fetchData(`http://localhost:8080/showtime/${show}`, setShowtime2);
     }, [show])
@@ -181,15 +177,14 @@ export default function SeatSelection() {
         <div className={`flex h-screen text-white`}>
             <div className="w-[25%] p-8 border-r border-gray-600 flex flex-col items-center overflow-y-auto">
                 <img
-                    src={`http://localhost:8080/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
-                    alt={`${showtime.movie.title} cover`}
+                    src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                    alt={`${movie.title} cover`}
                     className="w-[12rem] rounded-lg shadow-lg"
                 />
                 <div className="text-center mt-4">
-                    <h1 className="text-xl font-bold text-green-400">{showtime.movie.title}</h1>
-                    <p className="text-gray-400 mt-2">{showtime.cinema.cinema_name}</p>
-                    <p className="text-gray-400">{showtime.movie.duration} mins</p>
-                    <p className="text-gray-400">Genre: {showtime.movie.genre.genreName}</p>
+                    <h1 className="text-xl font-bold text-green-400">{movie.title}</h1>
+                    <p className="text-gray-400">{movie.duration} mins</p>
+                    <p className="text-gray-400">Genre: {movie.genre.genreName}</p>
                 </div>
 
                 <div className="mt-8 w-full">
@@ -198,7 +193,7 @@ export default function SeatSelection() {
                         className="w-full p-2 bg-gray-800 text-white rounded border border-gray-700"
                     >
                         <option>Select Showtime</option>
-                        {movieShowtime.map((mshow) => (
+                        {showtime.map((mshow) => (
                             <option key={mshow.movieCinemaId} value={mshow.movieCinemaId}>{mshow.date} - {mshow.time}</option>
                         ))}
                     </select>
@@ -354,11 +349,11 @@ export default function SeatSelection() {
                         <div className="mt-4">
                             <h1 className="font-medium text-gray-200/50">Details</h1>
                             <div>
-                                <p>Movie: {showtime.movie.title}</p>
-                                <p>Cinema: {showtime.cinema.cinema_name}</p>
-                                <p>Duration: {showtime.movie.duration} minutes</p>
-                                <p>Date and Time: {showtime.date} - {showtime.time}</p>
-                                <p>Price: ₱{showtime.price}</p>
+                                <p>Movie: {showtime2.movie.title}</p>
+                                <p>Cinema: {showtime2.cinema.cinema_name}</p>
+                                <p>Duration: {showtime2.movie.duration} minutes</p>
+                                <p>Date and Time: {showtime2.date} - {showtime2.time}</p>
+                                <p>Price: ₱{showtime2.price * selectedSeats.length}</p>
                                 <p>Seats: {selectedSeats.map((seat, index) => (
                                     <span key={index}>{seat.seatNo}</span>
                                 ))}</p>

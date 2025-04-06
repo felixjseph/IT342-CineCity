@@ -89,30 +89,41 @@ export default function Login() {
     }
 
     return (
-        <div className="flex justify-center items-center overflow-y-hidden">
-            <div className="login-container mt-16 w-[25%] bg-[#2E2F33] p-8 rounded-lg flex flex-col justify-center items-center">
-                <img src="/images/logo.png" alt="logo" className="w-[8rem] mb-2" />
-                <h1 className="text-2xl text-white font-bold mt-2">Welcome Back</h1>
-                <p className="text-white/30 text-sm ">Sign in to continue</p>
-                <form className="flex flex-col items-center justify-center w-full mt-2" onSubmit={handleSubmit}>
-                    <input type="text" placeholder="Email" className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
-                        onChange={handleChange}
+        <div className="flex justify-center items-center min-h-screen bg-[#1c1c1c] px-4">
+            <div className="max-w-sm sm:max-w-md md:max-w-lg bg-[#2E2F33] p-6 sm:p-8 rounded-lg flex flex-col justify-center items-center shadow-lg">
+                <img src="/images/logo.png" alt="logo" className="w-24 sm:w-28 mb-4" />
+                <h1 className="text-xl sm:text-2xl text-white font-bold">Welcome Back</h1>
+                <p className="text-white/30 text-sm mb-4">Sign in to continue</p>
+
+                <form className="flex flex-col items-center justify-center w-full" onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Email"
                         name="email"
                         value={login.email}
-                    />
-                    <input type="password" placeholder="Password" className="bg-white my-2 py-2 px-4 w-full font-medium"
                         onChange={handleChange}
+                        className="bg-white my-2 py-2 px-4 w-full rounded font-medium text-sm sm:text-base"
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
                         name="password"
                         value={login.password}
+                        onChange={handleChange}
+                        className="bg-white my-2 py-2 px-4 w-full rounded font-medium text-sm sm:text-base"
                     />
-                    <button className="bg-[#2FBD59] w-full py-2 rounded my-2 text-white font-medium cursor-pointer">Login</button>
+                    <button className="bg-[#2FBD59] w-full py-2 rounded my-2 text-white font-medium hover:bg-[#29a94f] transition">
+                        Login
+                    </button>
                 </form>
-                <div className="flex border-1 border-white text-white w-full my-2 py-2 rounded justify-between px-8">
+
+                <div className="flex border border-white/20 text-white w-full my-3 py-2 rounded justify-between px-6 text-sm sm:text-base">
                     <p className="cursor-pointer hover:text-[#2FBD59]" onClick={() => navigate('/login')}>SIGN IN</p>
                     <p>|</p>
                     <p className="cursor-pointer hover:text-[#2FBD59]" onClick={() => navigate('/signup')}>SIGN UP</p>
                 </div>
             </div>
+
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
@@ -126,5 +137,5 @@ export default function Login() {
                 rtl={false}
             />
         </div>
-    )
+    );
 }
