@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { FaCircleCheck } from "react-icons/fa6";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Signup() {
 
@@ -27,14 +29,14 @@ export default function Signup() {
             [e.target.name]: e.target.value
         })
 
-        if(e.target.name === "password" && e.target.value.length >= 8){
+        if (e.target.name === "password" && e.target.value.length >= 8) {
             setPasswordError("");
         }
 
-        if(e.target.name === "email"){
-            if(!validateEmail(registerUser.email)){
+        if (e.target.name === "email") {
+            if (!validateEmail(registerUser.email)) {
                 setEmailError("Invalid email address");
-            }else{
+            } else {
                 setEmailError("");
             }
         }
@@ -44,12 +46,12 @@ export default function Signup() {
         e.preventDefault();
 
         if (registerUser.password.length < 8) {
-            setPasswordError("Password must be atleast 8 characters long")
+            toast.error("Password must be atleast 8 characters long")
             return;
         }
 
-        if(!validateEmail(registerUser.email)){
-            setEmailError("Invalid email address");
+        if (!validateEmail(registerUser.email)) {
+            toast.error("Invalid email address")
             return;
         }
 
@@ -71,19 +73,18 @@ export default function Signup() {
                     password: ""
                 })
                 setSuccess(true);
-                setErrorMessage("");
             } else {
                 const error = await response.json();
                 console.log(error);
                 if (error.detail && error.detail.includes("Duplicate entry")) {
-                    setErrorMessage("Email already exists");
+                    toast.error("Email already exist.")
                 } else {
-                    setErrorMessage("An error occurred. Please try again.");
+                    toast.error("An error occurred. Please try again.");
                 }
             }
         } catch (error) {
             console.log(error);
-            setErrorMessage("An error occurred. Please try again.");
+            toast.error("An error occurred. Please try again.");
         }
     }
 
@@ -99,30 +100,41 @@ export default function Signup() {
                     >Go to Login now</button>
                 </div>
             ) : (
-                <div className="login-container mt-16 w-[20rem] bg-[#2E2F33] p-8 rounded-lg flex flex-col justify-center items-center h-[28rem]">
-                    <img src="/images/logo.png" alt="logo" className="w-[15rem] mb-2" />
-                    <form className="flex flex-col items-center justify-center w-full" onSubmit={handleSubmit}>
-                        <input type="text" placeholder="Username" className="bg-white my-2 py-2 px-4 w-full rounded-3xl font-medium"
+                <div className="login-container mt-16 w-[25%] bg-[#2E2F33] p-8 rounded-lg flex flex-col justify-center items-center h-[28rem]">
+                    <img src="/images/logo.png" alt="logo" className="w-[8rem] mb-2" />
+                    <h1 className="text-2xl text-white font-bold mt-2">Create an account</h1>
+                    <p className="text-white/30 text-sm">Hello new comers!</p>
+                    <form className="flex flex-col items-center justify-center w-full mt-2" onSubmit={handleSubmit}>
+                        <input type="text" placeholder="Username" className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
                             onChange={handleChange} value={registerUser.username} name="username"
                         />
-                        <input type="text" placeholder="Email" className="bg-white my-2 py-2 px-4 w-full rounded-3xl font-medium"
+                        <input type="text" placeholder="Email" className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
                             onChange={handleChange} value={registerUser.email} name="email"
                         />
-                        {emailError && <p className="text-red-500 text-sm pl-2 w-full">{emailError}</p>}
-                        {errorMessage && <p className="text-red-500 text-sm pl-2 w-full">{errorMessage}</p>}
-                        <input type="password" placeholder="Password" className="bg-white my-2 py-2 px-4 w-full rounded-3xl font-medium"
+                        <input type="password" placeholder="Password" className="bg-white my-2 py-2 px-4 w-full rounded font-medium"
                             onChange={handleChange} value={registerUser.password} name="password"
                         />
-                        {passwordError && <p className="text-red-500 text-sm pl-2 w-full">{passwordError}</p>}
-                        <button className="bg-[#2FBD59] w-full py-2 rounded-3xl my-2 text-white font-medium cursor-pointer">Signup</button>
-                    </form> 
-                    <div className="flex border-1 border-white text-white w-full my-2 py-2 rounded-3xl justify-between px-8">
+                        <button className="bg-[#2FBD59] w-full py-2 rounded my-2 text-white font-medium cursor-pointer">Signup</button>
+                    </form>
+                    <div className="flex border-1 border-white text-white w-full my-2 py-2 rounded justify-between px-8">
                         <p className="cursor-pointer hover:text-[#2FBD59]" onClick={() => navigate('/login')}>SIGN IN</p>
                         <p>|</p>
                         <p className="cursor-pointer hover:text-[#2FBD59]" onClick={() => navigate('/signup')}>SIGN UP</p>
                     </div>
                 </div>
             )}
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeButton={true}
+                pauseOnFocusLoss
+                pauseOnHover
+                draggable
+                draggablePercent={60}
+                rtl={false}
+            />
         </div>
     )
 }

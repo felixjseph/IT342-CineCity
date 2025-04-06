@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
-
+import { MdDelete } from "react-icons/md";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Cinemas() {
 
@@ -12,12 +13,9 @@ export default function Cinemas() {
     const [countCinemas, setCountCinemas] = useState()
     const [addModal, setAddModal] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [successAddToast, setSuccessAddToast] = useState(false)
     const [updateModal, setUpdateModal] = useState(false)
-    const [updateToast, setUpdateToast] = useState(false)
     const [cinemaUpdate, setCinemaUpdate] = useState(null)
     const [deleteModal, setDeleteModal] = useState(false)
-    const [deleteToast, setDeleteToast] = useState(false)
 
     const handleChange = (e) => {
         setAddCinema({
@@ -91,16 +89,15 @@ export default function Cinemas() {
                 console.log(data)
                 console.log("cinema updated successfully")
                 setIsLoading(false)
+                toast.success("Cinema updated successfully!");
                 setUpdateModal(false)
-                setUpdateToast(true)
                 setAddCinema({
                     cinema_name: ""
                 })
                 fetchCinemas();
-                setTimeout(() => setUpdateToast(false), 3000)
             }
         } catch (error) {
-
+            toast.error("Error deleting cinema");
         }
     }
 
@@ -116,14 +113,14 @@ export default function Cinemas() {
                 console.log("cinema delete successfully")
                 setDeleteModal(false)
                 setIsLoading(false)
-                setDeleteToast(true)
-                setTimeout(() => setDeleteToast(false), 3000)
                 fetchCinemas()
+                toast.success("Cinema deleted successfully!");
             } else {
                 console.log("error deleting cinema")
             }
         } catch (error) {
             console.log(error)
+            toast.error("Error deleting cinema");
         }
     }
 
@@ -151,15 +148,15 @@ export default function Cinemas() {
                     cinema_name: ""
                 })
                 numberOfCinemas();
-                setSuccessAddToast(true)
-                setTimeout(() => setSuccessAddToast(false), 3000)
                 fetchCinemas()
+                toast.success("Cinema added successfully!");
             } else {
                 console.log(data)
                 console.log("error adding cinema")
             }
         } catch (error) {
             console.log(error)
+            toast.error("Error adding cinema!");
         } finally {
             setIsLoading(false)
         }
@@ -308,24 +305,6 @@ export default function Cinemas() {
                 </div>
             )}
 
-            {successAddToast && (
-                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-                    New cinema added
-                </div>
-            )}
-
-            {deleteToast && (
-                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-                    Cinema deleted successfully
-                </div>
-            )}
-
-            {updateToast && (
-                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-                    Cinema updated successfully
-                </div>
-            )}
-
             {deleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black-500/20 backdrop-blur-sm">
                     <div className="bg-[#2E2F33] p-6 rounded shadow-lg w-96 text-white">
@@ -349,6 +328,20 @@ export default function Cinemas() {
                     </div>
                 </div>
             )}
+
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeButton={true}
+                pauseOnFocusLoss
+                pauseOnHover
+                draggable
+                draggablePercent={60}
+                rtl={false}
+            />
         </div>
     )
 }

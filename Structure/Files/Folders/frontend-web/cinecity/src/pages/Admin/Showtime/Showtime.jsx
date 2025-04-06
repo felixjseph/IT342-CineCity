@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Showtime() {
 
@@ -14,9 +16,7 @@ export default function Showtime() {
     const [addToast, setAddToast] = useState(false)
     const [updateModal, setUpdateModal] = useState(false)
     const [show, setShow] = useState(false)
-    const [updateToast, setUpdateToast] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
-    const [successDeleteToast, setSuccessDeleteToast] = useState(false)
     const [viewSeatsModal, setViewSeatsModal] = useState(false)
     const [seats, setSeats] = useState([])
     const [movieCinema, setMovieCinema] = useState([])
@@ -44,18 +44,18 @@ export default function Showtime() {
                 console.log(data)
                 setSeats(data)
                 setViewSeatsModal(true)
-                const response2 = await fetch(`http://localhost:8080/seats/showtime/${showtimeId}`,{
-                    credentials:'include'
+                const response2 = await fetch(`http://localhost:8080/seats/showtime/${showtimeId}`, {
+                    credentials: 'include'
                 })
 
                 const data2 = await response2.json();
-                if(response2.ok){
+                if (response2.ok) {
                     console.log(data2)
                     setMovieCinema(data2)
-                }else{
+                } else {
                     console.log("error fetching showtime")
                 }
-                
+
             } else {
                 console.log(data)
             }
@@ -82,8 +82,7 @@ export default function Showtime() {
             if (response.ok) {
                 setIsLoading(false)
                 setAddModal(false)
-                setAddToast(true)
-                setTimeout(() => setAddToast(false), 3000)
+                toast.success("Showtime added successfully")
                 fetchShowtimes();
                 setShowtime({
                     movie: {
@@ -102,25 +101,26 @@ export default function Showtime() {
             }
         } catch (error) {
             console.log(error)
+            toast.success("Error adding showtime")
         }
     }
 
     const numberOfShowtimes = async () => {
         try {
-          const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime/stats/count`, {
-            credentials: 'include'
-          })
-          if (response.ok) {
-            const data = await response.json();
-            console.log("Number of showtimes: ", data)
-            setCountShowtimes(data)
-          } else {
-            console.log("Error")
-          }
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime/stats/count`, {
+                credentials: 'include'
+            })
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Number of showtimes: ", data)
+                setCountShowtimes(data)
+            } else {
+                console.log("Error")
+            }
         } catch (error) {
-          console.log(error)
+            console.log(error)
         }
-      }
+    }
 
     const handleViewSeats = (showtime) => {
         setSelectedShowtime(showtime);
@@ -175,14 +175,14 @@ export default function Showtime() {
                 console.log(`movie with id ${show} has been deleted`)
                 setDeleteModal(false)
                 setIsLoading(false)
-                setSuccessDeleteToast(true)
                 fetchShowtimes();
-                setTimeout(() => setSuccessDeleteToast(false), 3000);
+                toast.success("Showtime deleted successfully!");
             } else {
                 console.log(`error deleting movie id ${show}`)
             }
         } catch (error) {
             console.log(error)
+            toast.error("Error deleting showtime!");
         }
     }
 
@@ -203,11 +203,10 @@ export default function Showtime() {
             if (response.ok) {
                 setIsLoading(false)
                 setUpdateModal(false)
-                setUpdateToast(true)
-                setTimeout(() => setUpdateToast(false), 3000)
                 console.log(data)
                 console.log("successful")
                 fetchShowtimes();
+                toast.success("Showtime updated successfully!");
                 setShowtime({
                     movie: {
                         id: ""
@@ -225,6 +224,7 @@ export default function Showtime() {
             }
         } catch (error) {
             console.log(error)
+            toast.error("Error updating showtime!");
         }
     }
 
@@ -564,24 +564,6 @@ export default function Showtime() {
                 </div>
             )}
 
-            {addToast && (
-                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-                    New showtime added
-                </div>
-            )}
-
-            {successDeleteToast && (
-                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-                    Showtime deleted successfully
-                </div>
-            )}
-
-            {updateToast && (
-                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-                    Showtime updated successfully
-                </div>
-            )}
-
             {deleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black-500/20 backdrop-blur-sm">
                     <div className="bg-[#2E2F33] p-6 rounded shadow-lg w-96 text-white">
@@ -636,7 +618,7 @@ export default function Showtime() {
 
                         <div className="mt-6 flex justify-end w-full">
                             <button
-                                onClick={()=>setViewSeatsModal(false)}
+                                onClick={() => setViewSeatsModal(false)}
                                 className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer"
                             >
                                 Close
@@ -645,6 +627,19 @@ export default function Showtime() {
                     </div>
                 </div>
             )}
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeButton={true}
+                pauseOnFocusLoss
+                pauseOnHover
+                draggable
+                draggablePercent={60}
+                rtl={false}
+            />
         </div>
     )
 }
