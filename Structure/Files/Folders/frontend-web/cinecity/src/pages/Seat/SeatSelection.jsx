@@ -33,16 +33,16 @@ export default function SeatSelection() {
 
     const handlePayment = async (e) => {
         e.preventDefault();
-        if(show === null){
+        if (show === null) {
             toast.error("No showtime selected!")
             return
         }
 
-        if(selectedSeats.length === 0){
+        if (selectedSeats.length === 0) {
             toast.error("No seat/s selected!")
             return
         }
-        
+
         setLoading(true);
         try {
             const response = await fetch("http://localhost:8080/payments/intent", {
@@ -114,7 +114,7 @@ export default function SeatSelection() {
                 credentials: 'include',
                 body: JSON.stringify({
                     payment_method: paymentMethodId,
-                    client_key: "pk_test_5E5ti3sZY2yEGNmazZMc6AG2",
+                    client_key: `${import.meta.env.VITE_CLIENT_KEY}`,
                     return_url: "http://localhost:5173/movie"
                 })
             });
@@ -374,7 +374,7 @@ export default function SeatSelection() {
                                 <p>Date and Time: {showtime2.date} - {showtime2.time}</p>
                                 <p>Price: ₱{showtime2.price * selectedSeats.length}</p>
                                 <p>Seats: {selectedSeats.map((seat, index) => (
-                                    <span key={index}>{seat.seatNo}</span>
+                                    <span key={index} className="mr-2 border border-green-500/30 px-2 rounded">{seat.seatNo}</span>
                                 ))}</p>
                             </div>
                         </div>
