@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function Navbar() {
     const navigate = useNavigate();
     return (
-        <div>
+        <div className="h-screen">
             <nav className="border-b-2 border-opacity-30 border-gray-200/30 px-16 py-2">
                 <div className="flex justify-between items-center">
                     <div className="flex">

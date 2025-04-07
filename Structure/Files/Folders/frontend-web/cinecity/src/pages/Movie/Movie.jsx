@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
+import { FaTrash } from "react-icons/fa";
 
 export default function Movie() {
   const [movies, setMovies] = useState([]);
@@ -19,7 +20,7 @@ export default function Movie() {
 
   const location = useLocation();
 
-  const fetchMovieShowtime = (movieId) =>{
+  const fetchMovieShowtime = (movieId) => {
     fetchMovie(movieId);
     fetchShowtime(movieId);
   }
@@ -230,11 +231,12 @@ export default function Movie() {
     );
   };
 
-  const filteredMovies = showtimes.filter(
-    (showtime) =>
-      (selectedGenres.length === 0 || selectedGenres.includes(showtime.movie.genre?.id)) &&
-      showtime.movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMovies = movies.filter(
+    (movie) =>
+      (selectedGenres.length === 0 || selectedGenres.includes(movie.genre?.id)) &&
+      movie.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
 
   const clearFilters = () => {
     setSelectedGenres([]);
@@ -242,12 +244,12 @@ export default function Movie() {
   };
 
   return (
-    <div className="flex h-screen text-white">
+    <div className="flex text-white">
       <div className="w-1/6 p-8 border-r border-gray-600 overflow-y-auto max-h-screen scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Genres</h2>
-          <button onClick={clearFilters} className="text-white transition duration-200 cursor-pointer underline">
-            Clear
+          <h2 className="py-2 text-4xl font-bold">Genres</h2>
+          <button onClick={clearFilters} className="text-white text-xl transition duration-200 cursor-pointer underline hover:text-red-400">
+          <FaTrash />
           </button>
         </div>
         {genres.map((genre) => (
@@ -267,32 +269,38 @@ export default function Movie() {
           </div>
         ))}
       </div>
-      <div className="w-5/6 p-7">
+      <div className="w-5/6 p-7 overflow-y-auto h-[54rem]">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-6xl font-bold text-[#FFF]">MOVIES</h1>
+          <h1 className="text-4xl font-bold text-[#FFF]">MOVIES</h1>
           <div className="mt-4 mb-4 w-[20%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33]">
             <IoSearchSharp className="text-[#2FBD59] mr-2" />
             <input type="text" placeholder="Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
               className="text-white w-full border-l-1 pl-2 border-gray-500 placeholder-gray-400 focus:outline-none" />
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-4">
-          {movies.map((movie) => (
-            <div
-              key={movie.id}
-              className="bg-[#2FBD59] p-4 rounded-lg text-black cursor-pointer hover:shadow-lg hover:scale-105 transition duration-300"
-              onClick={() => fetchMovieShowtime(movie.id)}
-            >
-              <img
-                src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
-                alt={`${movie.title} Cover`}
-                className="object-cover rounded mb-4 w-full h-48"
-              />
-              <h3 className="text-lg font-bold">{movie.title}</h3>
-              <p className="text-sm truncate">{movie.synopsis}</p>
-              <p className="text-sm font-semibold">Genre: {movie.genre?.genreName || "Unknown"}</p>
-            </div>
-          ))}
+        <div className="grid grid-cols-5 gap-4"> {/* Adjusted grid layout */}
+          {filteredMovies.length > 0 ? (
+            filteredMovies.map((movie) => (
+              <div
+                key={movie.id}
+                className="bg-gray-800 p-6 rounded-lg text-white cursor-pointer hover:shadow-xl hover:scale-105 transition-transform duration-300"
+                onClick={() => fetchMovieShowtime(movie.id)}
+              >
+                <img
+                  src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                  alt={`${movie.title} Cover`}
+                  className="object-cover rounded-lg mb-4 w-full h-64" // Adjusted image size
+                />
+                <h3 className="text-xl font-bold mb-2">{movie.title}</h3> {/* Larger title */}
+                <p className="text-sm movie-synopsis text-gray-300 mb-4">{movie.synopsis}</p> {/* Styled synopsis */}
+                <p className="text-sm font-semibold text-gray-400">Genre: {movie.genre?.genreName || "Unknown"}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-400 col-span-3">
+              No movies match your search criteria.
+            </p>
+          )}
         </div>
       </div>
       {selectedMovie && showtime && (
@@ -311,11 +319,11 @@ export default function Movie() {
               <h1 className="text-4xl font-extrabold">{movie.title}</h1>
               <p className="mt-3 text-gray-300">{movie.synopsis}</p>
               <p className="mt-4 font-semibold">Cinemas:</p>
-              {showtime.map((showtime)=>(
+              {showtime.map((showtime) => (
                 <p className="text-sm text-gray-200/50">{showtime.cinema.cinema_name}</p>
               ))}
               <p className="mt-4 font-semibold">Showtimes:</p>
-              {showtime.map((showtime)=>(
+              {showtime.map((showtime) => (
                 <p className="text-sm text-gray-200/50">{showtime.date} - {showtime.time}</p>
               ))}
               <button className="mt-3 ml-4 px-3 py-1 bg-green-500 text-black rounded-full hover:scale-105 transition duration-300"
