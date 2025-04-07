@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SeatSelection() {
 
@@ -31,6 +33,16 @@ export default function SeatSelection() {
 
     const handlePayment = async (e) => {
         e.preventDefault();
+        if(show === null){
+            toast.error("No showtime selected!")
+            return
+        }
+
+        if(selectedSeats.length === 0){
+            toast.error("No seat/s selected!")
+            return
+        }
+        
         setLoading(true);
         try {
             const response = await fetch("http://localhost:8080/payments/intent", {
@@ -39,7 +51,7 @@ export default function SeatSelection() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    amount: showtime2.price * selectedSeats.length+"00"
+                    amount: showtime2.price * selectedSeats.length + "00"
                 }),
                 credentials: 'include'
             });
@@ -192,7 +204,7 @@ export default function SeatSelection() {
                         onChange={(e) => setShow(e.target.value)}
                         className="w-full p-2 bg-gray-800 text-white rounded border border-gray-700"
                     >
-                        <option>Select Showtime</option>
+                        <option>Select showtime</option>
                         {showtime.map((mshow) => (
                             <option key={mshow.movieCinemaId} value={mshow.movieCinemaId}>{mshow.date} - {mshow.time}</option>
                         ))}
@@ -227,54 +239,61 @@ export default function SeatSelection() {
             <div className="w-full p-7 flex flex-col items-center">
                 <h2 className="text-4xl font-bold mb-[2rem] mt-3">Seat Selection</h2>
 
-                <div className="flex justify-around items-center mb-6">
-                    <div className="flex flex-col items-center mx-4 text-gray-200">
-                        <h1>Available</h1>
-                        <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-gray-500 rounded"></div>
-                    </div>
-                    <div className="flex flex-col items-center mx-4 text-gray-200">
-                        <h1>Selected</h1>
-                        <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-green-500 rounded"></div>
-                    </div>
-                    <div className="flex flex-col items-center mx-4 text-gray-200">
-                        <h1>Not Available</h1>
-                        <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-red-500 rounded"></div>
-                    </div>
-                </div>
-
-                <div className="w-[50%] h-[1.2rem] bg-green-500 rounded-xl shadow-lg mb-6"></div>
-
-                <div className="grid grid-cols-11 gap-2 mb-2 items-center">
-                    <span className="w-12 text-center font-bold"></span>
-                    {[...Array(10)].map((_, i) => (
-                        <span key={i} className="w-10 text-center font-bold">{i + 1}</span>
-                    ))}
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    {Object.keys(groupedSeats)
-                        .sort()
-                        .map((row) => (
-                            <div key={row} className="grid grid-cols-11 gap-2 items-center">
-                                <span className="w-10 text-center font-bold">{row}</span>
-                                {groupedSeats[row]
-                                    .sort((a, b) => a.seatNo.localeCompare(b.seatNo))
-                                    .map((seat) => (
-                                        <button
-                                            key={seat.seatId}
-                                            disabled={!seat.isAvailable} // Disable the button if the seat is not available
-                                            onClick={() => toggleSeatSelection(seat)}
-                                            className={`w-7 h-7 rounded flex items-center justify-center
-                                            ${!seat.isAvailable ? "bg-red-500 cursor-not-allowed" :
-                                                    selectedSeats.some((s) => s.seatId === seat.seatId) ? "bg-green-500 cursor-pointer" :
-                                                        "bg-gray-500 cursor-pointer"}`}
-                                        >
-                                        </button>
-                                    ))}
+                {show ? (
+                    <>
+                        <div className="flex justify-around items-center mb-6">
+                            <div className="flex flex-col items-center mx-4 text-gray-200">
+                                <h1>Available</h1>
+                                <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-gray-500 rounded"></div>
                             </div>
-                        ))}
-                </div>
+                            <div className="flex flex-col items-center mx-4 text-gray-200">
+                                <h1>Selected</h1>
+                                <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-green-500 rounded"></div>
+                            </div>
+                            <div className="flex flex-col items-center mx-4 text-gray-200">
+                                <h1>Not Available</h1>
+                                <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-red-500 rounded"></div>
+                            </div>
+                        </div>
 
+                        <div className="w-[50%] h-[1.2rem] bg-green-500 rounded-xl shadow-lg mb-6"></div>
+
+                        <div className="grid grid-cols-11 gap-2 mb-2 items-center">
+                            <span className="w-12 text-center font-bold"></span>
+                            {[...Array(10)].map((_, i) => (
+                                <span key={i} className="w-10 text-center font-bold">{i + 1}</span>
+                            ))}
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            {Object.keys(groupedSeats)
+                                .sort()
+                                .map((row) => (
+                                    <div key={row} className="grid grid-cols-11 gap-2 items-center">
+                                        <span className="w-10 text-center font-bold">{row}</span>
+                                        {groupedSeats[row]
+                                            .sort((a, b) => a.seatNo.localeCompare(b.seatNo))
+                                            .map((seat) => (
+                                                <button
+                                                    key={seat.seatId}
+                                                    disabled={!seat.isAvailable} // Disable the button if the seat is not available
+                                                    onClick={() => toggleSeatSelection(seat)}
+                                                    className={`w-7 h-7 rounded flex items-center justify-center
+                                        ${!seat.isAvailable ? "bg-red-500 cursor-not-allowed" :
+                                                            selectedSeats.some((s) => s.seatId === seat.seatId) ? "bg-green-500 cursor-pointer" :
+                                                                "bg-gray-500 cursor-pointer"}`}
+                                                >
+                                                </button>
+                                            ))}
+                                    </div>
+                                ))}
+                        </div>
+                    </>
+                ) : (
+                    <div className="text-center text-gray-400 mt-10">
+                        <p>Please select a showtime to view available seats.</p>
+                    </div>
+                )}
             </div>
             {paymentData && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
@@ -372,6 +391,19 @@ export default function SeatSelection() {
                     </div>
                 </div>
             )}
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeButton={true}
+                pauseOnFocusLoss
+                pauseOnHover
+                draggable
+                draggablePercent={60}
+                rtl={false}
+            />
         </div>
     )
 }
