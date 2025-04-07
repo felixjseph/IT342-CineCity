@@ -4,7 +4,7 @@ CineCity is a streamlined cinema booking system that makes finding and booking m
 
 ## Documentation
 
-- For initial setup & cloning the repository, read [SETUP.md.](https://github.com/felixjseph/IT342-CineCity/blob/main/Setup.md)
+- For initial setup & cloning the repository, read [SETUP.md.](https://github.com/felixjseph/IT342-CineCity/blob/main/SETUP.md)
 
 ## List of Features
 
