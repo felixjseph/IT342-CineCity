@@ -64,7 +64,7 @@ fun WelcomeScreen(
             }
 
             Button(
-                onClick = onSignInClick,
+                onClick = onCreateAccountClick,
                 modifier = Modifier
                     .width(220.dp)
                     .height(48.dp)
