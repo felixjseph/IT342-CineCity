@@ -67,7 +67,7 @@ fun ProfileScreen() {
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Felix Castaneda",
+            text = "Felix Joseph",
             color = white,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
