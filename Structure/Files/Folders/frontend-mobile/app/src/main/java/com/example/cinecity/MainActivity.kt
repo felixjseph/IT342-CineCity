@@ -8,18 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.cinecity.ui.theme.CineCityTheme
+import com.example.cinecity.ui.screens.HomeScreen
+import com.example.cinecity.ui.screens.LoginScreen
 import com.example.cinecity.ui.screens.WelcomeScreen
 import com.example.cinecity.ui.screens.SignUpScreen
-import java.nio.file.WatchEvent
+import com.example.cinecity.ui.theme.CineCityTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +39,35 @@ fun AppContent() {
             "welcome" -> WelcomeScreen(
                 modifier = Modifier.fillMaxSize()
                 .padding(innerPadding),
-                onSignInClick = {},
-                onCreateAccountClick = { currentScreen = "sign up"}
+                onSignInClick = { currentScreen = "login" },
+                onCreateAccountClick = { currentScreen = "sign up" }
             )
-            "sign up" -> SignUpScreen(modifier = Modifier.fillMaxSize())
+
+            "login" -> LoginScreen(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                onLoginClick = { username, password ->
+                    // Login logic
+
+                    currentScreen = "home"
+                },
+                onCreateAccountClick = { currentScreen = "sign up" }
+            )
+
+            "sign up" -> SignUpScreen(
+                modifier = Modifier
+                    .fillMaxSize()
+                .padding(innerPadding),
+            onBackClick = { currentScreen = "welcome" },
+            onCreateAccountClick = { username, email, password ->
+                // Account Creation logic
+
+                currentScreen = "home"
+                }
+            )
+
+            "home" -> HomeScreen()
         }
     }
 }
