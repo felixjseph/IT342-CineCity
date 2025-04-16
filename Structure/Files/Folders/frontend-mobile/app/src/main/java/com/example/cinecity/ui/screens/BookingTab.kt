@@ -27,8 +27,8 @@ import androidx.compose.foundation.lazy.items
 
 
 @Composable
-fun BookingScreen() {
-    val background = Color(0xFF2D2D2D) // Light background like the image
+fun BookingTab() {
+    val background = Color(0xFF1C1C1C) // Light background like the image
     val bookings = listOf(
         Booking("BK1234", "Avengers: Endgame", "CineCity Mall", "Apr 12, 6:00 PM", "Confirmed", "GCash"),
         Booking("BK5678", "Dune Part Two", "Ayala Center", "Apr 13, 8:30 PM", "Pending", "Credit Card"),
@@ -68,7 +68,10 @@ fun BookingCard(booking: Booking) {
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF2D2D2D) // Replace this with your desired background color
+        )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
