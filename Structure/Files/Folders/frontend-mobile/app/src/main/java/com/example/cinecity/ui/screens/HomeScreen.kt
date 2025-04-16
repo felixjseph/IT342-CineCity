@@ -30,7 +30,7 @@ fun HomeScreen() {
         ) {
             composable(BottomNavItem.Home.route) { HomeTab() }
             composable(BottomNavItem.Movies.route) { MoviesTab() }
-            composable(BottomNavItem.Bookings.route) { BookingsTab() }
+            composable(BottomNavItem.Bookings.route) { BookingScreen() }
             composable(BottomNavItem.Profile.route) { ProfileScreen() }
         }
     }
