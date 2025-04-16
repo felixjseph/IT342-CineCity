@@ -28,10 +28,20 @@ fun HomeScreen() {
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(BottomNavItem.Home.route) { HomeTab() }
+            composable(BottomNavItem.Home.route) {
+                HomeTab(onBrowseClick = {
+                    navController.navigate(BottomNavItem.Movies.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                })
+            }
             composable(BottomNavItem.Movies.route) { MoviesTab() }
-            composable(BottomNavItem.Bookings.route) { BookingScreen() }
-            composable(BottomNavItem.Profile.route) { ProfileScreen() }
+            composable(BottomNavItem.Bookings.route) { BookingTab() }
+            composable(BottomNavItem.Profile.route) { ProfileTab() }
         }
     }
 }
