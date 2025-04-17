@@ -15,23 +15,53 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cinecity.R
-
+import com.example.cinecity.data.util.Resource
+import com.example.cinecity.ui.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    onCreateAccountClick: (String, String, String) -> Unit = { _, _, _ -> }
+    onSignUpSuccess: () -> Unit = {},
+    authViewModel: AuthViewModel = viewModel()
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // Collect register state
+    val registerState = authViewModel.registerState.collectAsState().value
+
+    // Handle register state changes
+    LaunchedEffect(registerState) {
+        when (registerState) {
+            is Resource.Loading -> {
+                isLoading = true
+                errorMessage = null
+            }
+            is Resource.Success -> {
+                isLoading = false
+                errorMessage = null
+                onSignUpSuccess()
+                authViewModel.resetRegisterState()
+            }
+            is Resource.Error -> {
+                isLoading = false
+                errorMessage = registerState.message
+            }
+            null -> {
+                isLoading = false
+                errorMessage = null
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -115,15 +145,32 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // Show error message if any
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
+
         Button(
-            onClick = { onCreateAccountClick(username, email, password) },
+            onClick = { authViewModel.register(email, password, username) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF33B85A))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF33B85A)),
+            enabled = !isLoading
         ) {
-            Text("Create", color = Color.White)
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            } else {
+                Text("Create", color = Color.White)
+            }
         }
     }
 }
