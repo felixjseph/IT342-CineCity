@@ -1,16 +1,20 @@
 package com.example.cinecity.ui.screens
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -27,6 +31,7 @@ fun MoviesTab(
     onMovieClick: (Movie) -> Unit = {}
 ) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+    val focusManager = LocalFocusManager.current
 
     val movies = listOf(
         Movie("Deadpool vs Wolverine", R.drawable.placeholder),
@@ -37,47 +42,76 @@ fun MoviesTab(
         Movie("Movie 6", R.drawable.placeholder)
     )
 
-    Column(
-        modifier = modifier
+    Box (
+        modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF2D2D2D))
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .clickable(
+                // No ripple/visual feedback
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                focusManager.clearFocus() // Clears focus when tapping outside
+            }
     ) {
-        Text(
-            text = "Now Showing",
-            color = Color.White,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
-            placeholder = { Text("Search for movies...", color = Color.LightGray) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            singleLine = true,
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFF2A2A2A),
-                focusedContainerColor = Color(0xFF2A2A2A),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                cursorColor = Color.White
-            )
-        )
-
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 160.dp),
-            contentPadding = PaddingValues(bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxSize()
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color(0xFF1C1C1C))
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            items(movies) { movie ->
-                MovieCard(movie = movie, onClick = { onMovieClick(movie) })
+            Text(
+                text = "Movies",
+                color = Color.White,
+                fontSize = 42.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                placeholder = { Text("Search for movies...", color = Color.LightGray) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search Icon",
+                        tint = Color.LightGray
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .padding(bottom = 12.dp),
+                singleLine = true,
+                shape = RoundedCornerShape(50.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = Color(0xFF2A2A2A),
+                    focusedContainerColor = Color(0xFF2A2A2A),
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    cursorColor = Color.White
+                )
+            )
+
+
+            Text(
+                text = "Now Showing",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 160.dp),
+                contentPadding = PaddingValues(bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(movies) { movie ->
+                    MovieCard(movie = movie, onClick = { onMovieClick(movie) })
+                }
             }
         }
     }
@@ -86,14 +120,11 @@ fun MoviesTab(
 @Composable
 fun MovieCard(movie: Movie, onClick: () -> Unit) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF2D2D2D)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
     ) {
-        Column (
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -101,9 +132,10 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
                 contentDescription = movie.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .height(250.dp)
+                    .height(260.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp)) // match shape
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { onClick() }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -119,6 +151,7 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
         }
     }
 }
+
 
 
 // Data class remains the same

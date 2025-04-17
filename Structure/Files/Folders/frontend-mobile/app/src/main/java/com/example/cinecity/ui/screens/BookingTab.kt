@@ -85,7 +85,7 @@ fun BookingCard(booking: Booking) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(booking.movie, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text(booking.movie, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
             Text(booking.cinema, color = grayText)
 
             Spacer(modifier = Modifier.height(8.dp))

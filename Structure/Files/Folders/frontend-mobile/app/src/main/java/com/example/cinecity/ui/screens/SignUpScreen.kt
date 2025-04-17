@@ -96,7 +96,7 @@ fun SignUpScreen(
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            placeholder = { Text("Username") },
+            placeholder = { Text("Username", color = Color.LightGray) },
             shape = RoundedCornerShape(12.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedContainerColor = Color(0xFF444444),
@@ -113,7 +113,7 @@ fun SignUpScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            placeholder = { Text("Email") },
+            placeholder = { Text("Email", color = Color.LightGray) },
             shape = RoundedCornerShape(12.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedContainerColor = Color(0xFF444444),
@@ -130,7 +130,7 @@ fun SignUpScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = { Text("Password") },
+            placeholder = { Text("Password", color = Color.LightGray) },
             shape = RoundedCornerShape(12.dp),
             visualTransformation = PasswordVisualTransformation(),
             colors = OutlinedTextFieldDefaults.colors(
