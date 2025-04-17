@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import com.example.cinecity.ui.screens.HomeScreen
 import com.example.cinecity.ui.screens.LoginScreen
@@ -32,13 +33,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppContent() {
-    var currentScreen by remember { mutableStateOf("welcome") }
+    var currentScreen by rememberSaveable { mutableStateOf("welcome") }
 
     Scaffold { innerPadding ->
         when (currentScreen) {
             "welcome" -> WelcomeScreen(
-                modifier = Modifier.fillMaxSize()
-                .padding(innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
                 onSignInClick = { currentScreen = "login" },
                 onCreateAccountClick = { currentScreen = "sign up" }
             )
@@ -48,8 +50,6 @@ fun AppContent() {
                     .fillMaxSize()
                     .padding(innerPadding),
                 onLoginClick = { username, password ->
-                    // Login logic
-
                     currentScreen = "home"
                 },
                 onCreateAccountClick = { currentScreen = "sign up" }
@@ -58,12 +58,10 @@ fun AppContent() {
             "sign up" -> SignUpScreen(
                 modifier = Modifier
                     .fillMaxSize()
-                .padding(innerPadding),
-            onBackClick = { currentScreen = "welcome" },
-            onCreateAccountClick = { username, email, password ->
-                // Account Creation logic
-
-                currentScreen = "home"
+                    .padding(innerPadding),
+                onBackClick = { currentScreen = "welcome" },
+                onCreateAccountClick = { username, email, password ->
+                    currentScreen = "home"
                 }
             )
 
