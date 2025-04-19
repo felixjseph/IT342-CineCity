@@ -167,7 +167,7 @@ fun SignUpScreen(
                         errorMessage = "Password must be at least 8 characters long."
                     }
                     else -> {
-                        authViewModel.register(username, email, password)
+                        authViewModel.register(email, password, username)
                     }
                 }
             },

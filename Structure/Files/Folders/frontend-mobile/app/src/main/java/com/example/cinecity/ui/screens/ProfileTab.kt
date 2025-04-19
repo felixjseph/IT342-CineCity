@@ -43,6 +43,7 @@ import com.example.cinecity.ui.viewmodel.AuthViewModel
 @Composable
 fun ProfileTab(
     onLogoutSuccess: () -> Unit = {},
+    onEditProfile: () -> Unit = {},
     authViewModel: AuthViewModel = viewModel()
 ) {
     val background = Color(0xFF1C1C1C)
@@ -121,7 +122,7 @@ fun ProfileTab(
                 val user = userState.data
 
                 Text(
-                    text = user.username ?: "User",
+                    text = user.usernameField ?: "User",
                     color = white,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
@@ -132,7 +133,7 @@ fun ProfileTab(
                 ProfileItem(
                     icon = Icons.Default.Person,
                     label = "Username",
-                    value = user.username ?: "User",
+                    value = user.usernameField ?: "User",
                     containerColor = cardColor,
                     textColor = white
                 )
@@ -174,7 +175,7 @@ fun ProfileTab(
 
         // Edit Profile Button
         Button(
-            onClick = { /* Handle edit */ },
+            onClick = onEditProfile,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),

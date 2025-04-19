@@ -7,6 +7,7 @@ import com.example.cinecity.data.local.CookieManager
 import com.example.cinecity.data.model.LoginRequest
 import com.example.cinecity.data.model.LoginResponse
 import com.example.cinecity.data.model.RegisterRequest
+import com.example.cinecity.data.model.UpdateProfileRequest
 import com.example.cinecity.data.model.User
 import com.example.cinecity.data.util.Resource
 import kotlinx.coroutines.Dispatchers
@@ -108,4 +109,22 @@ class AuthRepository(private val context: Context) {
     fun isLoggedIn(): Boolean {
         return cookieManager.isLoggedIn()
     }
+
+    suspend fun updateProfile(username: String, email: String, password: String?): Resource<User> {
+        try {
+            val request = UpdateProfileRequest(username, email, password)
+
+            val response = apiService.updateProfile(request)
+
+            if (response.isSuccessful) {
+                return Resource.Success(response.body()!!)
+            } else {
+                return Resource.Error("Failed to update profile: ${response.message()}")
+            }
+        } catch (e: Exception) {
+            // Catch any exceptions (network errors, etc.)
+            return Resource.Error("Network error: ${e.localizedMessage}")
+        }
+    }
+
 }

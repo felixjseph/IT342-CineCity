@@ -43,24 +43,25 @@ fun LoginScreen(
         when (loginState) {
             is Resource.Loading -> {
                 isLoading = true
-                errorMessage = null
+                errorMessage = null // Clear the error message when loading
             }
             is Resource.Success -> {
                 isLoading = false
                 errorMessage = null
-                onLoginSuccess()
-                authViewModel.resetLoginState()
+                onLoginSuccess() // Trigger on login success callback
+                authViewModel.resetLoginState() // Reset the login state
             }
             is Resource.Error -> {
                 isLoading = false
-                errorMessage = loginState.message
+                errorMessage = loginState.message // Show error message
             }
-            null -> {
+            else -> {  // Catch-all for other unhandled states
                 isLoading = false
                 errorMessage = null
             }
         }
     }
+
 
     Column(
         modifier = modifier

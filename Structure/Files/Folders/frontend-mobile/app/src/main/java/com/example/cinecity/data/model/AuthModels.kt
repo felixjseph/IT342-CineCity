@@ -24,6 +24,7 @@ data class User(
     val id: Long? = null,
     val email: String,
     val username: String? = null,
+    val usernameField: String? = null,
     val password: String? = null,
     val roles: List<String>? = null,
     val enabled: Boolean = true,
@@ -35,4 +36,10 @@ data class User(
 
 data class Authority(
     val authority: String
+)
+
+data class UpdateProfileRequest(
+    val username: String,
+    val email: String,
+    val password: String?
 )
