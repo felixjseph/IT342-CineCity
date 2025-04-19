@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
 import { FaTrash } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
+import { PiFilmSlateFill } from "react-icons/pi";
 
 export default function Movie() {
   const [movies, setMovies] = useState([]);
@@ -249,7 +251,7 @@ export default function Movie() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="py-2 text-4xl font-bold">Genres</h2>
           <button onClick={clearFilters} className="text-white text-xl transition duration-200 cursor-pointer underline hover:text-red-400">
-          <FaTrash />
+            <FaTrash />
           </button>
         </div>
         {genres.map((genre) => (
@@ -271,14 +273,17 @@ export default function Movie() {
       </div>
       <div className="w-5/6 p-7 overflow-y-auto h-[54rem]">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-4xl font-bold text-[#FFF]">MOVIES</h1>
+          <div className="flex items-center text-4xl font-bold text-[#FFF]">
+            <PiFilmSlateFill className="mr-1 text-green-500" />
+            MOVIES
+          </div>
           <div className="mt-4 mb-4 w-[20%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33]">
             <IoSearchSharp className="text-[#2FBD59] mr-2" />
             <input type="text" placeholder="Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
               className="text-white w-full border-l-1 pl-2 border-gray-500 placeholder-gray-400 focus:outline-none" />
           </div>
         </div>
-        <div className="grid grid-cols-5 gap-4"> {/* Adjusted grid layout */}
+        <div className="grid grid-cols-5 gap-4">
           {filteredMovies.length > 0 ? (
             filteredMovies.map((movie) => (
               <div
@@ -289,15 +294,15 @@ export default function Movie() {
                 <img
                   src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
                   alt={`${movie.title} Cover`}
-                  className="object-cover rounded-lg mb-4 w-full h-64" // Adjusted image size
+                  className="object-cover rounded-lg mb-4 w-full h-64"
                 />
-                <h3 className="text-xl font-bold mb-2">{movie.title}</h3> {/* Larger title */}
-                <p className="text-sm movie-synopsis text-gray-300 mb-4">{movie.synopsis}</p> {/* Styled synopsis */}
+                <h3 className="text-xl font-bold mb-2">{movie.title}</h3>
+                <p className="text-sm movie-synopsis text-gray-300 mb-4">{movie.synopsis}</p>
                 <p className="text-sm font-semibold text-gray-400">Genre: {movie.genre?.genreName || "Unknown"}</p>
               </div>
             ))
           ) : (
-            <p className="text-center text-gray-400 col-span-3">
+            <p className="text-center text-2xl text-gray-200 col-span-3">
               No movies match your search criteria.
             </p>
           )}
@@ -307,9 +312,9 @@ export default function Movie() {
         <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50" onClick={() => setSelectedMovie(false)}>
           <div className="relative bg-[#1E1E1E] text-white rounded-lg shadow-lg w-[80%] max-w-4xl flex p-6 space-x-6" onClick={(e) => e.stopPropagation()}>
             <button
-              onClick={() => setSelectedMovie(false)}
-              className="absolute top-5 right-3 text-white text-2xl hover:text-gray-400"
-            > ✖ </button>
+              onClick={() => setSelectedMovie(false)}>
+              <MdClose className="absolute top-1 right-2 text-2xl text-red-100 transition duration-200 hover:text-red-400 cursor-pointer" />
+            </button>
             <img
               src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
               alt={`${movie.title} Cover`}
@@ -326,7 +331,7 @@ export default function Movie() {
               {showtime.map((showtime) => (
                 <p className="text-sm text-gray-200/50">{showtime.date} - {showtime.time}</p>
               ))}
-              <button className="mt-3 ml-4 px-3 py-1 bg-green-500 text-black rounded-full hover:scale-105 transition duration-300"
+              <button className="mt-3 ml-4 px-3 py-1 bg-green-500 text-black rounded-full hover:scale-105 transition duration-300 cursor-pointer"
                 onClick={() => {
                   localStorage.setItem("showtime", JSON.stringify(showtime));
                   localStorage.setItem("movie", JSON.stringify(movie));
