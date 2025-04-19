@@ -3,28 +3,25 @@ package com.example.cinecity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import com.example.cinecity.ui.screens.HomeScreen
-import com.example.cinecity.ui.screens.LoginScreen
-import com.example.cinecity.ui.screens.WelcomeScreen
-import com.example.cinecity.ui.screens.SignUpScreen
+import com.example.cinecity.ui.navigation.AppNavigation
 import com.example.cinecity.ui.theme.CineCityTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             CineCityTheme {
-                Surface (modifier = Modifier.fillMaxSize()) {
-                    AppContent()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    AppNavigation()
                 }
             }
         }
@@ -69,3 +66,4 @@ fun AppContent() {
         }
     }
 }
+

@@ -9,7 +9,9 @@ import com.example.cinecity.ui.components.BottomNavBar
 import com.example.cinecity.ui.navigation.BottomNavItem
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onLogoutSuccess: () -> Unit = {}
+) {
     val navController = rememberNavController()
     val bottomNavItems = listOf(
         BottomNavItem.Home,
@@ -41,7 +43,9 @@ fun HomeScreen() {
             }
             composable(BottomNavItem.Movies.route) { MoviesTab() }
             composable(BottomNavItem.Bookings.route) { BookingTab() }
-            composable(BottomNavItem.Profile.route) { ProfileTab() }
+            composable(BottomNavItem.Profile.route) {
+                ProfileTab(onLogoutSuccess = onLogoutSuccess)
+            }
         }
     }
 }

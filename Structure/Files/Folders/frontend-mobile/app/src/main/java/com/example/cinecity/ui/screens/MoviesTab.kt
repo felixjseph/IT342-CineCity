@@ -7,9 +7,13 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -56,6 +60,7 @@ fun MoviesTab(
         Column(
             modifier = modifier
                 .fillMaxSize()
+                .background(Color(0xFF1C1C1C))
                 .background(Color(0xFF2D2D2D))
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
@@ -80,6 +85,7 @@ fun MoviesTab(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(70.dp)
                     .height(60.dp)
                     .padding(bottom = 12.dp),
                 singleLine = true,
@@ -119,6 +125,24 @@ fun MoviesTab(
 
 @Composable
 fun MovieCard(movie: Movie, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = movie.coverResId),
+                contentDescription = movie.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(260.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { onClick() }
+            )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(IntrinsicSize.Min)

@@ -20,20 +20,54 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cinecity.R
-
+import com.example.cinecity.data.util.Resource
+import com.example.cinecity.ui.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    onCreateAccountClick: (String, String, String) -> Unit = { _, _, _ -> }
+    onSignUpSuccess: () -> Unit = {},
+    authViewModel: AuthViewModel = viewModel()
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // Collect register state
+    val registerState = authViewModel.registerState.collectAsState().value
+
+    // Handle register state changes
+    LaunchedEffect(registerState) {
+        when (registerState) {
+            is Resource.Loading -> {
+                isLoading = true
+                errorMessage = null
+            }
+            is Resource.Success -> {
+                isLoading = false
+                errorMessage = null
+                onSignUpSuccess()
+                authViewModel.resetRegisterState()
+            }
+            is Resource.Error -> {
+                isLoading = false
+                errorMessage = registerState.message
+            }
+            null -> {
+                isLoading = false
+                errorMessage = null
+            }
+        }
+    }
+    
     val focusManager = LocalFocusManager.current
+
 
     Box(
         modifier = modifier
@@ -75,6 +109,21 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+        OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            placeholder = { Text("Username", color = Color.LightGray) },
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = Color(0xFF444444),
+                focusedContainerColor = Color(0xFF444444),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                cursorColor = Color.White
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
@@ -92,6 +141,21 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            placeholder = { Text("Email", color = Color.LightGray) },
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = Color(0xFF444444),
+                focusedContainerColor = Color(0xFF444444),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                cursorColor = Color.White
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -109,6 +173,22 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            placeholder = { Text("Password", color = Color.LightGray) },
+            shape = RoundedCornerShape(12.dp),
+            visualTransformation = PasswordVisualTransformation(),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = Color(0xFF444444),
+                focusedContainerColor = Color(0xFF444444),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                cursorColor = Color.White
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+        
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -125,7 +205,33 @@ fun SignUpScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
+
             Spacer(modifier = Modifier.height(24.dp))
+
+        // Show error message if any
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
+
+        Button(
+            onClick = { authViewModel.register(email, password, username) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF33B85A)),
+            enabled = !isLoading
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            } else {
 
             Button(
                 onClick = { onCreateAccountClick(username, email, password) },
