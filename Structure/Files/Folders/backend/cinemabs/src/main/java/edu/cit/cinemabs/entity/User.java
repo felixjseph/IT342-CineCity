@@ -52,6 +52,14 @@ public class User implements UserDetails {
         return password;
     }
 
+    public String getUsernameField() {
+        return username;
+    }
+
+    public void setUsernameField() {
+        this.username = username;
+    }
+
     @Override
     public String getUsername() {
         return email;
