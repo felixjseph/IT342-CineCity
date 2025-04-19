@@ -1,7 +1,5 @@
 package com.example.cinecity.ui.screens
 
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -64,37 +62,26 @@ fun LoginScreen(
         }
     }
 
-    val focusManager = LocalFocusManager.current
-
-
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color(0xFF2D2D2D))
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                focusManager.clearFocus()
-            }
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
+
+        Spacer(modifier = Modifier.height(150.dp))
+
+        Image(
+            painter = painterResource(id = R.drawable.cinecitylogo),
+            contentDescription = "Logo",
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(150.dp))
+                .width(300.dp)
+                .height(150.dp)
+                .padding(vertical = 16.dp)
+        )
 
-            Image(
-                painter = painterResource(id = R.drawable.cinecitylogo),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .width(300.dp)
-                    .height(150.dp)
-                    .padding(vertical = 16.dp)
-            )
-
+        Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = email,
@@ -111,23 +98,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                placeholder = { Text("Username") },
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFF444444),
-                    focusedContainerColor = Color(0xFF444444),
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    cursorColor = Color.White
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
+        Spacer(modifier = Modifier.height(12.dp))
 
         OutlinedTextField(
             value = password,
@@ -145,25 +116,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = { Text("Password") },
-                visualTransformation = PasswordVisualTransformation(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFF444444),
-                    focusedContainerColor = Color(0xFF444444),
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    cursorColor = Color.White
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-
+        Spacer(modifier = Modifier.height(24.dp))
 
         // Show error message if any
         errorMessage?.let {
@@ -175,7 +128,12 @@ fun LoginScreen(
         }
 
         Button(
-            onClick = { authViewModel.login(email, password) },
+            onClick = {
+                if (email.isBlank() || password.isBlank()){
+                    errorMessage = "Email and password must not be empty."
+                } else {
+                    authViewModel.login(email, password)
+                }},
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
@@ -193,42 +151,29 @@ fun LoginScreen(
             }
         }
 
-            Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-
-            Button(
-                onClick = { onLoginClick(username, password) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF33B85A))
-            ) {
-                Text("Login", color = Color.White)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = 8.dp)
-            ) {
-                Text(
-                    "Don't have an account?",
-                    color = Color.LightGray,
-                    style = LocalTextStyle.current.copy(fontSize = 16.sp)
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
+            Text(
+                "Don't have an account?",
+                color = Color.LightGray,
+                style = LocalTextStyle.current.copy(
+                    fontSize = 16.sp
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    "Create",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF33B85A),
-                        fontSize = 16.sp
-                    ),
-                    modifier = Modifier.clickable { onCreateAccountClick() }
-                )
-            }
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                "Create",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF33B85A),
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier.clickable { onCreateAccountClick() }
+            )
         }
     }
 }
