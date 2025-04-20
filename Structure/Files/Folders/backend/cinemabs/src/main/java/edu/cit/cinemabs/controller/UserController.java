@@ -5,7 +5,6 @@ import edu.cit.cinemabs.entity.User;
 import edu.cit.cinemabs.repository.UserRepository;
 import edu.cit.cinemabs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,27 +41,14 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
 
-        // Fetch the user from the database using their ID to ensure the most recent data
-        Optional<User> userOptional = userRepository.findById(currentUser.getUserId());
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }
-
-        User user = userOptional.get();
-
-        // Update the user details
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-
+        currentUser.setUsername(request.getUsername());
+        currentUser.setEmail(request.getEmail());
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            currentUser.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
-        // Save the updated user object
-        userRepository.save(user);
-
-        // Return the updated user
-        return ResponseEntity.ok(user);
+        userRepository.save(currentUser);
+        return ResponseEntity.ok(currentUser);
     }
 
 

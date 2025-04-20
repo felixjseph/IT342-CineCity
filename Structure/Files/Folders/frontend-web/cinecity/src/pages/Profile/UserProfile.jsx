@@ -6,7 +6,7 @@ export default function UserProfile() {
         const navigate = useNavigate();
         const [updateModal, setUpdateModal] = useState(false);
         const [user, setUser] = useState({
-            username:"",
+            usernameField:"",
             email:"",
             password:""
         })
@@ -91,7 +91,7 @@ export default function UserProfile() {
                     className="mt-[2rem] rounded-full mx-auto w-24 h-24"
                 />
                 <div className="text-center overflow-hidden">
-                    <h2 className="text-lg font-bold mt-4 text-green-400 break-words">{user.username}</h2>
+                    <h2 className="text-lg font-bold mt-4 text-green-400 break-words">{user.usernameField}</h2>
                     <p className="mt-2 text-gray-300 break-all">{user.email}</p>
                 </div>
                 <button className="mt-[5rem] w-full px-5 py-2 bg-green-500 rounded-full text-white font-bold hover:bg-green-600 cursor-pointer"
