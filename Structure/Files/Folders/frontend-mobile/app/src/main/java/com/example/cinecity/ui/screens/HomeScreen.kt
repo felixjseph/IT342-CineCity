@@ -44,8 +44,25 @@ fun HomeScreen(
             composable(BottomNavItem.Movies.route) { MoviesTab() }
             composable(BottomNavItem.Bookings.route) { BookingTab() }
             composable(BottomNavItem.Profile.route) {
-                ProfileTab(onLogoutSuccess = onLogoutSuccess)
+                ProfileTab(
+                    onLogoutSuccess = onLogoutSuccess,
+                    onEditProfile = { navController.navigate("edit_profile") }
+                )
+            }
+
+            composable("edit_profile") {
+                EditProfileScreen(
+                    onBack = { navController.popBackStack() },
+                    onSaveSuccess = {
+                        navController.navigate(BottomNavItem.Profile.route) {
+                            popUpTo("edit_profile") { inclusive = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
             }
         }
+
     }
 }

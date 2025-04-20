@@ -22,6 +22,9 @@ interface ApiService {
     @GET("users/me")
     suspend fun getCurrentUser(): Response<User>
 
+    @PUT("users/me")
+    suspend fun updateProfile(@Body request: UpdateProfileRequest): Response<User>
+
     // Movie endpoints
     @GET("movies")
     suspend fun getMovies(): Response<List<Movie>>
