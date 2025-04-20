@@ -28,7 +28,5 @@ public class UpdateProfileRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    // Getters and setters
 }
 
