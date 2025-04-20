@@ -1,5 +1,6 @@
 package edu.cit.cinemabs.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,6 +53,7 @@ public class User implements UserDetails {
         return password;
     }
 
+    @JsonProperty("usernameField")
     public String getUsernameField() {
         return username;
     }
