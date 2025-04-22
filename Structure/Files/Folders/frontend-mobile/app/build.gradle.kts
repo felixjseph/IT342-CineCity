@@ -49,6 +49,7 @@ android {
 }
 
 dependencies {
+    debugImplementation("io.coil-kt:coil:2.4.0")
 
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.navigation:navigation-compose:2.7.7")

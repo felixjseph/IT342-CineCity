@@ -1,7 +1,6 @@
 package com.example.cinecity.ui.screens
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.platform.LocalFocusManager
@@ -17,30 +16,45 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.ImageLoader
 import com.example.cinecity.R
+import com.example.cinecity.data.util.Resource
+import com.example.cinecity.ui.viewmodel.MovieViewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import coil.util.DebugLogger
+import com.example.cinecity.data.model.Movie
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoviesTab(
     modifier: Modifier = Modifier,
+    viewModel: MovieViewModel = viewModel(),
     onMovieClick: (Movie) -> Unit = {}
 ) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     val focusManager = LocalFocusManager.current
+    val movieState by viewModel.movies.collectAsState()
+    val currentState = movieState
 
-    val movies = listOf(
-        Movie("Deadpool vs Wolverine", R.drawable.placeholder),
-        Movie("Movie 2", R.drawable.placeholder),
-        Movie("Movie 3", R.drawable.placeholder),
-        Movie("Movie 4", R.drawable.placeholder),
-        Movie("Movie 5", R.drawable.placeholder),
-        Movie("Movie 6", R.drawable.placeholder)
-    )
+    LaunchedEffect(Unit) {
+        viewModel.getMovies()
+    }
+
+    val movies = when (currentState) {
+        is Resource.Success -> currentState.data ?: emptyList()
+        else -> emptyList()
+    }
+
+    val filteredMovies = movies.filter { movie ->
+        movie.title.contains(searchQuery.text, ignoreCase = true)
+    }
 
     Box (
         modifier = Modifier
@@ -109,7 +123,7 @@ fun MoviesTab(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(movies) { movie ->
+                items(filteredMovies) { movie ->
                     MovieCard(movie = movie, onClick = { onMovieClick(movie) })
                 }
             }
@@ -124,12 +138,22 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(id = movie.coverResId),
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            val imageUrl = "http://192.168.254.100:8080/movie/${movie.id}/cover"
+
+            val context = LocalContext.current
+            val imageLoader = ImageLoader.Builder(context)
+                .logger(DebugLogger()) // <- Logs errors to Logcat
+                .build()
+
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(imageUrl)
+                    .crossfade(true)
+                    .error(R.drawable.image_error)
+                    .build(),
                 contentDescription = movie.title,
+                imageLoader = imageLoader,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .height(260.dp)
@@ -148,14 +172,7 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
+
         }
     }
 }
-
-
-
-// Data class remains the same
-data class Movie(
-    val title: String,
-    val coverResId: Int
-)
