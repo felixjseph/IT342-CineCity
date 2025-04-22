@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 export default function NavBarNew() {
 
     const [menuOpen, setMenuOpen] = useState(false);
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState()
 
     const handleClick = () => {
         setMenuOpen(!menuOpen);
@@ -106,7 +106,7 @@ export default function NavBarNew() {
                             <div class="flex flex-wrap items-center justify-center gap-4 cursor-pointer">
                                 <img src='https://readymadeui.com/team-1.webp' class="w-12 h-12 rounded-full" />
                                 <div>
-                                    <p class="text-[15px] text-white font-semibold">{user.username}</p>
+                                    <p class="text-[15px] text-white font-semibold">{user.email}</p>
                                     <p class="text-xs text-slate-500 mt-0.5">{user.email}</p>
                                 </div>
                             </div>

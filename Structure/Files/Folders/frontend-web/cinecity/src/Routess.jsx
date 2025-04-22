@@ -21,6 +21,7 @@ import UserProfile from "./pages/Profile/userProfile"
 import NewLogin from "./pages/Login and Register/NewLogin"
 import Register from "./pages/Login and Register/Register"
 import NavBarNew from "./components/Navbar/NavBarNew"
+import Checkout from "./pages/Checkout/Checkout"
 
 export default function Routess() {
     return (
@@ -37,6 +38,7 @@ export default function Routess() {
                     <Route path="movies" element={<Movie />}></Route>
                     <Route path="/movie/:id" element={<MovieDetails />} />
                     <Route path="home" element={<Home />} />
+                    <Route path="checkout" element={<Checkout />} />
                     <Route path="seat" element={<SeatSelection />}/>
                     <Route path="account" element={<UserProfile />}/>
                 </Route>

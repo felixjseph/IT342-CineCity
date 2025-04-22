@@ -247,14 +247,14 @@ export default function Movie() {
 
   return (
     <div className="flex text-white">
-      <nav class="shadow-md border-r border-opacity-50 h-screen min-w-[250px] py-6 px-4 overflow-auto">
-        <div class="mt-4">
-          <h6 class="text-green-600 text-sm font-semibold px-4">Genres</h6>
-          <ul class="mt-2 space-y-1">
+      <nav className="shadow-md border-r border-opacity-50 h-screen min-w-[250px] py-6 px-4 overflow-auto">
+        <div className="mt-4">
+          <h6 className="text-green-600 text-sm font-semibold px-4">Genres</h6>
+          <ul className="mt-2 space-y-1">
             {genres.map((genre) => (
               <li>
                 <a href="javascript:void(0)"
-                  class="text-white font-medium text-[15px] block hover:text-slate-900 hover:bg-gray-100 rounded px-4 py-2 transition-all">
+                  className="text-white font-medium text-[15px] block hover:text-slate-900 hover:bg-gray-100 rounded px-4 py-2 transition-all">
                   {genre.genreName}
                 </a>
               </li>
@@ -268,40 +268,40 @@ export default function Movie() {
             <PiFilmSlateFill className="mr-1 text-green-500" />
             MOVIES
           </div>
-          <div class="flex w-full overflow-hidden max-w-md mx-auto">
+          <div className="flex w-full overflow-hidden max-w-md mx-auto">
             <input type="email" placeholder="Search Something..."
-              class="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3" />
-            <button type='button' class="flex items-center justify-center bg-green-600 px-5 text-sm text-white">
+              className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3" />
+            <button type='button' className="flex items-center justify-center bg-green-600 px-5 text-sm text-white">
               Search
             </button>
           </div>
         </div>
-        <div class="p-4 mx-auto lg:max-w-6xl md:max-w-4xl">
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="p-4 mx-auto lg:max-w-6xl md:max-w-4xl">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {movies.map((movie) => (
-              <div class="bg-[#2E2F33] flex flex-col rounded overflow-hidden shadow-md hover:scale-[1.01] transition-all relative"
+              <div className="bg-[#2E2F33] flex flex-col rounded overflow-hidden shadow-md hover:scale-[1.01] transition-all relative"
                 onClick={()=>{
                   setSelectedMovie(true)
                   fetchMovieShowtime(movie.id)
                 }}
               >
-                <a href="javascript:void(0)" class="block">
-                  <div class="w-full">
+                <a href="javascript:void(0)" className="block">
+                  <div className="w-full">
                     <img
                       src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
                       alt={`${movie.title} Cover`}
                       className="object-cover mb-4 w-full h-64"
                     />
                   </div>
-                  <div class="p-4">
-                    <h5 class="text-sm sm:text-base font-semibold text-white line-clamp-2">{movie.title}</h5>
-                    <div class="mt-2 flex items-center flex-wrap gap-2">
-                      <h6 class="text-sm sm:text-base text-white">{movie.duration} minutes</h6>
+                  <div className="p-4">
+                    <h5 className="text-sm sm:text-base font-semibold text-white line-clamp-2">{movie.title}</h5>
+                    <div className="mt-2 flex items-center flex-wrap gap-2">
+                      <h6 className="text-sm sm:text-base text-white">{movie.duration} minutes</h6>
                     </div>
                   </div>
                 </a>
-                <div class="min-h-[50px] p-4 !pt-0">
-                  <button type="button" class="absolute left-0 right-0 bottom-3 max-w-[88%] mx-auto text-sm px-2 py-2 font-medium w-full bg-green-600 hover:bg-green-700 text-white tracking-wide outline-none border-none rounded">Book Movie</button>
+                <div className="min-h-[50px] p-4 !pt-0">
+                  <button type="button" className="absolute left-0 right-0 bottom-3 max-w-[88%] mx-auto text-sm px-2 py-2 font-medium w-full bg-green-600 hover:bg-green-700 text-white tracking-wide outline-none border-none rounded">Book Movie</button>
                 </div>
               </div>
             ))}
