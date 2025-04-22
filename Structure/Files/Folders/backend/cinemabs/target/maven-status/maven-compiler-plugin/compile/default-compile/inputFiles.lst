@@ -14,6 +14,7 @@ C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\dto\LoginResponse.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\dto\LoginUserDto.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\dto\RegisterUserDto.java
+C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\dto\UpdateProfileRequest.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\Booking.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\Cinema.java
 C:\Users\Suenlie\Documents\GitHub\IT342-CineCity\Structure\Files\Folders\backend\cinemabs\src\main\java\edu\cit\cinemabs\entity\Genre.java

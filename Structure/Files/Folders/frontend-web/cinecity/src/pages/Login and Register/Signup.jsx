@@ -9,7 +9,6 @@ export default function Signup() {
     const navigate = useNavigate();
 
     const [success, setSuccess] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [emailError, setEmailError] = useState("");
 

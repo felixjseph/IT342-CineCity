@@ -18,18 +18,23 @@ import MovieDetails from "./pages/Movie/MovieDetails";
 import Profile from "./pages/Admin/Profile/Profile"
 import SeatSelection from "./pages/Seat/SeatSelection"
 import UserProfile from "./pages/Profile/userProfile"
+import NewLogin from "./pages/Login and Register/NewLogin"
+import Register from "./pages/Login and Register/Register"
+import NavBarNew from "./components/Navbar/NavBarNew"
 
 export default function Routess() {
     return (
         <Routes>
             <Route element={<PublicRoute />}>
                 <Route path="/login" element={<Login />} />
+                <Route path="/newlogin" element={<NewLogin />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/register" element={<Register />} />
             </Route>
             <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<Navbar />}>
+                <Route path="/" element={<NavBarNew/>}>
                     <Route path="home" element={<Home />}></Route>
-                    <Route path="movie" element={<Movie />}></Route>
+                    <Route path="movies" element={<Movie />}></Route>
                     <Route path="/movie/:id" element={<MovieDetails />} />
                     <Route path="home" element={<Home />} />
                     <Route path="seat" element={<SeatSelection />}/>
