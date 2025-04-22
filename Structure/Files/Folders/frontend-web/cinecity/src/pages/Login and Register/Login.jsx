@@ -7,9 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Login() {
 
     const navigate = useNavigate();
-
-    const [user, setUser] = useState({})
-    const [error, setError] = useState(null)
     const [authenticated, setAuthenticated] = useState(false)
 
     const [login, setLogin] = useState({
