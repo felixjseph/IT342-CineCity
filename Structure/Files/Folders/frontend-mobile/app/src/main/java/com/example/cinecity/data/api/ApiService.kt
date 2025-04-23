@@ -26,15 +26,15 @@ interface ApiService {
     suspend fun updateProfile(@Body request: UpdateProfileRequest): Response<User>
 
     // Movie endpoints
-    @GET("movies")
+    @GET("movie")
     suspend fun getMovies(): Response<List<Movie>>
 
-    @GET("movies/{id}")
-    suspend fun getMovieById(@Path("id") movieId: Long): Response<Movie>
+    @GET("movie/{id}")
+    suspend fun getMovieById(@Path("id") id: Long): Response<Movie>
 
     // Showtimes endpoints
-    @GET("showtimes")
-    suspend fun getShowTimes(@Query("movieId") movieId: Long? = null): Response<List<ShowTime>>
+    @GET("showtime/movie/{movieId}")
+    suspend fun getShowtimesByMovieId(@Path("movieId") movieId: Int): List<ShowtimeDto>
 
     // Booking endpoints
     @POST("bookings")

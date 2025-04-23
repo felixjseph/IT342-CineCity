@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.cinecity.data.api.ApiService
 import com.example.cinecity.data.api.RetrofitClient
 import com.example.cinecity.data.model.Movie
-import com.example.cinecity.data.model.ShowTime
+import com.example.cinecity.data.model.ShowtimeDto
 import com.example.cinecity.data.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,39 +30,9 @@ class MovieRepository(private val context: Context) {
         }
     }
 
-    suspend fun getMovieById(movieId: Long): Resource<Movie> {
+    suspend fun getShowtimesByMovieId(movieId: Int): List<ShowtimeDto> {
         return withContext(Dispatchers.IO) {
-            try {
-                val response = apiService.getMovieById(movieId)
-
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        Resource.Success(it)
-                    } ?: Resource.Error("Empty response body")
-                } else {
-                    Resource.Error("Failed to fetch movie: ${response.message()}")
-                }
-            } catch (e: Exception) {
-                Resource.Error("Failed to fetch movie: ${e.message}")
-            }
-        }
-    }
-
-    suspend fun getShowTimes(movieId: Long? = null): Resource<List<ShowTime>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = apiService.getShowTimes(movieId)
-
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        Resource.Success(it)
-                    } ?: Resource.Error("Empty response body")
-                } else {
-                    Resource.Error("Failed to fetch showtimes: ${response.message()}")
-                }
-            } catch (e: Exception) {
-                Resource.Error("Failed to fetch showtimes: ${e.message}")
-            }
+            apiService.getShowtimesByMovieId(movieId)
         }
     }
 }

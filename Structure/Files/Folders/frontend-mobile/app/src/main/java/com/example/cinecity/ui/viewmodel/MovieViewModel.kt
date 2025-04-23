@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinecity.data.model.Movie
-import com.example.cinecity.data.model.ShowTime
+import com.example.cinecity.data.model.ShowtimeDto
 import com.example.cinecity.data.repository.MovieRepository
 import com.example.cinecity.data.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,11 +17,11 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     private val _movies = MutableStateFlow<Resource<List<Movie>>?>(null)
     val movies: StateFlow<Resource<List<Movie>>?> = _movies
 
-    private val _movie = MutableStateFlow<Resource<Movie>?>(null)
-    val movie: StateFlow<Resource<Movie>?> = _movie
+    private val _showtimes = MutableStateFlow<Resource<List<ShowtimeDto>>>(Resource.Loading)
+    val showtimes: StateFlow<Resource<List<ShowtimeDto>>> = _showtimes
 
-    private val _showTimes = MutableStateFlow<Resource<List<ShowTime>>?>(null)
-    val showTimes: StateFlow<Resource<List<ShowTime>>?> = _showTimes
+    private val _movie = MutableStateFlow<Resource<Movie>>(Resource.Loading)
+    val movie: StateFlow<Resource<Movie>> = _movie
 
     fun getMovies() {
         _movies.value = Resource.Loading
@@ -31,19 +31,15 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getMovieById(movieId: Long) {
-        _movie.value = Resource.Loading
+    fun getShowtimesByMovieId(movieId: Int) {
         viewModelScope.launch {
-            val result = repository.getMovieById(movieId)
-            _movie.value = result
-        }
-    }
-
-    fun getShowTimes(movieId: Long? = null) {
-        _showTimes.value = Resource.Loading
-        viewModelScope.launch {
-            val result = repository.getShowTimes(movieId)
-            _showTimes.value = result
+            try {
+                _showtimes.value = Resource.Loading
+                val response = repository.getShowtimesByMovieId(movieId)
+                _showtimes.value = Resource.Success(response)
+            } catch (e: Exception) {
+                _showtimes.value = Resource.Error(e.message ?: "Unknown error")
+            }
         }
     }
 }

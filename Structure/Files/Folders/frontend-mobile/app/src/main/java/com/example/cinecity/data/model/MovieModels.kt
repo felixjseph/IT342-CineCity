@@ -1,26 +1,32 @@
 package com.example.cinecity.data.model
 
-import java.util.Date
-
 data class Movie(
-    val id: Long,
+    val id: Int,
     val title: String,
-    val description: String,
     val duration: Int,
-    val genre: String,
-    val releaseDate: String,
-    val posterUrl: String,
-    val price: Double
+    val synopsis: String,
+    val genre: Genre,
+    val photo: String
 )
 
-data class ShowTime(
-    val id: Long,
-    val movieId: Long,
-    val startTime: String,
-    val endTime: String,
-    val theater: String,
+data class Genre(
+    val id: Int,
+    val genreName: String
+)
+
+
+data class ShowtimeDto(
+    val movieCinemaId: Int,
+    val date: String,
+    val time: String,
     val price: Double,
-    val availableSeats: Int
+    val cinema: Cinema,
+    val movie: Movie
+)
+
+data class Cinema(
+    val cinema_ID: Int,
+    val cinema_name: String
 )
 
 data class BookingRequest(

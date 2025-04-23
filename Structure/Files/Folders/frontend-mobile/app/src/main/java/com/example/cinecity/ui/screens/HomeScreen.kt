@@ -41,8 +41,32 @@ fun HomeScreen(
                     }
                 })
             }
-            composable(BottomNavItem.Movies.route) { MoviesTab() }
+            composable(BottomNavItem.Movies.route) {
+                MoviesTab(
+                    onMovieClick = { movie ->
+                        navController.navigate("movieDetails/${movie.id}")
+                    }
+                )
+            }
+
+//            composable("movieDetails/{movieId}") { backStackEntry ->
+//                val movieId = backStackEntry.arguments?.getString("movieId")?.toInt() ?: return@composable
+//                val movie = getMovieById(movieId) // Replace with your method to fetch movie details
+//
+//                MovieDetailsScreen(
+//                    movie = movie,
+//                    onBookNow = { movieCinemaId ->
+//                        // Handle booking logic here
+//                    },
+//                    onBack = {
+//                        // Go back to the Movies tab
+//                        navController.popBackStack()
+//                    }
+//                )
+//            }
+
             composable(BottomNavItem.Bookings.route) { BookingTab() }
+
             composable(BottomNavItem.Profile.route) {
                 ProfileTab(
                     onLogoutSuccess = onLogoutSuccess,
