@@ -14,6 +14,7 @@ export default function Movie() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(false);
+
   const [users, setUsers] = useState()
   const showtime2 = localStorage.getItem("showtime2") ? JSON.parse(localStorage.getItem("showtime2")) : null;
   const paymentMethod = localStorage.getItem("paymentMethod") ? JSON.parse(localStorage.getItem("paymentMethod")) : null;
@@ -152,68 +153,112 @@ export default function Movie() {
     setSearchTerm("")
   };
 
+  const handleSearch = () => {
+    console.log("Search triggered for:", searchTerm);
+  };
+
   return (
-    <div className="flex text-white">
-      <nav className="shadow-md border-r border-opacity-50 h-screen min-w-[250px] py-6 px-4 overflow-auto">
+    <div className="flex text-white " style={{ height: `calc(100vh - 82px)` }}>
+      <nav className="shadow-md border-r border-opacity-50 h-full min-w-[250px] py-6 px-4 overflow-auto">
         <div className="mt-4">
-          <h6 className="text-green-600 text-sm font-semibold px-4">Genres</h6>
+          <div className="flex justify-between items-center mt-4">
+            <h6 className="text-green-600 text-sm font-semibold px-4">Genres</h6>
+            <button
+              className="text-sm text-white hover:bg-red-600 px-2 py-1/50 rounded-full transition duration-200"
+              onClick={clearFilters}
+            >
+              Reset
+            </button>
+          </div>
           <ul className="mt-2 space-y-1">
             {genres.map((genre) => (
-              <li>
-                <a href="javascript:void(0)"
-                  className="text-white font-medium text-[15px] block hover:text-slate-900 hover:bg-gray-100 rounded px-4 py-2 transition-all">
+              <li key={genre.id}>
+                <div
+                  className="text-white font-medium text-[15px] block hover:text-slate-900 hover:bg-gray-100 rounded px-4 py-2 transition-all cursor-pointer"
+                  onClick={() => toggleGenre(genre.id)}
+                >
                   {genre.genreName}
-                </a>
+                </div>
               </li>
             ))}
           </ul>
         </div>
       </nav>
-      <div className="w-5/6 p-7 overflow-y-auto h-[54rem]">
+      <div className="w-full p-7 overflow-y-auto">
         <div className="flex justify-between items-center">
           <div className="flex items-center text-4xl font-bold text-[#FFF]">
             <PiFilmSlateFill className="mr-1 text-green-500" />
             MOVIES
           </div>
-          <div className="flex w-full overflow-hidden max-w-md mx-auto">
-            <input type="email" placeholder="Search Something..."
-              className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3" />
-            <button type='button' className="flex items-center justify-center bg-green-600 px-5 text-sm text-white">
-              Search
-            </button>
+          <div className="flex justify-end w-full">
+            <div className="flex overflow-hidden rounded-2xl w-4/15">
+              <input
+                type="text"
+                placeholder="Search Something..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+                className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3"
+              />
+              <button
+                type="button"
+                className="flex items-center justify-center bg-green-600 px-5 text-sm text-white cursor-pointer"
+                onClick={handleSearch}
+              >
+                Search
+              </button>
+            </div>
           </div>
         </div>
         <div className="p-4 mx-auto lg:max-w-6xl md:max-w-4xl">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {movies.map((movie) => (
-              <div className="bg-[#2E2F33] flex flex-col rounded overflow-hidden shadow-md hover:scale-[1.01] transition-all relative"
-                onClick={()=>{
-                  setSelectedMovie(true)
-                  fetchMovieShowtime(movie.id)
-                }}
-              >
-                <a href="javascript:void(0)" className="block">
-                  <div className="w-full">
-                    <img
-                      src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
-                      alt={`${movie.title} Cover`}
-                      className="object-cover mb-4 w-full h-64"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h5 className="text-sm sm:text-base font-semibold text-white line-clamp-2">{movie.title}</h5>
-                    <div className="mt-2 flex items-center flex-wrap gap-2">
-                      <h6 className="text-sm sm:text-base text-white">{movie.duration} minutes</h6>
+          {filteredMovies.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              {filteredMovies.map((movie) => (
+                <div
+                  key={movie.id}
+                  className="bg-[#2E2F33] h-full flex flex-col rounded overflow-hidden shadow-md hover:scale-[1.01] transition-all relative"
+                  onClick={() => {
+                    setSelectedMovie(true);
+                    fetchMovieShowtime(movie.id);
+                  }}
+                >
+                  <div className="block cursor-pointer">
+                    <div className="w-full">
+                      <img
+                        src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                        alt={`${movie.title} Cover`}
+                        className="object-cover mb-4 w-full h-64"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h5 className="text-sm sm:text-base font-semibold text-white line-clamp-2">
+                        {movie.title}
+                      </h5>
+                      <div className="mt-2 flex items-center flex-wrap gap-2">
+                        <h6 className="text-sm sm:text-base text-white">{movie.duration} minutes</h6>
+                      </div>
                     </div>
                   </div>
-                </a>
-                <div className="min-h-[50px] p-4 !pt-0">
-                  <button type="button" className="absolute left-0 right-0 bottom-3 max-w-[88%] mx-auto text-sm px-2 py-2 font-medium w-full bg-green-600 hover:bg-green-700 text-white tracking-wide outline-none border-none rounded">Book Movie</button>
+                  <div className="min-h-[50px] p-4 !pt-0">
+                    <button
+                      type="button"
+                      className="absolute left-0 right-0 bottom-3 max-w-[88%] mx-auto text-sm px-2 py-2 font-medium w-full bg-green-600 hover:bg-green-700 text-white tracking-wide outline-none border-none rounded"
+                    >
+                      Book Movie
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-400 text-lg mt-10">
+              No movies available
+            </div>
+          )}
         </div>
       </div>
       {selectedMovie && showtime && (
