@@ -95,7 +95,7 @@ export default function SeatSelection() {
                 console.log("Payment method created:", data);
                 localStorage.setItem("seats", JSON.stringify(selectedSeats))
                 localStorage.setItem("showtime2", JSON.stringify(showtime2))
-                localStorage.setItem("paymentMethod", JSON.stringify(paymentMethod))
+                
                 await handleAttachIntent(data.data.id);
             } else {
                 console.error("Error creating payment method:", data);
@@ -119,7 +119,7 @@ export default function SeatSelection() {
                 body: JSON.stringify({
                     payment_method: paymentMethodId,
                     client_key: `${import.meta.env.VITE_CLIENT_KEY}`,
-                    return_url: "http://localhost:5173/movie"
+                    return_url: "http://localhost:5173/payment"
                 })
             });
 

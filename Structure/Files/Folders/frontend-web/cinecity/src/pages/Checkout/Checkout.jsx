@@ -7,8 +7,11 @@ export default function Checkout() {
         phone: "",
         type: "gcash"
     });
+    const [loading, setLoading] = useState(false);
+    const [paymentMethodId, setPaymentMethodId] = useState(null);
 
     const [selectedShipping, setSelectedShipping] = useState("gcash");
+    const paymentIntentId = JSON.parse(localStorage.getItem("paymentIntentId"))
 
     const showtime = JSON.parse(localStorage.getItem("showtime2"));
     const seats = JSON.parse(localStorage.getItem("seats"));
@@ -24,32 +27,92 @@ export default function Checkout() {
         setSelectedShipping(e.target.value);
         setPaymentMethod({
             ...paymentMethod,
-            type: e.target.value // Update the payment type
+            type: e.target.value
         });
+    };
+
+    const handlePaymentMethod = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch('http://localhost:8080/payments/method', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: 'include',
+                body: JSON.stringify(paymentMethod)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setPaymentMethodId(data.data.id);
+                console.log("Payment method created:", data);
+                localStorage.setItem("paymentMethod", JSON.stringify(paymentMethod))
+                await handleAttachIntent(data.data.id);
+            } else {
+                console.error("Error creating payment method:", data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleAttachIntent = async (paymentMethodId) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`http://localhost:8080/payments/intent/attach/${paymentIntentId}`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    payment_method: paymentMethodId,
+                    client_key: `${import.meta.env.VITE_CLIENT_KEY}`,
+                    return_url: "http://localhost:5173/payment"
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log("Intent attached successfully:", data);
+                window.location.href = data.data.attributes.next_action.redirect.url;
+            } else {
+                console.error("Error attaching intent:", data);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div>
             <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
                 <div className="px-4 pt-8">
-                    <p className="text-xl font-medium">Order Summary</p>
-                    <p className="text-gray-400">Check your items. And select a suitable shipping method.</p>
-                    <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-                        <div className="flex flex-col rounded-lg bg-white sm:flex-row">
+                    <p className="text-xl text-white font-medium">Order Summary</p>
+                    <p className="text-gray-400">Check your items. And select a suitable payment type.</p>
+                    <div className="mt-8 space-y-3 rounded-lg border border-gray-400 bg-[#2E2F33] px-2 py-4 sm:px-6">
+                        <div className="flex flex-col rounded-lg bg-[#2E2F33] sm:flex-row">
                             <img
                                 src={`http://localhost:8080/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
                                 alt={`${showtime.movie.title} Cover`}
                                 className="m-2 h-24 w-28 rounded-md border object-cover object-center"
                             />
                             <div className="flex w-full flex-col px-4 py-4">
-                                <span className="font-semibold">{showtime.movie.title}</span>
+                                <span className="font-semibold text-white">{showtime.movie.title}</span>
                                 <span className="float-right text-gray-400">{showtime.movie.duration} minutes</span>
-                                <p className="text-lg font-bold">₱{showtime.price}.00</p>
+                                <p className="text-lg font-bold text-white">₱{showtime.price}.00</p>
                             </div>
                         </div>
                     </div>
 
-                    <p className="mt-8 text-lg font-medium">Shipping Methods</p>
+                    <p className="mt-8 text-lg text-white font-medium">Shipping Methods</p>
                     <form className="mt-5 grid gap-6">
                         <div className="relative">
                             <input
@@ -95,16 +158,16 @@ export default function Checkout() {
                         </div>
                     </form>
                 </div>
-                <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-                    <p className="text-xl font-medium">Payment Details</p>
+                <div className="mt-10 bg-[#2E2F33] px-4 pt-8 lg:mt-0">
+                    <p className="text-xl text-white font-medium">Payment Details</p>
                     <p className="text-gray-400">Complete your order by providing your payment details.</p>
                     <div className="">
-                        <label className="mt-4 mb-2 block text-sm font-medium">Email</label>
+                        <label className="mt-4 mb-2 text-white block text-sm font-medium">Email</label>
                         <div className="relative">
                             <input
                                 type="text"
                                 name="email"
-                                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                                className="w-full rounded-md border text-white border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                                 placeholder="your@email.com"
                                 value={paymentMethod.email}
                                 onChange={handleChange}
@@ -126,12 +189,12 @@ export default function Checkout() {
                                 </svg>
                             </div>
                         </div>
-                        <label className="mt-4 mb-2 block text-sm font-medium">Fullname</label>
+                        <label className="mt-4 mb-2 block text-white text-sm font-medium">Fullname</label>
                         <div className="relative">
                             <input
                                 type="text"
                                 name="name"
-                                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                                className="w-full rounded-md text-white border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                                 placeholder="Your full name here"
                                 value={paymentMethod.name}
                                 onChange={handleChange}
@@ -153,13 +216,13 @@ export default function Checkout() {
                                 </svg>
                             </div>
                         </div>
-                        <label className="mt-4 mb-2 block text-sm font-medium">Phone Number</label>
+                        <label className="mt-4 mb-2 block text-sm text-white font-medium">Phone Number</label>
                         <div className="flex">
                             <div className="relative w-7/12 flex-shrink-0">
                                 <input
                                     type="text"
                                     name="phone"
-                                    className="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                                    className="w-full text-white rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                                     placeholder="+639 xxx xxx xxxx"
                                     value={paymentMethod.phone}
                                     onChange={handleChange}
@@ -182,24 +245,26 @@ export default function Checkout() {
 
                         <div className="mt-6 border-t border-b py-2">
                             <div className="flex items-center justify-between">
-                                <p className="text-sm font-medium text-gray-900">Subtotal</p>
-                                <p className="font-semibold text-gray-900">₱{showtime.price}.00</p>
+                                <p className="text-sm text-white font-medium text-gray-900">Subtotal</p>
+                                <p className="font-semibold text-white text-gray-900">₱{showtime.price}.00</p>
                             </div>
                             <div className="flex items-center justify-between">
-                                <p className="text-sm font-medium text-gray-900">Seats</p>
+                                <p className="text-sm font-medium text-white text-gray-900">Seats</p>
                                 <div className="flex items-center">
                                     {seats.map((seat) => (
-                                        <p className="mx-1 font-semibold text-gray-900">{seat.seatNo}</p>
+                                        <p key={seat.seatId} className="mx-1 text-white font-semibold ">{seat.seatNo}</p>
                                     ))}
                                 </div>
                             </div>
                         </div>
                         <div className="mt-6 flex items-center justify-between">
-                            <p className="text-sm font-medium text-gray-900">Total</p>
-                            <p className="text-2xl font-semibold text-gray-900">₱{showtime.price * seats.length}.00</p>
+                            <p className="text-sm font-medium text-white">Total</p>
+                            <p className="text-2xl font-semibold text-white">₱{showtime.price * seats.length}.00</p>
                         </div>
                     </div>
-                    <button className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">
+                    <button
+                        onClick={handlePaymentMethod}
+                        className="mt-4 mb-8 w-full rounded-md bg-green-600 px-6 py-3 font-medium text-white cursor-pointer">
                         Place Order
                     </button>
                 </div>
