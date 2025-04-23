@@ -15,6 +15,9 @@ export default function NavBarNew() {
 
     const [isAuthenticated, setIsAuthenticated] = useState(null);
 
+
+
+
     const userMe = async () => {
         try {
             const response = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`, {
@@ -22,6 +25,7 @@ export default function NavBarNew() {
             })
             const data = await response.json();
             if (response.ok) {
+                console.log("User fetched successfully: ", data)
                 setUser(data)
             } else {
                 console.log(data)
@@ -30,6 +34,7 @@ export default function NavBarNew() {
             console.log(error)
         }
     }
+
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -40,13 +45,13 @@ export default function NavBarNew() {
                 const result = await response.json();
                 console.log('Auth check response:', result);
                 setIsAuthenticated(result);
+                userMe();
             } catch (error) {
                 console.error('Error checking authentication:', error);
                 setIsAuthenticated(false);
             }
 
         };
-        userMe();
         checkAuth();
     }, []);
 
@@ -103,13 +108,17 @@ export default function NavBarNew() {
 
                     <div className="flex max-lg:ml-auto space-x-4">
                         {isAuthenticated ? (
-                            <div class="flex flex-wrap items-center justify-center gap-4 cursor-pointer">
-                                <img src='https://readymadeui.com/team-1.webp' class="w-12 h-12 rounded-full" />
-                                <div>
-                                    <p class="text-[15px] text-white font-semibold">{user.email}</p>
-                                    <p class="text-xs text-slate-500 mt-0.5">{user.email}</p>
+                            user ? ( // Check if the user object is defined
+                                <div className="flex flex-wrap items-center justify-center gap-4 cursor-pointer">
+                                    <img src="https://readymadeui.com/team-1.webp" className="w-12 h-12 rounded-full" alt="User Avatar" />
+                                    <div>
+                                        <p className="text-[15px] text-white font-semibold">{user.email}</p>
+                                        <p className="text-xs text-slate-500 mt-0.5">{user.email}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="text-white">Loading...</div> // Show a loading state while user data is being fetched
+                            )
                         ) : (
                             <div>
                                 <button className="px-4 py-2 text-sm rounded-full font-medium tracking-wide text-white border border-gray-400 bg-transparent hover:text-black hover:bg-gray-50 transition-all">
