@@ -18,33 +18,47 @@ import MovieDetails from "./pages/Movie/MovieDetails";
 import Profile from "./pages/Admin/Profile/Profile"
 import SeatSelection from "./pages/Seat/SeatSelection"
 import UserProfile from "./pages/Profile/userProfile"
+import NewLogin from "./pages/Login and Register/NewLogin"
+import Register from "./pages/Login and Register/Register"
+import NavBarNew from "./components/Navbar/NavBarNew"
+import Checkout from "./pages/Checkout/Checkout"
+import PaymentResult from "./pages/Checkout/PaymentResult"
+import Bookings from "./pages/Admin/Bookings/Bookings"
 
 export default function Routess() {
     return (
         <Routes>
             <Route element={<PublicRoute />}>
                 <Route path="/login" element={<Login />} />
+                <Route path="/newlogin" element={<NewLogin />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/register" element={<Register />} />
             </Route>
             <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<Navbar />}>
+                <Route path="/" element={<NavBarNew />}>
                     <Route path="home" element={<Home />}></Route>
-                    <Route path="movie" element={<Movie />}></Route>
+                    <Route path="movies" element={<Movie />}></Route>
                     <Route path="/movie/:id" element={<MovieDetails />} />
                     <Route path="home" element={<Home />} />
-                    <Route path="seat" element={<SeatSelection />}/>
-                    <Route path="account" element={<UserProfile />}/>
+                    <Route path="checkout" element={<Checkout />} />
+                    <Route path="seat" element={<SeatSelection />} />
+                    <Route path="account" element={<UserProfile />} />
+
                 </Route>
                 <Route element={<ProtectedRouteAdmin />}>
                     <Route path="/admin" element={<SideBar />}>
                         <Route path="movies" element={<Movies />} />
                         <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="cinemas" element={<Cinemas/>}/>
-                        <Route path="showtimes" element={<Showtime/>}/>
-                        <Route path="genres" element={<Genres/>}/>
-                        <Route path="profile" element={<Profile/>}/>
+                        <Route path="cinemas" element={<Cinemas />} />
+                        <Route path="showtimes" element={<Showtime />} />
+                        <Route path="genres" element={<Genres />} />
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="bookings" element={<Bookings />} />
                     </Route>
                 </Route>
+            </Route>
+            <Route element={<ProtectedRoute />}>
+                <Route path="payment" element={<PaymentResult />} />
             </Route>
         </Routes>
     );

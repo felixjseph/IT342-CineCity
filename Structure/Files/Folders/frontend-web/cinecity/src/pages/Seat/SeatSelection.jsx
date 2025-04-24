@@ -59,8 +59,12 @@ export default function SeatSelection() {
             const data = await response.json();
 
             if (response.ok) {
-                setPaymentData(data.data.id);
+                //setPaymentData(data.data.id);
+                localStorage.setItem("paymentIntentId", JSON.stringify(data.data.id));
+                localStorage.setItem("seats", JSON.stringify(selectedSeats))
+                localStorage.setItem("showtime2", JSON.stringify(showtime2))
                 console.log("Payment Intent created:", data);
+                navigate("/checkout")
             } else {
                 console.error("Error:", data);
             }
@@ -91,7 +95,7 @@ export default function SeatSelection() {
                 console.log("Payment method created:", data);
                 localStorage.setItem("seats", JSON.stringify(selectedSeats))
                 localStorage.setItem("showtime2", JSON.stringify(showtime2))
-                localStorage.setItem("paymentMethod", JSON.stringify(paymentMethod))
+                
                 await handleAttachIntent(data.data.id);
             } else {
                 console.error("Error creating payment method:", data);
@@ -115,7 +119,7 @@ export default function SeatSelection() {
                 body: JSON.stringify({
                     payment_method: paymentMethodId,
                     client_key: `${import.meta.env.VITE_CLIENT_KEY}`,
-                    return_url: "http://localhost:5173/movie"
+                    return_url: "http://localhost:5173/payment"
                 })
             });
 
@@ -205,9 +209,25 @@ export default function SeatSelection() {
                         className="w-full p-2 bg-gray-800 text-white rounded border border-gray-700"
                     >
                         <option>Select showtime</option>
-                        {showtime.map((mshow) => (
-                            <option key={mshow.movieCinemaId} value={mshow.movieCinemaId}>{mshow.date} - {mshow.time}</option>
-                        ))}
+                        {showtime.map((mshow) => {
+                            const formattedDate = new Intl.DateTimeFormat('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            }).format(new Date(mshow.date));
+
+                            const formattedTime = new Intl.DateTimeFormat('en-US', {
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true,
+                            }).format(new Date(`1970-01-01T${mshow.time}`));
+
+                            return (
+                                <option key={mshow.movieCinemaId} value={mshow.movieCinemaId}>
+                                    {formattedDate} - {formattedTime}
+                                </option>
+                            );
+                        })}
                     </select>
                 </div>
                 <div className="mt-6">
@@ -230,9 +250,17 @@ export default function SeatSelection() {
                 <button
                     onClick={handlePayment}
                     disabled={loading}
-                    className="px-2 py-2 mt-4 w-full rounded bg-green-700 cursor-pointer hover:bg-green-400"
+                    className="px-2 flex items-center justify-center py-2 mt-4 w-full rounded bg-green-700 cursor-pointer hover:bg-green-400"
                 >
-                    Proceed to payment
+                    Proceed to payment {loading && (
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 animate-[spin_0.8s_linear_infinite] fill-blue-600 block mx-auto"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z"
+                                data-original="#000000" />
+                        </svg>
+                    )}
+
                 </button>
             </div>
 

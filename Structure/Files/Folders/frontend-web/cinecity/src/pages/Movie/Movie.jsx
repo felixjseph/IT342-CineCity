@@ -14,8 +14,8 @@ export default function Movie() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(false);
+
   const [users, setUsers] = useState()
-  const seats = localStorage.getItem("seats") ? JSON.parse(localStorage.getItem("seats")) : null;
   const showtime2 = localStorage.getItem("showtime2") ? JSON.parse(localStorage.getItem("showtime2")) : null;
   const paymentMethod = localStorage.getItem("paymentMethod") ? JSON.parse(localStorage.getItem("paymentMethod")) : null;
   const navigate = useNavigate();
@@ -59,98 +59,6 @@ export default function Movie() {
       }
     } catch (error) {
       toast.error(error)
-    }
-  }
-
-  const updateSeatAvailability = async () => {
-    try {
-      for (const seat of seats) {
-        const response = await fetch(`${import.meta.env.VITE_DATA_URL}/seats/${seat.seatId}`, {
-          method: "PUT",
-          credentials: 'include'
-        })
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Seat updated successful: ", data)
-        } else {
-          console.log("error updating seat")
-        }
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const handleBooking = async (status) => {
-    try {
-      for (const seat of seats) {
-        const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings`, {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            showtime: {
-              movieCinemaId: showtime2.movieCinemaId
-            },
-            user: {
-              userId: users.userId
-            },
-            seat: {
-              seatId: seat.seatId
-            },
-            amount: showtime2.price,
-            status: status,
-            paymentMethod: paymentMethod.type
-          }),
-          credentials: 'include'
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Booking Success: ", data);
-          if (status === "success") {
-            updateSeatAvailability();
-          }
-        } else {
-          console.log("Booking Failed for seat: ", seat.seatNo);
-        }
-      }
-    } catch (error) {
-      console.log("Error during booking: ", error);
-    }
-  };
-
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search)
-    const paymentIntent = queryParams.get("payment_intent_id")
-
-    if (paymentIntent) {
-      retrievePaymentIntent(paymentIntent);
-    }
-  }, [location.search, users])
-
-  const retrievePaymentIntent = async (paymentIntentId) => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/payments/intent/${paymentIntentId}`, {
-        credentials: 'include'
-      })
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.data.attributes.status === "succeeded") {
-          handleBooking("success");
-          console.log(users)
-          console.log("success")
-          console.log(data)
-        } else {
-          console.log("payment failed")
-          handleBooking("failed");
-        }
-      }
-    } catch (error) {
-      console.log("Error retrieving payment intent:", error)
     }
   }
 
@@ -245,66 +153,111 @@ export default function Movie() {
     setSearchTerm("")
   };
 
+  const handleSearch = () => {
+    console.log("Search triggered for:", searchTerm);
+  };
+
   return (
-    <div className="flex text-white">
-      <div className="w-1/6 p-8 border-r border-gray-600 overflow-y-auto max-h-screen scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="py-2 text-4xl font-bold">Genres</h2>
-          <button onClick={clearFilters} className="text-white text-xl transition duration-200 cursor-pointer underline hover:text-red-400">
-            <FaTrash />
-          </button>
-        </div>
-        {genres.map((genre) => (
-          <div
-            key={genre.id}
-            className={`relative flex items-center px-5 py-2 mb-2 rounded-full cursor-pointer transition duration-200 ${selectedGenres.includes(genre.id) ? "bg-[#2FBD59] text-white" : "bg-gray-700 hover:bg-gray-600"
-              }`}
-            onClick={() => toggleGenre(genre.id)}
-          >
-            <input
-              type="checkbox"
-              checked={selectedGenres.includes(genre.id)}
-              onChange={() => toggleGenre(genre.id)}
-              className="absolute opacity-0 w-5 h-5 cursor-pointer"
-            />
-            <span className="font-medium">{genre.genreName}</span>
+    <div className="flex text-white " style={{ height: `calc(100vh - 82px)` }}>
+      <nav className="shadow-md border-r border-opacity-50 h-full min-w-[250px] py-6 px-4 overflow-auto">
+        <div className="mt-4">
+          <div className="flex justify-between items-center mt-4">
+            <h6 className="text-green-600 text-sm font-semibold px-4">Genres</h6>
+            <button
+              className="text-sm text-white hover:bg-red-600 px-2 py-1/50 rounded-full transition duration-200"
+              onClick={clearFilters}
+            >
+              Reset
+            </button>
           </div>
-        ))}
-      </div>
-      <div className="w-5/6 p-7 overflow-y-auto h-[54rem]">
-        <div className="flex justify-between items-center mb-6">
+          <ul className="mt-2 space-y-1">
+            {genres.map((genre) => (
+              <li key={genre.id}>
+                <div
+                  className="text-white font-medium text-[15px] block hover:text-slate-900 hover:bg-gray-100 rounded px-4 py-2 transition-all cursor-pointer"
+                  onClick={() => toggleGenre(genre.id)}
+                >
+                  {genre.genreName}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+      <div className="w-full p-7 overflow-y-auto">
+        <div className="flex justify-between items-center">
           <div className="flex items-center text-4xl font-bold text-[#FFF]">
             <PiFilmSlateFill className="mr-1 text-green-500" />
             MOVIES
           </div>
-          <div className="mt-4 mb-4 w-[20%] flex items-center rounded-3xl px-4 py-2 bg-[#2E2F33]">
-            <IoSearchSharp className="text-[#2FBD59] mr-2" />
-            <input type="text" placeholder="Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-              className="text-white w-full border-l-1 pl-2 border-gray-500 placeholder-gray-400 focus:outline-none" />
+          <div className="flex justify-end w-full">
+            <div className="flex overflow-hidden rounded-2xl w-4/15">
+              <input
+                type="text"
+                placeholder="Search Something..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+                className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3"
+              />
+              <button
+                type="button"
+                className="flex items-center justify-center bg-green-600 px-5 text-sm text-white cursor-pointer"
+                onClick={handleSearch}
+              >
+                Search
+              </button>
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-5 gap-4">
+        <div className="p-4 mx-auto lg:max-w-6xl md:max-w-4xl">
           {filteredMovies.length > 0 ? (
-            filteredMovies.map((movie) => (
-              <div
-                key={movie.id}
-                className="bg-gray-800 p-6 rounded-lg text-white cursor-pointer hover:shadow-xl hover:scale-105 transition-transform duration-300"
-                onClick={() => fetchMovieShowtime(movie.id)}
-              >
-                <img
-                  src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
-                  alt={`${movie.title} Cover`}
-                  className="object-cover rounded-lg mb-4 w-full h-64"
-                />
-                <h3 className="text-xl font-bold mb-2">{movie.title}</h3>
-                <p className="text-sm movie-synopsis text-gray-300 mb-4">{movie.synopsis}</p>
-                <p className="text-sm font-semibold text-gray-400">Genre: {movie.genre?.genreName || "Unknown"}</p>
-              </div>
-            ))
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              {filteredMovies.map((movie) => (
+                <div
+                  key={movie.id}
+                  className="bg-[#2E2F33] h-full flex flex-col rounded overflow-hidden shadow-md hover:scale-[1.01] transition-all relative"
+                  onClick={() => {
+                    setSelectedMovie(true);
+                    fetchMovieShowtime(movie.id);
+                  }}
+                >
+                  <div className="block cursor-pointer">
+                    <div className="w-full">
+                      <img
+                        src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                        alt={`${movie.title} Cover`}
+                        className="object-cover mb-4 w-full h-64"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h5 className="text-sm sm:text-base font-semibold text-white line-clamp-2">
+                        {movie.title}
+                      </h5>
+                      <div className="mt-2 flex items-center flex-wrap gap-2">
+                        <h6 className="text-sm sm:text-base text-white">{movie.duration} minutes</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="min-h-[50px] p-4 !pt-0">
+                    <button
+                      type="button"
+                      className="absolute left-0 right-0 bottom-3 max-w-[88%] mx-auto text-sm px-2 py-2 font-medium w-full bg-green-600 hover:bg-green-700 text-white tracking-wide outline-none border-none rounded"
+                    >
+                      Book Movie
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
-            <p className="text-center text-2xl text-gray-200 col-span-3">
-              No movies match your search criteria.
-            </p>
+            <div className="text-center text-gray-400 text-lg mt-10">
+              No movies available
+            </div>
           )}
         </div>
       </div>
