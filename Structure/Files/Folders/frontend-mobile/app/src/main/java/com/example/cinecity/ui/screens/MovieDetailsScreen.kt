@@ -3,6 +3,7 @@ package com.example.cinecity.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,16 +30,20 @@ import com.example.cinecity.data.model.Movie
 import com.example.cinecity.data.util.Resource
 import com.example.cinecity.ui.viewmodel.MovieViewModel
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun MovieDetailsScreen(
-    movie: Movie, // passed from previous screen
+    movie: Movie,
     viewModel: MovieViewModel = viewModel(),
     onBookNow: (Int) -> Unit,
     onBack: () -> Unit
 ) {
     val showtimeState = viewModel.showtimes.collectAsState().value
-
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) {
         viewModel.getShowtimesByMovieId(movie.id)
@@ -47,51 +52,72 @@ fun MovieDetailsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(Color(0xFF1C1C1C))
             .padding(16.dp)
     ) {
-        // Back Button
-        Text(
-            text = "← Back",
-            color = Color.White,
+        // Top Bar with Back and Title
+        Row(
             modifier = Modifier
-                .clickable { onBack() }
-                .padding(bottom = 8.dp)
-        )
+                .fillMaxWidth()
+                .padding(bottom = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Back",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.clickable { onBack() }
+            )
+            Text(
+                text = "Details",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.alignByBaseline()
+            )
+            Spacer(modifier = Modifier.width(60.dp)) // balances the row visually
+        }
 
-        // Movie Poster
+        // Poster
         AsyncImage(
             model = "http://192.168.254.100:8080/movie/${movie.id}/cover",
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .height(220.dp)
+                .height(350.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
         )
 
-        Spacer(Modifier.height(12.dp))
-
-        Text(movie.title, color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text("${movie.genre.genreName} • ${movie.duration} mins", color = Color.LightGray, fontSize = 14.sp)
-        Spacer(Modifier.height(8.dp))
-        Text(movie.synopsis, color = Color.White, fontSize = 14.sp)
-
         Spacer(Modifier.height(16.dp))
 
+        // Movie Title & Genre
+        Text(movie.title, color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text("${movie.genre.genreName} • ${movie.duration} mins", color = Color.Gray, fontSize = 14.sp)
+
+        Spacer(Modifier.height(12.dp))
+
+        // Synopsis
+        Text(movie.synopsis, color = Color.White, fontSize = 14.sp)
+
+        Spacer(Modifier.height(20.dp))
+
+        // Showtime Section
         when (val result = showtimeState) {
             is Resource.Success -> {
                 val showtimes = result.data ?: emptyList()
 
                 showtimes.groupBy { it.cinema.cinema_name }.forEach { (cinemaName, showList) ->
                     Text(cinemaName, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(6.dp))
 
                     showList.forEach { showtime ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 4.dp),
+                                .padding(vertical = 6.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
@@ -104,19 +130,23 @@ fun MovieDetailsScreen(
                         }
                     }
 
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(16.dp))
                 }
             }
 
             is Resource.Loading -> {
-                CircularProgressIndicator(color = Color.White)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = Color.White)
+                }
             }
 
-            is Resource.Error -> {
-                Text("Error loading showtimes", color = Color.Red)
-            }
-
+            is Resource.Error -> Text("Error loading showtimes", color = Color.Red)
             else -> Unit
         }
     }
 }
+
