@@ -7,6 +7,7 @@ import com.example.cinecity.data.model.Movie
 import com.example.cinecity.data.model.ShowtimeDto
 import com.example.cinecity.data.repository.MovieRepository
 import com.example.cinecity.data.util.Resource
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -22,6 +23,10 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _movie = MutableStateFlow<Resource<Movie>>(Resource.Loading)
     val movie: StateFlow<Resource<Movie>> = _movie
+
+    init {
+        getMovies()
+    }
 
     fun getMovies() {
         _movies.value = Resource.Loading

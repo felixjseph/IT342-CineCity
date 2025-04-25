@@ -21,7 +21,7 @@ public class JwtService {
     private final Dotenv dotenv = Dotenv.load();
 
     private final String secretKey = dotenv.get("JWT_SECRET_KEY");
-    private final long jwtExpiration = Long.parseLong(dotenv.get("security.jwt.expiration-time", "3600000"));
+    private final long jwtExpiration = Long.parseLong(dotenv.get("security.jwt.expiration-time", "3600000000"));
 
 
     public String extractUsername(String token) {
