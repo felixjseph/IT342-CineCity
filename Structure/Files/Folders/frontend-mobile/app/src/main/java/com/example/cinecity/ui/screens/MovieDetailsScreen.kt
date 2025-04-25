@@ -34,12 +34,28 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
+import com.example.cinecity.data.model.ShowtimeDto
+import java.text.SimpleDateFormat
+import java.util.*
+
+fun formatTo12HourLegacy(time24: String): String {
+    return try {
+        val inputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+        val date = inputFormat.parse(time24)
+        outputFormat.format(date!!)
+    } catch (e: Exception) {
+        time24
+    }
+}
+
 
 @Composable
 fun MovieDetailsScreen(
     movie: Movie,
     viewModel: MovieViewModel = viewModel(),
-    onBookNow: (Int) -> Unit,
+    onBookNow: (ShowtimeDto) -> Unit,
     onBack: () -> Unit
 ) {
     val showtimeState = viewModel.showtimes.collectAsState().value
@@ -86,7 +102,7 @@ fun MovieDetailsScreen(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .height(350.dp)
+                .height(400.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
         )
@@ -121,10 +137,17 @@ fun MovieDetailsScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
-                                Text("🕒 ${showtime.date} at ${showtime.time}", color = Color.White)
-                                Text("₱${showtime.price}", color = Color.LightGray)
+                                Text("\uD83D\uDDD3\uFE0F ${showtime.date} at ${formatTo12HourLegacy(showtime.time)}", color = Color.White)
+
+                                Text("\uD83D\uDCB5 ₱${showtime.price}", color = Color.LightGray)
                             }
-                            Button(onClick = { onBookNow(showtime.movieCinemaId) }) {
+                            Button(
+                                onClick = { onBookNow(showtime) },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF4CAF50),
+                                    contentColor = Color.White
+                                )
+                            ) {
                                 Text("Book Now")
                             }
                         }

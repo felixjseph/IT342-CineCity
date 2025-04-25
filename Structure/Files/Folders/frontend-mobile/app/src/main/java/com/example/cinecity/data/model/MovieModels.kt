@@ -1,5 +1,20 @@
 package com.example.cinecity.data.model
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 
+@Parcelize
+data class Genre(
+    val id: Int,
+    val genreName: String
+) : Parcelable
+
+@Parcelize
+data class Cinema(
+    val cinema_ID: Int,
+    val cinema_name: String
+) : Parcelable
+
+@Parcelize
 data class Movie(
     val id: Int,
     val title: String,
@@ -7,14 +22,9 @@ data class Movie(
     val synopsis: String,
     val genre: Genre,
     val photo: String
-)
+) : Parcelable
 
-data class Genre(
-    val id: Int,
-    val genreName: String
-)
-
-
+@Parcelize
 data class ShowtimeDto(
     val movieCinemaId: Int,
     val date: String,
@@ -22,11 +32,14 @@ data class ShowtimeDto(
     val price: Double,
     val cinema: Cinema,
     val movie: Movie
-)
+) : Parcelable
 
-data class Cinema(
-    val cinema_ID: Int,
-    val cinema_name: String
+
+data class SeatDto(
+    val seatId: Int,
+    val seatNo: String,
+    val showtime: ShowtimeDto,
+    val isAvailable: Boolean
 )
 
 data class BookingRequest(

@@ -8,13 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
+import com.example.cinecity.data.model.ShowtimeDto
+import com.example.cinecity.data.repository.SeatRepository
 import com.example.cinecity.data.util.Resource
 import com.example.cinecity.ui.components.BottomNavBar
 import com.example.cinecity.ui.navigation.BottomNavItem
+import com.example.cinecity.ui.screens.SeatSelectionScreen
 import com.example.cinecity.ui.viewmodel.MovieViewModel
 
 @Composable
@@ -74,11 +78,13 @@ fun HomeScreen(
                 if (movie != null) {
                     MovieDetailsScreen(
                         movie = movie,
-                        onBookNow = { movieCinemaId ->
-                            navController.navigate("seat_selection/$movieCinemaId/${movie.title}/${movie.duration}")
+                        onBookNow = { showtime ->
+                            navController.currentBackStackEntry?.savedStateHandle?.set("selected_showtime", showtime)
+                            navController.navigate("seat_selection")
                         },
                         onBack = { navController.popBackStack() }
                     )
+
                 } else {
                     if (movieState is Resource.Loading) {
                         CircularProgressIndicator(color = Color.White)
@@ -88,33 +94,29 @@ fun HomeScreen(
                 }
             }
 
-            composable(
-                "seat_selection/{movieCinemaId}/{movieTitle}/{duration}",
-                arguments = listOf(
-                    navArgument("movieCinemaId") { type = NavType.IntType },
-                    navArgument("movieTitle") { type = NavType.StringType },
-                    navArgument("duration") { type = NavType.IntType },
-                )
-            ) { backStackEntry ->
-                val movieCinemaId = backStackEntry.arguments?.getInt("movieCinemaId") ?: 0
-                val movieTitle = backStackEntry.arguments?.getString("movieTitle") ?: ""
-                val duration = backStackEntry.arguments?.getInt("duration") ?: 0
+            composable("seat_selection") {
+                val showtime = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<ShowtimeDto>("selected_showtime")
 
-                val viewModel: MovieViewModel = viewModel()
-                val showtimeState = viewModel.showtimes.collectAsState().value
-                val showtimes = if (showtimeState is Resource.Success) showtimeState.data ?: emptyList() else emptyList()
+                val context = LocalContext.current
 
-                SeatSelectionScreen(
-                    movieCinemaId = movieCinemaId,
-                    movieTitle = movieTitle,
-                    duration = duration,
-                    showtimes = showtimes,
-                    onBack = { navController.popBackStack() },
-                    onCheckout = { selectedSeats, selectedShowtimeId ->
-                        // Handle checkout
-                    }
-                )
+                if (showtime != null) {
+                    SeatSelectionScreen(
+                        selectedShowtime = showtime,
+                        movieTitle = showtime.movie.title,
+                        duration = showtime.movie.duration,
+                        onBack = { navController.popBackStack() },
+                        onCheckout = { selectedSeats, selectedShowtimeId ->
+                            // Handle checkout
+                        },
+                        repository = SeatRepository(context)
+                    )
+                } else {
+                    Text("Showtime not found.")
+                }
             }
+
 
 
 
