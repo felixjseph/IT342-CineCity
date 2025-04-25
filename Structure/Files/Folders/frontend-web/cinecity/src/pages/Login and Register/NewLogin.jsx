@@ -141,7 +141,16 @@ export default function NewLogin() {
                                     Sign in
                                 </button>
                             </div>
-                            <p className="text-white text-sm !mt-6 text-center">Don't have an account? <a href="javascript:void(0);" className="text-green-600 hover:underline ml-1 whitespace-nowrap font-semibold">Register here</a></p>
+                            <p className="text-white text-sm !mt-6 text-center">
+                                Don't have an account?
+                                <a
+                                    href="#"
+                                    onClick={() => navigate('/register')}
+                                    className="text-green-600 hover:underline ml-1 whitespace-nowrap font-semibold"
+                                >
+                                    Register here
+                                </a>
+                            </p>
                         </form>
                     </div>
                 </div>

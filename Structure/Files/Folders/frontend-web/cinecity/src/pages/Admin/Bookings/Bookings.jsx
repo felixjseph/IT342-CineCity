@@ -78,7 +78,7 @@ export default function Bookings() {
                     {bookings.map((booking) => (
                         <tr key={booking.bookingId} className="border-b border-gray-700 hover:bg-gray-700 transition">
                             <td className="py-4 px-6 text-center">{booking.bookingId}</td>
-                            <td className="py-4 px-6 text-center">{booking.amount}</td>
+                            <td className="py-4 px-6 text-center">₱ {booking.amount}</td>
                             <td className="py-4 px-6 text-center">{booking.paymentMethod}</td>
                             <td className="py-4 px-6 text-center">{booking.status}</td>
                             <td className="py-4 px-6 text-center">{booking.seat.seatId}</td>

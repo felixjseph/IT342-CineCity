@@ -1,86 +1,74 @@
-import { useEffect } from "react";
-import { useState } from "react"
-import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
-        const navigate = useNavigate();
-        const [updateModal, setUpdateModal] = useState(false);
-        const [user, setUser] = useState({
-            usernameField:"",
-            email:"",
-            password:""
-        })
-    
-        const handleChange = (e) =>{
-            setUser({
-                ...user,
-                [e.target.name]:e.target.value
-            })
-        }
-        
-        const handleLogout = async (e) => {
-            try {
-              const response = await fetch('http://localhost:8080/auth/logout', {
-                method:"POST",
+    const navigate = useNavigate();
+    const [updateModal, setUpdateModal] = useState(false);
+    const [user, setUser] = useState({
+        usernameField: "",
+        email: "",
+        password: ""
+    });
+    const [bookings, setBookings] = useState([]); // State for fetched bookings
+    const [selectedTicket, setSelectedTicket] = useState(null); // State for ticket modal
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/auth/logout', {
+                method: "POST",
                 credentials: 'include'
-              })
-        
-              if (response.ok) {
-                navigate('/login')
-              } else {
-                console.log("error has occured")
-              }
-            } catch (error) {
-              console.log(error)
-            }
-          }
+            });
 
-        const fetchData = async(url, setter)=>{
-            try {
-                const response = await fetch(url,{
-                    credentials:'include'
-                })
-    
-                const data = await response.json();
-                if(response.ok){
-                    console.log(data)
-                    console.log("data fetched successfully")
-                    setter(data)
-                }else{
-                    console.log(data)
-                    console.log("error fetching data")
-                }
-            } catch (error) {
-                console.log(error)
+            if (response.ok) {
+                navigate('/newlogin');
+            } else {
+                console.log("Error has occurred");
             }
+        } catch (error) {
+            console.log(error);
         }
-    
-        useEffect(()=>{
-            fetchData('http://localhost:8080/users/me',setUser)
-        },[])
-        
-        const handleUpdate = async () => {
-            try {
-                // const response = await fetch('http://localhost:8080/users/update', {
-                //     method: "PUT",
-                //     headers: {
-                //         "Content-Type": "application/json"
-                //     },
-                //     credentials: "include",
-                //     body: JSON.stringify(user)
-                // });
-                
-                if (response.ok) {
-                    alert("Profile updated successfully!");
-                    setUpdateModal(false);
-                } else {
-                    alert("Failed to update profile.");
-                }
+    };
 
-            } catch (error) {
-                console.log(error);
+    const fetchUserData = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/users/me', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setUser(data);
+            } else {
+                console.log("Error fetching user data:", data);
             }
-        };
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchBookings = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/bookings', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setBookings(data);
+            } else {
+                console.log("Error fetching bookings:", data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUserData();
+        fetchBookings();
+    }, []);
+
+    const handleViewTicket = (ticket) => {
+        setSelectedTicket(ticket); // Set the selected ticket details
+    };
 
     return (
         <div className="flex h-screen flex-col md:flex-row">
@@ -105,101 +93,75 @@ export default function UserProfile() {
                 </button>
             </div>
 
-            {updateModal && (
-                <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm">
-                    <div className="bg-[#1E1E1E] p-6 rounded-lg shadow-lg w-2/8 text-white">
+            {/* Transaction History */}
+            <div className="w-full md:w-2/2 p-6 ml-0 md:ml-6 rounded-lg shadow-md text-white">
+                <h2 className="text-4xl font-bold mb-4">Transaction History</h2>
+                <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden shadow-lg mt-4">
+                    <thead>
+                        <tr className="text-left text-gray-300 uppercase text-sm">
+                            <th className="py-3 px-6 text-center">Booking ID</th>
+                            <th className="py-3 px-6 text-center">Movie</th>
+                            <th className="py-3 px-6 text-center">Date & Time</th>
+                            <th className="py-3 px-6 text-center">Status</th>
+                            <th className="py-3 px-6 text-center">Amount</th>
+                            <th className="py-3 px-6 text-center">Payment Method</th>
+                            <th className="py-3 px-6 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {bookings.map((booking) => (
+                            <tr key={booking.bookingId} className="border-b border-gray-700 hover:bg-gray-700 transition">
+                                <td className="py-4 px-6 text-center">{booking.bookingId}</td>
+                                <td className="py-4 px-6 text-center">{booking.showtime.movie.title}</td>
+                                <td className="py-4 px-6 text-center">{`${booking.showtime.date} - ${booking.showtime.time}`}</td>
+                                <td className="py-4 px-6 text-center">{booking.status}</td>
+                                <td className="py-4 px-6 text-center">₱{booking.amount}</td>
+                                <td className="py-4 px-6 text-center">{booking.paymentMethod}</td>
+                                <td className="py-4 px-6 text-center">
+                                    <button
+                                        className="bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-800 cursor-pointer"
+                                        onClick={() => handleViewTicket(booking)}
+                                    >
+                                        View Ticket
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
-                        <h2 className="text-3xl font-bold mb-4 w">Update Profile</h2>
+            {/* Ticket Modal */}
+            {selectedTicket && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+                    <div className="relative bg-[#1E1F25] text-white w-[350px] rounded-2xl shadow-2xl p-6 pt-12">
+                        <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-green-500 rounded-full p-2 border-4 border-[#1E1F25]">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" />
+                            </svg>
+                        </div>
 
-                        <h2 className="mb-2">Username</h2>
-                        <input
-                            type="text"
-                            name="username"
-                            value={user.username}
-                            onChange={handleChange}
-                            placeholder="Username"
-                            className="w-full p-2 border border-gray-600 rounded mb-2 bg-gray-600"
-                        />
-                        <h2 className="mb-2">Email</h2>
-                        <input
-                            type="email"
-                            name="email"
-                            value={user.email}
-                            onChange={handleChange}
-                            placeholder="Email"
-                            className="w-full p-2 border border-gray-600 rounded mb-2 bg-gray-600"
-                        />
-                        <h2 className="mb-2">Password</h2>
-                        <input
-                            type="password"
-                            name="password"
-                            value={user.password}
-                            onChange={handleChange}
-                            placeholder="Password"
-                            className="w-full p-2 border border-gray-600 rounded mb-2 bg-gray-600"
-                        />
-                        <h2 className="mb-2">Confirm Password</h2>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            value={user.password}
-                            onChange={handleChange}
-                            placeholder="Confirm Password"
-                            className="w-full p-2 border border-gray-600 rounded mb-2 bg-gray-600"
-                        />
+                        <h2 className="text-center text-lg font-semibold mb-2">Ticket Details</h2>
+                        <div className="text-sm space-y-2 border-t border-gray-600 pt-4">
+                            <div className="flex justify-between"><span className="text-gray-400">Movie:</span> <span>{selectedTicket.showtime.movie.title}</span></div>
+                            <div className="flex justify-between"><span className="text-gray-400">Cinema:</span> <span>{selectedTicket.showtime.cinema.cinema_name}</span></div>
+                            <div className="flex justify-between"><span className="text-gray-400">Date:</span> <span>{selectedTicket.showtime.date}</span></div>
+                            <div className="flex justify-between"><span className="text-gray-400">Time:</span> <span>{selectedTicket.showtime.time}</span></div>
+                            <div className="flex justify-between"><span className="text-gray-400">Seat:</span> <span>{selectedTicket.seat.seatNo}</span></div>
+                            <div className="flex justify-between"><span className="text-gray-400">Price:</span> <span>₱{selectedTicket.amount}</span></div>
+                        </div>
 
-                        <div className="mt-[1rem] flex justify-end">
+                        <div className="mt-6 border-t border-gray-600 pt-4 text-center">
                             <button
-                                className="px-4 py-2 bg-gray-400 text-white rounded mr-2 cursor-pointer hover:bg-gray-500"
-                                onClick={() => setUpdateModal(false)}
+                                onClick={() => setSelectedTicket(null)}
+                                className="mt-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition"
                             >
-                                Cancel
-                            </button>
-                            <button
-                                className="px-4 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 "
-                                onClick={handleUpdate}
-                            >
-                                Save Changes
+                                Close
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-
-             {/* Temporary History for now */}
-            <div className="w-full md:w-2/2 p-6 ml-0 md:ml-6 rounded-lg shadow-md text-white">
-                <h2 className="text-4xl font-bold mb-4">Transaction History</h2>
-                <table className="w-full border-collapse">
-                <thead>
-                    <tr className="bg-gray-600">
-                    <th className="p-2 text-left">Booking ID</th>
-                    <th className="p-2 text-left">Movie Cinema</th>
-                    <th className="p-2 text-left">Date & Time</th>
-                    <th className="p-2 text-left">Status</th>
-                    <th className="p-2 text-left">Payment Method</th>
-                    <th className="p-2 text-left">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr className="border-t">
-                    <td className="p-2">#12345</td>
-                    <td className="p-2">The Batman</td>
-                    <td className="p-2">April 5, 2025 - 7:00 PM</td>
-                    <td className="p-2">Confirmed</td>
-                    <td className="p-2">Credit Card</td>
-                    <td className="p-2">
-                        <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 cursor-pointer">
-                        View Ticket
-                        </button>
-                    </td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-
-           
         </div>
-
-            
-    )
+    );
 }

@@ -24,6 +24,7 @@ import NavBarNew from "./components/Navbar/NavBarNew"
 import Checkout from "./pages/Checkout/Checkout"
 import PaymentResult from "./pages/Checkout/PaymentResult"
 import Bookings from "./pages/Admin/Bookings/Bookings"
+import Customers from "./pages/Admin/Customers/Customers"
 
 export default function Routess() {
     return (
@@ -43,6 +44,7 @@ export default function Routess() {
                     <Route path="checkout" element={<Checkout />} />
                     <Route path="seat" element={<SeatSelection />} />
                     <Route path="account" element={<UserProfile />} />
+                    <Route path='userprofile' element={<UserProfile />} />
 
                 </Route>
                 <Route element={<ProtectedRouteAdmin />}>
@@ -54,6 +56,7 @@ export default function Routess() {
                         <Route path="genres" element={<Genres />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="bookings" element={<Bookings />} />
+                        <Route path="customers" element={<Customers />} />
                     </Route>
                 </Route>
             </Route>

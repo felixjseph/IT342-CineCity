@@ -85,9 +85,9 @@ export default function NavBarNew() {
                             <li className="mb-6 hidden max-lg:block">
                                 <a href="#"><img src="https://readymadeui.com/readymadeui.svg" alt="logo" className="w-36" /></a>
                             </li>
-                            {['Home', 'Movies', 'About', 'Profile'].map((item) => {
-                                const path = `/${item.toLowerCase()}`; // Convert item to lowercase for the path
-                                const isActive = location.pathname === path; // Check if the current path matches the nav item
+                            {['Home', 'Movies', 'Profile'].map((item) => {
+                                const path = item === 'Profile' ? '/userprofile' : `/${item.toLowerCase()}`;
+                                const isActive = location.pathname === path;
 
                                 return (
                                     <li
@@ -108,8 +108,11 @@ export default function NavBarNew() {
 
                     <div className="flex max-lg:ml-auto space-x-4">
                         {isAuthenticated ? (
-                            user ? ( // Check if the user object is defined
-                                <div className="flex flex-wrap items-center justify-center gap-4 cursor-pointer">
+                            user ? (
+                                <div
+                                    className="flex flex-wrap items-center justify-center gap-4 cursor-pointer"
+                                    onClick={() => navigate('/userprofile')} // Redirect to /userprofile
+                                >
                                     <img src="https://readymadeui.com/team-1.webp" className="w-12 h-12 rounded-full" alt="User Avatar" />
                                     <div>
                                         <p className="text-[15px] text-white font-semibold">{user.email}</p>
@@ -117,14 +120,20 @@ export default function NavBarNew() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="text-white">Loading...</div> // Show a loading state while user data is being fetched
+                                <div className="text-white">Loading...</div>
                             )
                         ) : (
                             <div>
-                                <button className="px-4 py-2 text-sm rounded-full font-medium tracking-wide text-white border border-gray-400 bg-transparent hover:text-black hover:bg-gray-50 transition-all">
+                                <button
+                                    onClick={() => navigate('/newlogin')}
+                                    className="px-4 py-2 text-sm rounded-full font-medium tracking-wide text-white border border-gray-400 bg-transparent hover:text-black hover:bg-gray-50 transition-all"
+                                >
                                     Login
                                 </button>
-                                <button className="px-4 py-2 text-sm rounded-full font-medium tracking-wide text-white border border-green-600 bg-green-600 hover:bg-green-700 transition-all">
+                                <button
+                                    onClick={() => navigate('/register')}
+                                    className="px-4 py-2 text-sm rounded-full font-medium tracking-wide text-white border border-green-600 bg-green-600 hover:bg-green-700 transition-all"
+                                >
                                     Sign up
                                 </button>
                             </div>
