@@ -32,7 +32,7 @@ export default function SideBar() {
       });
 
       if (response.ok) {
-        navigate("/login");
+        navigate("/newlogin");
       } else {
         console.log("error has occurred");
       }
