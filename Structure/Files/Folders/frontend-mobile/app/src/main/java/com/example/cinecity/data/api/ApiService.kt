@@ -36,6 +36,10 @@ interface ApiService {
     @GET("showtime/movie/{movieId}")
     suspend fun getShowtimesByMovieId(@Path("movieId") movieId: Int): List<ShowtimeDto>
 
+    //Seat endpoints
+    @GET("/seats/showtime/{id}")
+    suspend fun getSeatsByShowtimeId(@Path("id") showtimeId: Int): List<SeatDto>
+
     // Booking endpoints
     @POST("bookings")
     suspend fun createBooking(@Body booking: BookingRequest): Response<Booking>
