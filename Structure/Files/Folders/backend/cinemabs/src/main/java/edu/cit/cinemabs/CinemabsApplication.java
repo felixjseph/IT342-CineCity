@@ -9,7 +9,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 @SpringBootApplication
 @EnableCaching
 public class CinemabsApplication {
-
 	public static void main(String[] args) {
 		Dotenv dotenv = Dotenv.load();
         System.setProperty("DATABASE_URL", dotenv.get("DATABASE_URL"));
