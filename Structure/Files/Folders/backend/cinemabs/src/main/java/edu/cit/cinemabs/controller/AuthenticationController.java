@@ -54,6 +54,10 @@ public class AuthenticationController {
         Cookie cookie = new Cookie("token", jwtToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
+        cookie.setSecure(true);
+
+        cookie.setDomain("it342-cinecity.onrender.com");
+
         cookie.setMaxAge((int) jwtService.getExpirationTime());
         response.addCookie(cookie);
 
