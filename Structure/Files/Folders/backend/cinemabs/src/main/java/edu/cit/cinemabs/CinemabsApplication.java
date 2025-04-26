@@ -11,15 +11,22 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class CinemabsApplication {
 
 	public static void main(String[] args) {
-		Dotenv dotenv = Dotenv.load();
-        System.setProperty("DATABASE_URL", dotenv.get("DATABASE_URL"));
-        System.setProperty("DB_USER", dotenv.get("DB_USER"));
-        System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
-        System.setProperty("JWT_SECRET_KEY", dotenv.get("JWT_SECRET_KEY"));
-		
+		// Only load dotenv if running locally
+		if (isRunningLocally()) {
+			Dotenv dotenv = Dotenv.configure()
+					.ignoreIfMissing()
+					.load();
+			dotenv.entries().forEach(entry -> {
+				System.setProperty(entry.getKey(), entry.getValue());
+			});
+		}
 
 		SpringApplication.run(CinemabsApplication.class, args);
-		
-			System.out.println("Run Success");
+		System.out.println("Run Success");
+	}
+
+	private static boolean isRunningLocally() {
+		// You can detect local by checking an environment variable that exists only in Render
+		return System.getenv("RENDER") == null;
 	}
 }
