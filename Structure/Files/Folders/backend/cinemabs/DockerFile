@@ -3,6 +3,7 @@ FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
 
 COPY . .
+COPY .env .env
 
 RUN chmod +x mvnw && ./mvnw clean install -DskipTests
 
