@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String jwt = getJwtFromCookies(request);
+        final String jwt = getJwt(request);
 
         if (jwt == null) {
             filterChain.doFilter(request, response);
@@ -82,7 +82,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private String getJwtFromCookies(HttpServletRequest request) {
+    private String getJwt(HttpServletRequest request) {
+        // Check Authorization header first
+        final String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7); // remove "Bearer "
+        }
+
+        // Fallback: check Cookies
         if (request.getCookies() != null) {
             return Arrays.stream(request.getCookies())
                     .filter(cookie -> "token".equals(cookie.getName()))
@@ -90,8 +97,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .map(Cookie::getValue)
                     .orElse(null);
         }
+
         return null;
     }
+
 
     private void removeTokenCookie(HttpServletResponse response) {
         Cookie cookie = new Cookie("token", null);
