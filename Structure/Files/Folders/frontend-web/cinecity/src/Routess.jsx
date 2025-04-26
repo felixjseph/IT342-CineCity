@@ -17,7 +17,7 @@ import Genres from "./pages/Admin/Genres/Genre"
 import MovieDetails from "./pages/Movie/MovieDetails";
 import Profile from "./pages/Admin/Profile/Profile"
 import SeatSelection from "./pages/Seat/SeatSelection"
-import UserProfile from "./pages/Profile/userProfile"
+import UserProfile from "./pages/Profile/UserProfile"
 import NewLogin from "./pages/Login and Register/NewLogin"
 import Register from "./pages/Login and Register/Register"
 import NavBarNew from "./components/Navbar/NavBarNew"
