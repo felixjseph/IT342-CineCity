@@ -9,7 +9,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 @SpringBootApplication
 @EnableCaching
 public class CinemabsApplication {
-
 	public static void main(String[] args) {
 		// Only load dotenv if running locally
 		if (isRunningLocally()) {
