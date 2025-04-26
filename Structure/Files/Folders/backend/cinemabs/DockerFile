@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # Build the project (skip tests to speed it up)
-RUN mvn clean install -DskipTests
+RUN ./mvnw clean install -DskipTests
 
 # Use a smaller JDK runtime for the final image
 FROM openjdk:17-jdk-slim
