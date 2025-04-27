@@ -45,7 +45,6 @@ export default function Routess() {
                     <Route path="seat" element={<SeatSelection />} />
                     <Route path="account" element={<UserProfile />} />
                     <Route path='userprofile' element={<UserProfile />} />
-                    <Route path='payment' element={<PaymentResult />} />
                 </Route>
                 <Route element={<ProtectedRouteAdmin />}>
                     <Route path="/admin" element={<SideBar />}>
