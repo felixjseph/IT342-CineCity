@@ -99,7 +99,7 @@ export default function NewLogin() {
                             <div>
                                 <label className="text-white text-sm font-medium mb-2 block">Email</label>
                                 <div className="relative flex items-center">
-                                    <input type="text" required className="w-full text-white text-sm border border-slate-300 px-4 py-3 rounded-md outline-blue-600" placeholder="Enter email"
+                                    <input type="text" required className="w-full text-white text-sm border border-slate-500 px-4 py-3 rounded-md outline-white-600" placeholder="Enter email"
                                         name="email"
                                         value={login.email}
                                         onChange={handleChange}
@@ -114,7 +114,7 @@ export default function NewLogin() {
                             <div>
                                 <label className="text-white text-sm font-medium mb-2 block">Password</label>
                                 <div className="relative flex items-center">
-                                    <input type="password" required className="w-full text-white text-sm border border-slate-300 px-4 py-3 rounded-md outline-blue-600" placeholder="Enter password"
+                                    <input type="password" required className="w-full text-white text-sm border border-slate-500 px-4 py-3 rounded-md outline-white-600" placeholder="Enter password"
                                         name="password"
                                         value={login.password}
                                         onChange={handleChange}
