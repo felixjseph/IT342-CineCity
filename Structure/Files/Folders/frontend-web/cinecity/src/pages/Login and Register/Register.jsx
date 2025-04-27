@@ -87,8 +87,9 @@ export default function Register() {
     }
 
     return (
-        <div className="flex flex-col justify-center sm:h-screen p-4">
-            <div className="max-w-md w-full mx-auto border bg-[#2E2F33] border-slate-300 rounded-2xl p-8">
+        <div className="bg-[#1c1c1c]">
+            <div className="flex flex-col justify-center sm:h-screen p-4">
+            <div className="max-w-md w-full mx-auto bg-[#2E2F33] border-slate-300 rounded-2xl p-8">
                 <div className="text-center mb-12">
                     <img src="/images/logo.png" alt="logo" className="w-40 mb-8 mx-auto block" />
                 </div>
@@ -97,21 +98,21 @@ export default function Register() {
                     <div className="space-y-6">
                         <div>
                             <label className="text-white text-sm font-medium mb-2 block">Username</label>
-                            <input name="username" type="text" className="text-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500" placeholder="Enter email"
+                            <input name="username" type="text" className="text-white border border-slate-500 w-full text-sm px-4 py-3 rounded-md outline-white-500" placeholder="Enter email"
                                 onChange={handleChange}
                                 value={registerUser.username}
                             />
                         </div>
                         <div>
                             <label className="text-white text-sm font-medium mb-2 block">Email</label>
-                            <input name="email" type="email" className="text-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500" placeholder="Enter email"
+                            <input name="email" type="email" className="text-white border border-slate-500 w-full text-sm px-4 py-3 rounded-md outline-whte-500" placeholder="Enter email"
                                 onChange={handleChange}
                                 value={registerUser.email}
                             />
                         </div>
                         <div>
                             <label className="text-white text-sm font-medium mb-2 block">Password</label>
-                            <input name="password" type="password" className="text-white border border-slate-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500" placeholder="Enter password"
+                            <input name="password" type="password" className="text-white border border-slate-500 w-full text-sm px-4 py-3 rounded-md outline-white-500" placeholder="Enter password"
                                 onChange={handleChange}
                                 value={registerUser.password}
                             />
@@ -127,6 +128,8 @@ export default function Register() {
                     <p className="text-white text-sm mt-6 text-center">Already have an account? <a href="javascript:void(0);" className="text-green-600 font-medium hover:underline ml-1" onClick={() => navigate('/newlogin')}>Login here</a></p>
                 </form>
             </div>
+        </div>
+        
 
             {success && (
                 <div>
