@@ -72,7 +72,7 @@ export default function Checkout() {
                 body: JSON.stringify({
                     payment_method: paymentMethodId,
                     client_key: `${import.meta.env.VITE_CLIENT_KEY}`,
-                    return_url: "http://localhost:5173/payment"
+                    return_url: `https://system-integ-cinecity.vercel.app/payment`
                 })
             });
 

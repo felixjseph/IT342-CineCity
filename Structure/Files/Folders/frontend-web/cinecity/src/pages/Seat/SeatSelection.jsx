@@ -119,7 +119,7 @@ export default function SeatSelection() {
                 body: JSON.stringify({
                     payment_method: paymentMethodId,
                     client_key: `${import.meta.env.VITE_CLIENT_KEY}`,
-                    return_url: `${import.meta.env.VITE_DATA_URL}/payment`
+                    return_url: `https://system-integ-cinecity.vercel.app/payment`
                 })
             });
 
