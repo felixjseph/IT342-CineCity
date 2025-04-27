@@ -46,22 +46,25 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto,
-            HttpServletResponse response) {
+                                                      HttpServletResponse response) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         // Set the token in an HTTP-only cookie
         Cookie cookie = new Cookie("token", jwtToken);
         cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge((int) jwtService.getExpirationTime());
-        response.addCookie(cookie);
+
+        // Manually set the SameSite attribute in the Set-Cookie header
+        response.addHeader("Set-Cookie", "token=" + jwtToken + "; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=" + jwtService.getExpirationTime());
 
         LoginResponse loginResponse = new LoginResponse().setToken(jwtToken)
                 .setExpiresIn(jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);
     }
-
+    
     @GetMapping("/check")
     public ResponseEntity<Boolean> checkLogin(HttpServletRequest request) {
         String jwt = getJwtFromCookies(request);
