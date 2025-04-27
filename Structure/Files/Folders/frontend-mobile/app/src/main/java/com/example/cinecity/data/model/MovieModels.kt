@@ -34,30 +34,23 @@ data class ShowtimeDto(
     val movie: Movie
 ) : Parcelable
 
-
+@Parcelize
 data class SeatDto(
     val seatId: Int,
     val seatNo: String,
     val showtime: ShowtimeDto,
     val isAvailable: Boolean
-)
+) : Parcelable
 
-data class BookingRequest(
-    val showTimeId: Long,
-    val seats: List<String>,
-    val totalPrice: Double
-)
-
+@Parcelize
 data class Booking(
-    val id: Long,
-    val userId: Long,
-    val showTimeId: Long,
-    val movieTitle: String? = null,
-    val cinema: String? = null,
-    val dateTime: String? = null,
-    val seats: List<String>,
-    val totalPrice: Double,
-    val bookingDate: String,
+    val bookingId: Int,
+    val createdAt: String,
+    val amount: Double,
+    val paymentMethod: String,
     val status: String,
-    val paymentMethod: String
-)
+    val showtime: ShowtimeDto,
+    val seat: SeatDto
+) : Parcelable
+
+

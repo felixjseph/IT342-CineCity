@@ -4,35 +4,30 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinecity.data.model.Booking
-import com.example.cinecity.data.model.BookingRequest
 import com.example.cinecity.data.repository.BookingRepository
-import com.example.cinecity.data.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class BookingViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = BookingRepository(application)
 
-    private val _createBookingState = MutableStateFlow<Resource<Booking>?>(null)
-    val createBookingState: StateFlow<Resource<Booking>?> = _createBookingState
+    private val _bookings = MutableStateFlow<List<Booking>>(emptyList())
+    val bookings: StateFlow<List<Booking>> get() = _bookings
 
-    private val _bookings = MutableStateFlow<Resource<List<Booking>>?>(null)
-    val bookings: StateFlow<Resource<List<Booking>>?> = _bookings
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
 
-    fun createBooking(bookingRequest: BookingRequest) {
-        _createBookingState.value = Resource.Loading
+    fun fetchBookings() {
         viewModelScope.launch {
-            val result = repository.createBooking(bookingRequest)
-            _createBookingState.value = result
-        }
-    }
-
-    fun getUserBookings() {
-        _bookings.value = Resource.Loading
-        viewModelScope.launch {
-            val result = repository.getUserBookings()
-            _bookings.value = result
+            try {
+                _isLoading.value = true
+                _bookings.value = repository.getBookings()
+                _isLoading.value = false
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
