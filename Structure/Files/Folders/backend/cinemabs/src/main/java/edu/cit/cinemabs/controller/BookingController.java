@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -20,14 +20,14 @@ public class BookingController {
         return bookingService.createBooking(booking);
     }
 
+    @GetMapping("/userbookings")
+    public List<Booking> getBookingsByLoggedInUser() {
+        return bookingService.getBookingsByLoggedInUser();
+    }
+
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingService.getAllBookings();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<Booking> getBookingById(@PathVariable int id) {
-        return bookingService.getBookingById(id);
     }
 
     @PutMapping("/{id}")

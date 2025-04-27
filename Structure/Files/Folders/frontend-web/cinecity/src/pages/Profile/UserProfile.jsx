@@ -74,7 +74,7 @@ export default function UserProfile() {
 
     const fetchBookings = async () => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings/userbookings`, {
                 credentials: 'include'
             });
             const data = await response.json();
