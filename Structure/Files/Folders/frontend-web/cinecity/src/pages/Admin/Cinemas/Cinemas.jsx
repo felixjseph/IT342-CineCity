@@ -48,7 +48,7 @@ export default function Cinemas() {
 
     const fetchCinema = async (cinemaId) => {
         try {
-            const response = await fetch(`http://localhost:8080/cinemas/${cinemaId}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/cinemas/${cinemaId}`, {
                 credentials: 'include'
             })
 
@@ -75,7 +75,7 @@ export default function Cinemas() {
     const handleEditSubmit = async () => {
         setIsLoading(true)
         try {
-            const response = await fetch(`http://localhost:8080/cinemas/${cinemaUpdate}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/${cinemaUpdate}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -104,7 +104,7 @@ export default function Cinemas() {
     const handleDeleteSubmit = async () => {
         setIsLoading(true)
         try {
-            const response = await fetch(`http://localhost:8080/cinemas/${cinemaUpdate}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/cinemas/${cinemaUpdate}`, {
                 method: "DELETE",
                 credentials: 'include'
             })
@@ -128,7 +128,7 @@ export default function Cinemas() {
         e.preventDefault();
         setIsLoading(true)
         try {
-            const response = await fetch('http://localhost:8080/cinemas', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/cinemas`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -164,7 +164,7 @@ export default function Cinemas() {
 
     const fetchCinemas = async () => {
         try {
-            const response = await fetch('http://localhost:8080/cinemas', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/cinemas`, {
                 credentials: 'include'
             })
 

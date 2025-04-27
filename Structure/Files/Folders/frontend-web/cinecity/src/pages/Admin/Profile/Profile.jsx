@@ -38,7 +38,7 @@ export default function Profile() {
     }
 
     useEffect(()=>{
-        fetchData('http://localhost:8080/users/me',setUser)
+        fetchData(`${import.meta.env.VITE_DATA_URL}/users/me`,setUser)
     },[])
 
     return (

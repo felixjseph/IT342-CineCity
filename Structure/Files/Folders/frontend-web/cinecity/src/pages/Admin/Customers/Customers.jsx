@@ -10,7 +10,7 @@ export default function Customers() {
     // Fetch all users from the backend
     const fetchCustomers = async () => {
         try {
-            const response = await fetch('http://localhost:8080/users/', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/users/`, {
                 credentials: 'include'
             });
 

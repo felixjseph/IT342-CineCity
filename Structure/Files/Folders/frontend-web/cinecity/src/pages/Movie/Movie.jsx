@@ -88,7 +88,7 @@ export default function Movie() {
 
   const fetchGenres = async () => {
     try {
-      const response = await fetch("http://localhost:8080/genre", {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/genre`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -104,7 +104,7 @@ export default function Movie() {
 
   const fetchShowtime = async (movieId) => {
     try {
-      const response = await fetch(`http://localhost:8080/showtime/movie/${movieId}`, {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime/movie/${movieId}`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -121,7 +121,7 @@ export default function Movie() {
 
   const fetchShowtimes = async () => {
     try {
-      const response = await fetch("http://localhost:8080/showtime", {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -269,7 +269,7 @@ export default function Movie() {
               <MdClose className="absolute top-1 right-2 text-2xl text-red-100 transition duration-200 hover:text-red-400 cursor-pointer" />
             </button>
             <img
-              src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+              src={`${import.meta.env.VITE_DATA_URL}/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
               alt={`${movie.title} Cover`}
               className="w-1/3 object-cover rounded-lg"
             />

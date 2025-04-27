@@ -7,7 +7,7 @@ const ProtectedRoute = () => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await fetch('http://localhost:8080/auth/check', {
+                const response = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/check`, {
                     credentials: 'include',
                 });
                 const result = await response.json();

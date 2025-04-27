@@ -15,7 +15,7 @@ export default function Bookings() {
 
     const fetchCinemas = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/bookings', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings`, {
                 credentials: 'include'
             })
 

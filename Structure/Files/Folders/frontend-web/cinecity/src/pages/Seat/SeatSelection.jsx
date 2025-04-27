@@ -45,7 +45,7 @@ export default function SeatSelection() {
 
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:8080/payments/intent", {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/payments/intent`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -79,7 +79,7 @@ export default function SeatSelection() {
     const handlePaymentMethod = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:8080/payments/method', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/payments/method`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -110,7 +110,7 @@ export default function SeatSelection() {
     const handleAttachIntent = async (paymentMethodId) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8080/payments/intent/attach/${paymentData}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/payments/intent/attach/${paymentData}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -119,7 +119,7 @@ export default function SeatSelection() {
                 body: JSON.stringify({
                     payment_method: paymentMethodId,
                     client_key: `${import.meta.env.VITE_CLIENT_KEY}`,
-                    return_url: "http://localhost:5173/payment"
+                    return_url: `${import.meta.env.VITE_DATA_URL}/payment`
                 })
             });
 
@@ -160,8 +160,8 @@ export default function SeatSelection() {
     }
 
     useEffect(() => {
-        fetchData(`http://localhost:8080/seats/showtime/${show}`, setSeats);
-        fetchData(`http://localhost:8080/showtime/${show}`, setShowtime2);
+        fetchData(`${import.meta.env.VITE_DATA_URL}/seats/showtime/${show}`, setSeats);
+        fetchData(`${import.meta.env.VITE_DATA_URL}/showtime/${show}`, setShowtime2);
     }, [show])
 
     useEffect(() => {
@@ -193,7 +193,7 @@ export default function SeatSelection() {
         <div className={`flex h-screen text-white`}>
             <div className="w-[25%] p-8 border-r border-gray-600 flex flex-col items-center overflow-y-auto">
                 <img
-                    src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                    src={`${import.meta.env.VITE_DATA_URL}/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
                     alt={`${movie.title} cover`}
                     className="w-[12rem] rounded-lg shadow-lg"
                 />

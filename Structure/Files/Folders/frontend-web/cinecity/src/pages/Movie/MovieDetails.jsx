@@ -12,7 +12,7 @@ export default function MovieDetails() {
 
   const fetchMovieDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/movie/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie/${id}`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -34,7 +34,7 @@ export default function MovieDetails() {
     <div
       className="relative w-full h-screen text-white"
       style={{
-        backgroundImage: `url(http://localhost:8080/movie/${id}/cover?timestamp=${new Date().getTime()})`,
+        backgroundImage: `url(${import.meta.env.VITE_DATA_URL}/movie/${id}/cover?timestamp=${new Date().getTime()})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
