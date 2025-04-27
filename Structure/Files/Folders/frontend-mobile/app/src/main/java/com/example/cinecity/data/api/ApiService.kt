@@ -41,6 +41,6 @@ interface ApiService {
     suspend fun getSeatsByShowtimeId(@Path("id") showtimeId: Int): List<SeatDto>
 
     // Booking endpoints
-    @GET("/api/bookings")
+    @GET("/api/bookings/userbookings")
     suspend fun getBookings(): List<Booking>
 }

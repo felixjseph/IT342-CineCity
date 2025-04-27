@@ -43,30 +43,58 @@ fun BookingTab(viewModel: BookingViewModel, navController: NavController) {
         viewModel.fetchBookings()
     }
 
-    if (isLoading) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(background),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator(color = accentGreen)
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(background)
-                .padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(bookings) { booking ->
-                BookingCard(booking = booking, navController = navController)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(background)
+            .padding(12.dp)
+    ) {
+        when {
+            isLoading -> {
+                // Show loading spinner
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator(color = accentGreen)
+                }
+            }
+            bookings.isEmpty() -> {
+                // Show no bookings message
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "No bookings yet!",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Start booking your favorite movies.",
+                        fontSize = 16.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
+            else -> {
+                // Show list of bookings
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(bookings) { booking ->
+                        BookingCard(booking = booking, navController = navController)
+                    }
+                }
             }
         }
     }
 }
+
 
 
 @Composable
