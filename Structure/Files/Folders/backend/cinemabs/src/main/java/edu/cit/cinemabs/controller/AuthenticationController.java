@@ -46,39 +46,21 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto,
-                                                      HttpServletResponse response, HttpServletRequest request) {
+            HttpServletResponse response) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
         String jwtToken = jwtService.generateToken(authenticatedUser);
-
-        // Detect if running locally or in production
-        boolean isLocalhost = request.getHeader("origin") != null && request.getHeader("origin").contains("localhost");
 
         // Set the token in an HTTP-only cookie
         Cookie cookie = new Cookie("token", jwtToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge((int) jwtService.getExpirationTime());
-        cookie.setSecure(!isLocalhost); // Set secure flag to true if not in localhost
-
-        // Add the SameSite attribute manually
-        String sameSiteValue = "None"; // For cross-origin requests
-        if (isLocalhost) {
-            sameSiteValue = "Lax"; // For localhost, you can use Lax (or Strict if needed)
-        }
-
         response.addCookie(cookie);
-        response.setHeader("Set-Cookie", cookie.getName() + "=" + cookie.getValue() +
-                "; Path=" + cookie.getPath() +
-                "; Max-Age=" + cookie.getMaxAge() +
-                "; HttpOnly" +
-                (cookie.getSecure() ? "; Secure" : "") +
-                "; SameSite=" + sameSiteValue);
 
         LoginResponse loginResponse = new LoginResponse().setToken(jwtToken)
                 .setExpiresIn(jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);
     }
-
 
     @GetMapping("/check")
     public ResponseEntity<Boolean> checkLogin(HttpServletRequest request) {
