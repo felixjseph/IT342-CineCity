@@ -16,19 +16,46 @@ export default function UserProfile() {
         try {
             const response = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/logout`, {
                 method: "POST",
-                credentials: 'include'
+                credentials: 'include', // Make sure cookies are sent
             });
-
+    
             if (response.ok) {
-                navigate('/newlogin');
+                // Clear session data
+                setUser({
+                    usernameField: "",
+                    email: "",
+                    password: ""
+                });
+                setBookings([]); // Clear bookings
+                setSelectedTicket(null); // Clear selected ticket
+    
+                // Optionally clear localStorage if used
+                localStorage.removeItem("showtime");
+                localStorage.removeItem("movie");
+                localStorage.removeItem("paymentMethod");
+    
+                // Now check authentication status again
+                const authCheckResponse = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/check`, {
+                    credentials: 'include' // Send cookies for auth check
+                });
+    
+                const isAuthenticated = await authCheckResponse.json();
+    
+                if (!isAuthenticated) {
+                    // If not authenticated, navigate to login page
+                    navigate('/newlogin');
+                } else {
+                    console.log('User is still authenticated.');
+                }
             } else {
-                console.log("Error has occurred");
+                console.log("Error during logout.");
             }
         } catch (error) {
-            console.log(error);
+            console.log("Error during logout:", error);
         }
     };
-
+    
+    
     const fetchUserData = async () => {
         try {
             const response = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`, {

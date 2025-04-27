@@ -79,14 +79,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("token", null);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        // Clear the JWT cookie
+        Cookie cookie = new Cookie("token", null);  // Assuming the cookie name is 'token'
+        cookie.setHttpOnly(true);  // Make sure it's not accessible via JavaScript
+        cookie.setPath("/");  // Set to the same path as the token cookie
+        cookie.setMaxAge(0);  // Set the cookie's expiration to the past to invalidate it
         response.addCookie(cookie);
+
         return ResponseEntity.noContent().build();
     }
+
 
     private String getJwtFromCookies(HttpServletRequest request) {
         if (request.getCookies() != null) {
