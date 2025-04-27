@@ -8,7 +8,7 @@ const PaymentButton = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:8080/payments/intent", {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/payments/intent`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

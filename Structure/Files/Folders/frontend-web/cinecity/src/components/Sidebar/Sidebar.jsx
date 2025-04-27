@@ -26,7 +26,7 @@ export default function SideBar() {
 
   const handleLogout = async (e) => {
     try {
-      const response = await fetch("http://localhost:8080/auth/logout", {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

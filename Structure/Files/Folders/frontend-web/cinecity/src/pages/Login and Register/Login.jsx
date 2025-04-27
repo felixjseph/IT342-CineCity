@@ -36,7 +36,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/auth/login', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -53,7 +53,7 @@ export default function Login() {
                     email: "",
                     password: ""
                 })
-                const user = await fetch('http://localhost:8080/users/me', {
+                const user = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`, {
                     method: "GET",
                     credentials: 'include',
                 });

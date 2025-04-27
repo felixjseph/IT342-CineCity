@@ -14,7 +14,7 @@ export default function UserProfile() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('http://localhost:8080/auth/logout', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/logout`, {
                 method: "POST",
                 credentials: 'include'
             });
@@ -31,7 +31,7 @@ export default function UserProfile() {
 
     const fetchUserData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/users/me', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`, {
                 credentials: 'include'
             });
             const data = await response.json();
@@ -47,7 +47,7 @@ export default function UserProfile() {
 
     const fetchBookings = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/bookings', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings`, {
                 credentials: 'include'
             });
             const data = await response.json();

@@ -34,7 +34,7 @@ export default function Checkout() {
     const handlePaymentMethod = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:8080/payments/method', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/payments/method`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -63,7 +63,7 @@ export default function Checkout() {
     const handleAttachIntent = async (paymentMethodId) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8080/payments/intent/attach/${paymentIntentId}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/payments/intent/attach/${paymentIntentId}`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -100,7 +100,7 @@ export default function Checkout() {
                     <div className="mt-8 space-y-3 rounded-lg border border-gray-400 bg-[#2E2F33] px-2 py-4 sm:px-6">
                         <div className="flex flex-col rounded-lg bg-[#2E2F33] sm:flex-row">
                             <img
-                                src={`http://localhost:8080/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
+                                src={`${import.meta.env.VITE_DATA_URL}/movie/${showtime.movie.id}/cover?timestamp=${new Date().getTime()}`}
                                 alt={`${showtime.movie.title} Cover`}
                                 className="m-2 h-24 w-28 rounded-md border object-cover object-center"
                             />

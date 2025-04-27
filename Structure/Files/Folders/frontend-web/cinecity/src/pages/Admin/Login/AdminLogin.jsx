@@ -21,7 +21,7 @@ export default function AdminLogin() {
     const handleSubmit = async(e) =>{
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/auth/login',{
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/login`,{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json"
@@ -31,7 +31,7 @@ export default function AdminLogin() {
             })
             const data = await response.json();
             if(response.ok){
-                const status = await fetch('http://localhost:8080/auth/check',{
+                const status = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/check`,{
                     credentials:'include'
                 })
                 const stat = await status.json();

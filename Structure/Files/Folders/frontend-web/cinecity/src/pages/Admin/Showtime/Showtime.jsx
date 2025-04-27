@@ -35,7 +35,7 @@ export default function Showtime() {
 
     const fetchSeats = async (showtimeId) => {
         try {
-            const response = await fetch(`http://localhost:8080/seats/showtime/${showtimeId}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/seats/showtime/${showtimeId}`, {
                 credentials: 'include'
             })
 
@@ -44,7 +44,7 @@ export default function Showtime() {
                 console.log(data)
                 setSeats(data)
                 setViewSeatsModal(true)
-                const response2 = await fetch(`http://localhost:8080/seats/showtime/${showtimeId}`, {
+                const response2 = await fetch(`${import.meta.env.VITE_DATA_URL}/seats/showtime/${showtimeId}`, {
                     credentials: 'include'
                 })
 
@@ -71,7 +71,7 @@ export default function Showtime() {
 
     const addDefaultSeats = async (showtimeId) => {
         try {
-            const response = await fetch(`http://localhost:8080/seats/default-seats/${showtimeId}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/seats/default-seats/${showtimeId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -131,7 +131,7 @@ export default function Showtime() {
         e.preventDefault();
         setIsLoading(true)
         try {
-            const response = await fetch('http://localhost:8080/showtime', {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -166,7 +166,7 @@ export default function Showtime() {
         e.preventDefault();
         setIsLoading(true)
         try {
-            const response = await fetch(`http://localhost:8080/showtime/${show}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime/${show}`, {
                 method: "DELETE",
                 credentials: 'include'
             })
@@ -190,7 +190,7 @@ export default function Showtime() {
         e.preventDefault();
         setIsLoading(true)
         try {
-            const response = await fetch(`http://localhost:8080/showtime/${show}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime/${show}`, {
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json"
@@ -230,7 +230,7 @@ export default function Showtime() {
 
     const fetchCinemas = async () => {
         try {
-            const response = await fetch("http://localhost:8080/cinemas", {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/cinemas`, {
                 method: "GET",
                 credentials: 'include'
             })
@@ -251,7 +251,7 @@ export default function Showtime() {
 
     const fetchShowtimes = async () => {
         try {
-            const response = await fetch("http://localhost:8080/showtime", {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime`, {
                 method: "GET",
                 credentials: 'include'
             })
@@ -272,7 +272,7 @@ export default function Showtime() {
 
     const fetchShowtime = async (showtimeId) => {
         try {
-            const response = await fetch(`http://localhost:8080/showtime/${showtimeId}`, {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/showtime/${showtimeId}`, {
                 method: "GET",
                 credentials: 'include'
             })
@@ -294,7 +294,7 @@ export default function Showtime() {
 
     const fetchMovies = async () => {
         try {
-            const response = await fetch("http://localhost:8080/movie", {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie`, {
                 method: "GET",
                 credentials: 'include'
             })

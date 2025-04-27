@@ -11,7 +11,7 @@ export default function ProtectedRouteAdmin(){
     useEffect(()=>{
         const checkRole = async(e) =>{
             try {
-                const response = await fetch('http://localhost:8080/users/me',{
+                const response = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`,{
                     credentials:'include'
                 })
 

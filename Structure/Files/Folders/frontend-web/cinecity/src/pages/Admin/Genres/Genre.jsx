@@ -27,7 +27,7 @@ export default function AdminGenres() {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("http://localhost:8080/genre", {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/genre`, {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to fetch genres");
@@ -50,7 +50,7 @@ export default function AdminGenres() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/genre", {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/genre`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ genreName: newGenre }),
@@ -87,7 +87,7 @@ export default function AdminGenres() {
   const updateGenre = async () => {
     if (!editGenre || !editName.trim()) return;
     try {
-      const response = await fetch(`http://localhost:8080/genre/${editGenre.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/genre/${editGenre.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ genreName: editName }),
@@ -107,7 +107,7 @@ export default function AdminGenres() {
     if (!genreToDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/genre/${genreToDelete.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_DATA_URL}/genre/${genreToDelete.id}`, {
         method: "DELETE",
         credentials: "include",
       });
