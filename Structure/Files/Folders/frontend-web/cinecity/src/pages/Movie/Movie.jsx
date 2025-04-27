@@ -229,7 +229,7 @@ export default function Movie() {
                   <div className="block cursor-pointer">
                     <div className="w-full">
                       <img
-                        src={`http://localhost:8080/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
+                        src={`${import.meta.env.VITE_DATA_URL}/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
                         alt={`${movie.title} Cover`}
                         className="object-cover mb-4 w-full h-64"
                       />
