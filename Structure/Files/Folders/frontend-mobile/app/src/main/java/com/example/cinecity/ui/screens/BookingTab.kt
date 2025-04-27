@@ -24,44 +24,53 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.items
-
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import com.example.cinecity.data.model.Booking
+import com.example.cinecity.ui.viewmodel.BookingViewModel
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
 
 @Composable
-fun BookingTab() {
-    val background = Color(0xFF1C1C1C) // Light background like the image
-    val bookings = listOf(
-        Booking("BK1234", "Avengers: Endgame", "CineCity Mall", "Apr 12, 6:00 PM", "Confirmed", "GCash"),
-        Booking("BK5678", "Dune Part Two", "Ayala Center", "Apr 13, 8:30 PM", "Pending", "Credit Card"),
-        Booking("BK9012", "Oppenheimer", "SM Seaside", "Apr 14, 7:00 PM", "Cancelled", "PayPal"),
-        Booking("BK3234", "Paksiw", "Skina Japan", "Apr 15, 7:00 PM", "Confirmed", "PayPal"),
-        Booking("BK1696", "Boanga", "Didto Ragud", "Apr 16, 7:00 PM", "Confirmed", "Cash")
-    )
+fun BookingTab(viewModel: BookingViewModel, navController: NavController) {
+    val background = Color(0xFF1C1C1C)
+    val bookings by viewModel.bookings.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val accentGreen = Color(0xFF33B85A)
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(background)
-            .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(bookings) { booking ->
-            BookingCard(booking)
+    LaunchedEffect(Unit) {
+        viewModel.fetchBookings()
+    }
+
+    if (isLoading) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(background),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator(color = accentGreen)
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(background)
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(bookings) { booking ->
+                BookingCard(booking = booking, navController = navController)
+            }
         }
     }
 }
 
-data class Booking(
-    val id: String,
-    val movie: String,
-    val cinema: String,
-    val dateTime: String,
-    val status: String,
-    val payment: String
-)
 
 @Composable
-fun BookingCard(booking: Booking) {
-
+fun BookingCard(booking: Booking, navController: NavController) {
     val green = Color(0xFF33B85A)
     val grayText = Color.Gray
 
@@ -69,24 +78,21 @@ fun BookingCard(booking: Booking) {
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF2D2D2D) // Replace this with your desired background color
-        )
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF2D2D2D))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
-                modifier = Modifier
-                .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Booking ID: ${booking.id}", fontWeight = FontWeight.Bold, color = green)
-                Text(booking.status, color = if (booking.status == "Confirmed") green else Color.Red)
+                Text("Booking ID: ${booking.bookingId}", fontWeight = FontWeight.Bold, color = green)
+                Text(booking.status, color = if (booking.status == "success") green else Color.Red)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(booking.movie, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
-            Text(booking.cinema, color = grayText)
+            Text(booking.showtime.movie.title, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Text(booking.showtime.cinema.cinema_name, color = grayText)
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -94,20 +100,26 @@ fun BookingCard(booking: Booking) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(booking.dateTime, fontSize = 14.sp, color = grayText)
-                Text("Paid via: ${booking.payment}", fontSize = 14.sp, color = grayText)
+                Text("${booking.showtime.date} ${booking.showtime.time}", fontSize = 14.sp, color = grayText)
+                Text("Paid via: ${booking.paymentMethod}", fontSize = 14.sp, color = grayText)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             Button(
-                onClick = { /* Placeholder for view ticket */ },
+                onClick = {
+                    // Save the booking to the SavedStateHandle
+                    navController.currentBackStackEntry?.savedStateHandle?.set("selected_booking", booking)
+                    navController.navigate("ticket_screen")
+                },
                 modifier = Modifier.align(Alignment.End),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = green)
             ) {
                 Text("View Ticket", color = Color.White)
             }
+
+
         }
     }
 }

@@ -13,12 +13,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
+import com.example.cinecity.data.model.Booking
 import com.example.cinecity.data.model.ShowtimeDto
 import com.example.cinecity.data.repository.SeatRepository
 import com.example.cinecity.data.util.Resource
 import com.example.cinecity.ui.components.BottomNavBar
 import com.example.cinecity.ui.navigation.BottomNavItem
 import com.example.cinecity.ui.screens.SeatSelectionScreen
+import com.example.cinecity.ui.viewmodel.BookingViewModel
 import com.example.cinecity.ui.viewmodel.MovieViewModel
 
 @Composable
@@ -118,9 +120,26 @@ fun HomeScreen(
             }
 
 
+            composable(BottomNavItem.Bookings.route) {
+                val bookingViewModel: BookingViewModel = viewModel()
+                BookingTab(viewModel = bookingViewModel, navController = navController)
+            }
 
 
-            composable(BottomNavItem.Bookings.route) { BookingTab() }
+            composable("ticket_screen") {
+                val booking = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<Booking>("selected_booking")
+
+                if (booking != null) {
+                    TicketScreen(
+                        booking = booking,
+                        onClose = { navController.popBackStack() }
+                    )
+                } else {
+                    Text("Ticket not found.")
+                }
+            }
 
             composable(BottomNavItem.Profile.route) {
                 ProfileTab(

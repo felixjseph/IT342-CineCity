@@ -98,7 +98,7 @@ fun MovieDetailsScreen(
 
         // Poster
         AsyncImage(
-            model = "http://192.168.254.100:8080/movie/${movie.id}/cover",
+            model = "https://it342-cinecity.onrender.com/movie/${movie.id}/cover",
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

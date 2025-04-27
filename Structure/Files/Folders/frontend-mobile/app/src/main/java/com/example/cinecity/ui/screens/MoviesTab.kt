@@ -139,7 +139,7 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            val imageUrl = "http://192.168.254.100:8080/movie/${movie.id}/cover"
+            val imageUrl = "https://it342-cinecity.onrender.com/movie/${movie.id}/cover"
 
             val context = LocalContext.current
             val imageLoader = ImageLoader.Builder(context)
