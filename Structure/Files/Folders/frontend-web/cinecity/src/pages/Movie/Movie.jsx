@@ -14,6 +14,7 @@ export default function Movie() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [users, setUsers] = useState()
   const showtime2 = localStorage.getItem("showtime2") ? JSON.parse(localStorage.getItem("showtime2")) : null;
@@ -46,6 +47,7 @@ export default function Movie() {
 
   const fetchMovies = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${import.meta.env.VITE_DATA_URL}/movie`, {
         credentials: 'include'
       })
@@ -59,6 +61,8 @@ export default function Movie() {
       }
     } catch (error) {
       toast.error(error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -175,7 +179,7 @@ export default function Movie() {
             {genres.map((genre) => (
               <li key={genre.id}>
                 <button
-                  className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between ${
+                  className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between cursor-pointer ${
                     selectedGenres.includes(genre.id)
                       ? "bg-green-500 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white"
@@ -236,7 +240,22 @@ export default function Movie() {
           </div>
         </div>
         <div className="p-4 mx-auto lg:max-w-6xl md:max-w-4xl">
-          {filteredMovies.length > 0 ? (
+          {isLoading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              {[...Array(8)].map((_, index) => (
+                <div key={index} className="bg-[#2E2F33] h-full flex flex-col rounded overflow-hidden shadow-md animate-pulse">
+                  <div className="w-full h-64 bg-gray-700"></div>
+                  <div className="p-4">
+                    <div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
+                    <div className="h-4 bg-gray-700 rounded w-1/2"></div>
+                  </div>
+                  <div className="min-h-[50px] p-4 !pt-0">
+                    <div className="h-10 bg-gray-700 rounded w-full"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredMovies.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {filteredMovies.map((movie) => (
                 <div
