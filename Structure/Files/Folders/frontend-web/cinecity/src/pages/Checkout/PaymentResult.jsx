@@ -10,7 +10,7 @@ export default function PaymentResult() {
     const showtime2 = localStorage.getItem("showtime2") ? JSON.parse(localStorage.getItem("showtime2")) : null;
     const paymentMethod = localStorage.getItem("paymentMethod") ? JSON.parse(localStorage.getItem("paymentMethod")) : null;
 
-    const calledRef = useRef(false); // 🛡️ guard for duplicate calls
+    const calledRef = useRef(false);
 
     useEffect(() => {
         fetchUser();
@@ -27,6 +27,7 @@ export default function PaymentResult() {
             }
         } catch (error) {
             console.error("Error fetching user:", error);
+            setLoading(false);
         }
     };
 
@@ -36,8 +37,10 @@ export default function PaymentResult() {
             const paymentIntent = queryParams.get("payment_intent_id");
 
             if (paymentIntent) {
-                calledRef.current = true; // 🛡️ Prevent double calling
+                calledRef.current = true;
                 retrievePaymentIntent(paymentIntent);
+            } else {
+                setLoading(false);
             }
         }
     }, [users]);
@@ -51,17 +54,16 @@ export default function PaymentResult() {
             if (response.ok) {
                 const data = await response.json();
                 if (data.data.attributes.status === "succeeded") {
-                    if (status !== "success") {
-                        await handleBooking("success");
-                    }
+                    await handleBooking("success");
                 } else {
-                    if (status !== "failed") {
-                        await handleBooking("failed");
-                    }
+                    await handleBooking("failed");
                 }
+            } else {
+                await handleBooking("failed");
             }
         } catch (error) {
             console.log("Error retrieving payment intent:", error);
+            await handleBooking("failed");
         }
     };
 
@@ -79,13 +81,10 @@ export default function PaymentResult() {
             }
         } catch (error) {
             console.error(error);
-        } finally {
-            setLoading(false);
         }
     };
 
     const handleBooking = async (bookingStatus) => {
-        setStatus(bookingStatus);
         try {
             if (Array.isArray(seats) && seats.length > 0) {
                 for (const seat of seats) {
@@ -117,9 +116,11 @@ export default function PaymentResult() {
             }
         } catch (error) {
             console.error("Error during booking: ", error);
+        } finally {
+            setStatus(bookingStatus);
+            setLoading(false);
         }
     };
-
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
@@ -164,12 +165,12 @@ export default function PaymentResult() {
                             </h1>
                             <p className="mt-4 text-lg text-gray-800 dark:text-gray-300">
                                 {status === "success" 
-                                    ? "Thank you for your purchase."
-                                    : "Sorry, your payment has failed."}
+                                    ? "Thank you for your purchase. Your tickets have been booked successfully."
+                                    : "Sorry, your payment has failed. Please try again or contact support."}
                             </p>
                             <p className="mt-4 text-sm text-gray-700 dark:text-gray-400">
                                 If you have any questions or need further assistance, feel free to contact us at:
-                                <a href="mailto:admin@eliteai.tools" className="font-medium text-indigo-600 dark:text-indigo-400 underline">
+                                <a href="mailto:alprincegwapo@gmail.com" className="font-medium text-indigo-600 dark:text-indigo-400 underline">
                                     alprincegwapo@gmail.com
                                 </a>
                             </p>
