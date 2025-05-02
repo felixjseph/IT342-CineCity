@@ -113,7 +113,7 @@ export default function NavBarNew() {
                                     className="flex flex-wrap items-center justify-center gap-4 cursor-pointer"
                                     onClick={() => navigate('/userprofile')} // Redirect to /userprofile
                                 >
-                                    <img src="https://readymadeui.com/team-1.webp" className="w-12 h-12 rounded-full" alt="User Avatar" />
+                                    <img src="images/profile-icon.png" className="w-10 h-10 rounded-full" alt="User Avatar" />
                                     <div>
                                         <p className="text-[15px] text-white font-semibold">{user.email}</p>
                                         <p className="text-xs text-slate-500 mt-0.5">{user.email}</p>

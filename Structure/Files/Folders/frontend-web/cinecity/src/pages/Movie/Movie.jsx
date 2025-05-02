@@ -150,7 +150,7 @@ export default function Movie() {
 
   const clearFilters = () => {
     setSelectedGenres([]);
-    setSearchTerm("")
+    setSearchTerm("");
   };
 
   const handleSearch = () => {
@@ -158,43 +158,63 @@ export default function Movie() {
   };
 
   return (
-    <div className="flex text-white " style={{ height: `calc(100vh - 82px)` }}>
-      <nav className="shadow-md border-r border-opacity-50 h-full min-w-[250px] py-6 px-4 overflow-auto">
+    <div className="flex text-white" style={{ height: `calc(100vh - 82px)` }}>
+      <nav className="shadow-md border-r border-gray-700 h-full min-w-[250px] py-6 px-4 overflow-auto bg-[#1c1c1c]">
         <div className="mt-4">
-          <div className="flex justify-between items-center mt-4">
-            <h6 className="text-green-600 text-sm font-semibold px-4">Genres</h6>
+          <div className="flex justify-between items-center mb-4">
+            <h6 className="text-green-500 text-lg font-semibold">Genres</h6>
             <button
-              className="text-sm text-white hover:bg-red-600 px-2 py-1/50 rounded-full transition duration-200"
+              className="text-sm text-gray-400 hover:text-white hover:bg-gray-700 px-3 py-1 rounded-full transition duration-200 flex items-center gap-1"
               onClick={clearFilters}
             >
+              <FaTrash className="text-xs" />
               Reset
             </button>
           </div>
-          <ul className="mt-2 space-y-1">
+          <ul className="space-y-2">
             {genres.map((genre) => (
               <li key={genre.id}>
-                <div
-                  className="text-white font-medium text-[15px] block hover:text-slate-900 hover:bg-gray-100 rounded px-4 py-2 transition-all cursor-pointer"
+                <button
+                  className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between ${
+                    selectedGenres.includes(genre.id)
+                      ? "bg-green-500 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                  }`}
                   onClick={() => toggleGenre(genre.id)}
                 >
-                  {genre.genreName}
-                </div>
+                  <span className="font-medium">{genre.genreName}</span>
+                  {selectedGenres.includes(genre.id) && (
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                </button>
               </li>
             ))}
           </ul>
         </div>
       </nav>
-      <div className="w-full p-7 overflow-y-auto">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center text-4xl font-bold text-[#FFF]">
-            <PiFilmSlateFill className="mr-1 text-green-500" />
+      <div className="w-full p-7 overflow-y-auto bg-[#1c1c1c]">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center text-4xl font-bold text-white">
+            <PiFilmSlateFill className="mr-2 text-green-500" />
             MOVIES
           </div>
           <div className="flex justify-end w-full">
             <div className="flex overflow-hidden rounded-2xl w-4/15">
               <input
                 type="text"
-                placeholder="Search Something..."
+                placeholder="Search movies..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => {
@@ -202,13 +222,14 @@ export default function Movie() {
                     handleSearch();
                   }
                 }}
-                className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3"
+                className="w-full outline-none bg-[#2E2F33] text-white text-sm px-4 py-3 placeholder-gray-400"
               />
               <button
                 type="button"
-                className="flex items-center justify-center bg-green-600 px-5 text-sm text-white cursor-pointer"
+                className="flex items-center justify-center bg-green-600 px-5 text-sm text-white cursor-pointer hover:bg-green-700 transition duration-200"
                 onClick={handleSearch}
               >
+                <IoSearchSharp className="mr-1" />
                 Search
               </button>
             </div>

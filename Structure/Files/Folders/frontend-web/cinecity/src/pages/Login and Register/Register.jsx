@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Register() {
 
     const navigate = useNavigate();
-
+    const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -42,14 +42,17 @@ export default function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         if (registerUser.password.length < 8) {
             toast.error("Password must be atleast 8 characters long")
+            setIsLoading(false);
             return;
         }
 
         if (!validateEmail(registerUser.email)) {
             toast.error("Invalid email address")
+            setIsLoading(false);
             return;
         }
 
@@ -83,6 +86,8 @@ export default function Register() {
         } catch (error) {
             console.log(error);
             toast.error("An error occurred. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -98,9 +103,10 @@ export default function Register() {
                     <div className="space-y-6">
                         <div>
                             <label className="text-white text-sm font-medium mb-2 block">Username</label>
-                            <input name="username" type="text" className="text-white border border-slate-500 w-full text-sm px-4 py-3 rounded-md outline-white-500" placeholder="Enter email"
+                            <input name="username" type="text" className="text-white border border-slate-500 w-full text-sm px-4 py-3 rounded-md outline-white-500" placeholder="Enter username"
                                 onChange={handleChange}
                                 value={registerUser.username}
+                                disabled={isLoading}
                             />
                         </div>
                         <div>
@@ -108,6 +114,7 @@ export default function Register() {
                             <input name="email" type="email" className="text-white border border-slate-500 w-full text-sm px-4 py-3 rounded-md outline-whte-500" placeholder="Enter email"
                                 onChange={handleChange}
                                 value={registerUser.email}
+                                disabled={isLoading}
                             />
                         </div>
                         <div>
@@ -115,14 +122,27 @@ export default function Register() {
                             <input name="password" type="password" className="text-white border border-slate-500 w-full text-sm px-4 py-3 rounded-md outline-white-500" placeholder="Enter password"
                                 onChange={handleChange}
                                 value={registerUser.password}
+                                disabled={isLoading}
                             />
                         </div>
 
                     </div>
 
                     <div className="mt-12">
-                        <button className="w-full py-3 px-4 text-sm tracking-wider font-medium rounded-md text-white bg-green-600 cursor-pointer hover:bg-green-700 focus:outline-none">
-                            Create an account
+                        <button 
+                            type="submit"
+                            disabled={isLoading}
+                            className={`w-full py-3 px-4 text-sm tracking-wider font-medium rounded-md text-white bg-green-600 cursor-pointer hover:bg-green-700 focus:outline-none ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+                        >
+                            {isLoading ? (
+                                <div className="flex items-center justify-center">
+                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Creating account...
+                                </div>
+                            ) : 'Create an account'}
                         </button>
                     </div>
                     <p className="text-white text-sm mt-6 text-center">Already have an account? <a href="javascript:void(0);" className="text-green-600 font-medium hover:underline ml-1" onClick={() => navigate('/newlogin')}>Login here</a></p>
