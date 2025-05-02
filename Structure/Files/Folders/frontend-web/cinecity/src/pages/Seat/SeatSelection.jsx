@@ -182,7 +182,27 @@ export default function SeatSelection() {
         });
     };
 
-    const groupedSeats = seats.reduce((acc, seat) => {
+    const generateSeats = () => {
+        const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+        const seatsPerRow = 10;
+        const generatedSeats = [];
+
+        rows.forEach(row => {
+            for (let i = 1; i <= seatsPerRow; i++) {
+                const seatNo = `${row}${i}`;
+                const existingSeat = seats.find(s => s.seatNo === seatNo);
+                generatedSeats.push({
+                    seatId: existingSeat?.seatId || `seat-${row}-${i}`,
+                    seatNo: seatNo,
+                    isAvailable: existingSeat?.isAvailable ?? true
+                });
+            }
+        });
+
+        return generatedSeats;
+    };
+
+    const groupedSeats = generateSeats().reduce((acc, seat) => {
         const row = seat.seatNo[0];
         if (!acc[row]) acc[row] = [];
         acc[row].push(seat);
@@ -190,8 +210,8 @@ export default function SeatSelection() {
     }, {});
 
     return (
-        <div className={`flex h-screen text-white`}>
-            <div className="w-[25%] p-8 border-r border-gray-600 flex flex-col items-center overflow-y-auto">
+        <div className="flex h-screen text-white bg-[#1c1c1c]">
+            <div className="w-[25%] p-8 border-r border-gray-700 flex flex-col items-center overflow-y-auto">
                 <img
                     src={`${import.meta.env.VITE_DATA_URL}/movie/${movie.id}/cover?timestamp=${new Date().getTime()}`}
                     alt={`${movie.title} cover`}
@@ -206,9 +226,9 @@ export default function SeatSelection() {
                 <div className="mt-8 w-full">
                     <select
                         onChange={(e) => setShow(e.target.value)}
-                        className="w-full p-2 bg-gray-800 text-white rounded border border-gray-700"
+                        className="w-full p-2 bg-[#2E2F33] text-white rounded border border-gray-700 focus:border-green-500 focus:ring-1 focus:ring-green-500"
                     >
-                        <option>Select showtime</option>
+                        <option value="" className="text-gray-400">Select showtime</option>
                         {showtime.map((mshow) => {
                             const formattedDate = new Intl.DateTimeFormat('en-US', {
                                 year: 'numeric',
@@ -230,14 +250,15 @@ export default function SeatSelection() {
                         })}
                     </select>
                 </div>
-                <div className="mt-6">
-                    <h2 className="text-xl font-bold mb-2">Selected Seats:</h2>
+
+                <div className="mt-6 w-full">
+                    <h2 className="text-xl font-bold mb-2 text-green-400">Selected Seats:</h2>
                     {selectedSeats.length > 0 ? (
                         <div className="flex flex-wrap gap-2">
                             {selectedSeats.map((seat) => (
                                 <span
                                     key={seat.seatId}
-                                    className="px-3 py-1 bg-green-500 text-white rounded"
+                                    className="px-3 py-1 bg-green-500 text-white rounded-full text-sm"
                                 >
                                     {seat.seatNo}
                                 </span>
@@ -247,72 +268,77 @@ export default function SeatSelection() {
                         <p className="text-gray-400">No seats selected</p>
                     )}
                 </div>
+
                 <button
                     onClick={handlePayment}
-                    disabled={loading}
-                    className="px-2 flex items-center justify-center py-2 mt-4 w-full rounded bg-green-700 cursor-pointer hover:bg-green-400"
+                    disabled={loading || selectedSeats.length === 0}
+                    className={`px-4 py-2 mt-6 w-full rounded-lg flex items-center justify-center gap-2 transition duration-200 ${
+                        loading || selectedSeats.length === 0
+                            ? 'bg-gray-700 cursor-not-allowed'
+                            : 'bg-green-600 hover:bg-green-700'
+                    }`}
                 >
-                    Proceed to payment {loading && (
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 animate-[spin_0.8s_linear_infinite] fill-blue-600 block mx-auto"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z"
-                                data-original="#000000" />
+                    {loading ? (
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                    )}
-
+                    ) : null}
+                    Proceed to Payment
                 </button>
             </div>
 
             <div className="w-full p-7 flex flex-col items-center">
-                <h2 className="text-4xl font-bold mb-[2rem] mt-3">Seat Selection</h2>
+                <h2 className="text-4xl font-bold mb-8 text-green-400">Seat Selection</h2>
 
                 {show ? (
                     <>
-                        <div className="flex justify-around items-center mb-6">
-                            <div className="flex flex-col items-center mx-4 text-gray-200">
-                                <h1>Available</h1>
-                                <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-gray-500 rounded"></div>
+                        <div className="flex justify-center gap-8 mb-8">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 bg-gray-500 rounded"></div>
+                                <span className="text-gray-300">Available</span>
                             </div>
-                            <div className="flex flex-col items-center mx-4 text-gray-200">
-                                <h1>Selected</h1>
-                                <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-green-500 rounded"></div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 bg-green-500 rounded"></div>
+                                <span className="text-gray-300">Selected</span>
                             </div>
-                            <div className="flex flex-col items-center mx-4 text-gray-200">
-                                <h1>Not Available</h1>
-                                <div className="mt-3 w-[1.5rem] h-[1.5rem] bg-red-500 rounded"></div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 bg-red-500 rounded"></div>
+                                <span className="text-gray-300">Not Available</span>
                             </div>
                         </div>
 
-                        <div className="w-[50%] h-[1.2rem] bg-green-500 rounded-xl shadow-lg mb-6"></div>
+                        <div className="w-[60%] h-4 bg-green-500 rounded-xl shadow-lg mb-8"></div>
 
-                        <div className="grid grid-cols-11 gap-2 mb-2 items-center">
-                            <span className="w-12 text-center font-bold"></span>
+                        <div className="ml-10 grid grid-cols-10 gap-7.5 mb-4">
                             {[...Array(10)].map((_, i) => (
-                                <span key={i} className="w-10 text-center font-bold">{i + 1}</span>
+                                <span key={i} className="text-center font-bold text-gray-400">{i + 1}</span>
                             ))}
                         </div>
 
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-4">
                             {Object.keys(groupedSeats)
                                 .sort()
                                 .map((row) => (
-                                    <div key={row} className="grid grid-cols-11 gap-2 items-center">
-                                        <span className="w-10 text-center font-bold">{row}</span>
-                                        {groupedSeats[row]
-                                            .sort((a, b) => a.seatNo.localeCompare(b.seatNo))
-                                            .map((seat) => (
+                                    <div key={row} className="flex items-center gap-4">
+                                        <span className="w-6 text-center font-bold text-gray-400">{row}</span>
+                                        <div className="grid grid-cols-10 gap-4">
+                                            {groupedSeats[row].map((seat) => (
                                                 <button
                                                     key={seat.seatId}
-                                                    disabled={!seat.isAvailable} // Disable the button if the seat is not available
+                                                    disabled={!seat.isAvailable}
                                                     onClick={() => toggleSeatSelection(seat)}
-                                                    className={`w-7 h-7 rounded flex items-center justify-center
-                                        ${!seat.isAvailable ? "bg-red-500 cursor-not-allowed" :
-                                                            selectedSeats.some((s) => s.seatId === seat.seatId) ? "bg-green-500 cursor-pointer" :
-                                                                "bg-gray-500 cursor-pointer"}`}
+                                                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition duration-200 ${
+                                                        !seat.isAvailable
+                                                            ? 'bg-red-500 cursor-not-allowed'
+                                                            : selectedSeats.some((s) => s.seatId === seat.seatId)
+                                                                ? 'bg-green-500 hover:bg-green-600'
+                                                                : 'bg-gray-500 hover:bg-gray-600'
+                                                    }`}
                                                 >
                                                 </button>
                                             ))}
+                                        </div>
                                     </div>
                                 ))}
                         </div>
@@ -323,6 +349,7 @@ export default function SeatSelection() {
                     </div>
                 )}
             </div>
+
             {paymentData && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
                     <div className="relative bg-[#1E1E1E] h-[80%] flex flex-col w-[50%] rounded p-6 px-25 overflow-y-auto">
