@@ -328,7 +328,7 @@ export default function SeatSelection() {
                                                     key={seat.seatId}
                                                     disabled={!seat.isAvailable}
                                                     onClick={() => toggleSeatSelection(seat)}
-                                                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition duration-200 ${
+                                                    className={`cursor-pointer w-8 h-8 rounded-lg flex items-center justify-center transition duration-200 ${
                                                         !seat.isAvailable
                                                             ? 'bg-red-500 cursor-not-allowed'
                                                             : selectedSeats.some((s) => s.seatId === seat.seatId)
