@@ -56,13 +56,19 @@ export default function PaymentResult() {
                 if (data.data.attributes.status === "succeeded") {
                     await handleBooking("success");
                 } else {
+                    setStatus("failed");
+                    setLoading(false);
                     await handleBooking("failed");
                 }
             } else {
+                setStatus("failed");
+                setLoading(false);
                 await handleBooking("failed");
             }
         } catch (error) {
-            console.log("Error retrieving payment intent:", error);
+            console.error("Error retrieving payment intent:", error);
+            setStatus("failed");
+            setLoading(false);
             await handleBooking("failed");
         }
     };
