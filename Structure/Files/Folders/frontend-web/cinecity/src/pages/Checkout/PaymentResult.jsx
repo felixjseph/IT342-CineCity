@@ -178,7 +178,7 @@ export default function PaymentResult() {
                 </div>
                 <button 
                     className="mt-8 text-center"
-                    onClick={() => navigate('/home')}
+                    onClick={() => navigate('/movies')}
                     disabled={loading}
                 >
                     <a
