@@ -83,6 +83,12 @@ export default function PaymentResult() {
             setLoading(false);
         }
     };
+    
+    {loading && (
+        <div className="text-center text-gray-700 dark:text-gray-200">
+          <p className="text-lg">Processing your payment, please wait...</p>
+        </div>
+      )}
 
     const handleBooking = async (bookingStatus) => {
         setStatus(bookingStatus);
@@ -104,22 +110,22 @@ export default function PaymentResult() {
                         }),
                         credentials: 'include'
                     });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (bookingStatus === "success") {
-                            await updateSeatAvailability();
-                        }
-                    } else {
+    
+                    if (response.ok && bookingStatus === "success") {
+                        await updateSeatAvailability();
+                    } else if (!response.ok) {
                         console.log("Booking failed for seat: ", seat.seatNo);
                     }
                 }
             }
         } catch (error) {
             console.error("Error during booking: ", error);
+        } finally {
+            // ✅ Always stop loading, no matter the outcome
+            setLoading(false);
         }
     };
-
+      
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
@@ -156,7 +162,7 @@ export default function PaymentResult() {
                     </p>
                 </div>
                 <button className="mt-8 text-center"
-                    onClick={() => navigate('/home')}
+                    onClick={() => navigate('/movies')}
                 >
                     <a
                         className="inline-block px-6 py-2 text-lg font-medium text-white transition-transform rounded-full shadow-lg bg-gradient-to-r from-indigo-600 to-blue-600 hover:scale-105 hover:from-indigo-700 hover:to-blue-700 dark:from-indigo-500 dark:to-blue-500 dark:hover:from-indigo-600 dark:hover:to-blue-600">
