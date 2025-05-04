@@ -67,16 +67,41 @@ public class AuthenticationController {
     }
     
     @GetMapping("/check")
-    public ResponseEntity<Boolean> checkLogin(HttpServletRequest request) {
-        String jwt = getJwtFromCookies(request);
-        if (jwt != null) {
-            String username = jwtService.extractUsername(jwt);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                return ResponseEntity.ok(true);
+    public ResponseEntity<Boolean> checkLogin(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String jwt = getJwtFromCookies(request);
+            if (jwt == null) {
+                return ResponseEntity.ok(false);
             }
+
+            // Check if token is expired
+            if (jwtService.isTokenExpired(jwt)) {
+                // Clear the expired token cookie
+                Cookie cookie = new Cookie("token", null);
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                cookie.setDomain(request.getServerName());
+                response.addCookie(cookie);
+                return ResponseEntity.ok(false);
+            }
+
+            String username = jwtService.extractUsername(jwt);
+            if (username == null) {
+                return ResponseEntity.ok(false);
+            }
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (!jwtService.isTokenValid(jwt, userDetails)) {
+                return ResponseEntity.ok(false);
+            }
+
+            return ResponseEntity.ok(true);
+        } catch (Exception e) {
+            // If any exception occurs during token validation, return false
+            return ResponseEntity.ok(false);
         }
-        return ResponseEntity.ok(false);
     }
 
     @PostMapping("/logout")
