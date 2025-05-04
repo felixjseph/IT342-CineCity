@@ -16,44 +16,40 @@ export default function UserProfile() {
 
     const handleLogout = async () => {
         try {
+            // First, clear all local state and storage
+            setUser({
+                usernameField: "",
+                email: "",
+                password: ""
+            });
+            setBookings([]);
+            setSelectedTicket(null);
+            
+            // Clear all relevant localStorage items
+            localStorage.clear(); // This will clear all items, but you can be specific if needed
+            
+            // Call the logout endpoint
             const response = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/logout`, {
                 method: "POST",
-                credentials: 'include', // Make sure cookies are sent
+                credentials: 'include',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
             });
     
             if (response.ok) {
-                // Clear session data
-                setUser({
-                    usernameField: "",
-                    email: "",
-                    password: ""
-                });
-                setBookings([]); // Clear bookings
-                setSelectedTicket(null); // Clear selected ticket
-    
-                // Optionally clear localStorage if used
-                localStorage.removeItem("showtime");
-                localStorage.removeItem("movie");
-                localStorage.removeItem("paymentMethod");
-    
-                // Now check authentication status again
-                const authCheckResponse = await fetch(`${import.meta.env.VITE_DATA_URL}/auth/check`, {
-                    credentials: 'include' // Send cookies for auth check
-                });
-    
-                const isAuthenticated = await authCheckResponse.json();
-    
-                if (!isAuthenticated) {
-                    // If not authenticated, navigate to login page
-                    navigate('/newlogin');
-                } else {
-                    console.log('User is still authenticated.');
-                }
+                // Force a hard reload to clear any cached auth state
+                window.location.href = '/newlogin';
             } else {
-                console.log("Error during logout.");
+                console.error("Logout failed:", await response.text());
+                // Still redirect to login even if the server request fails
+                window.location.href = '/newlogin';
             }
         } catch (error) {
-            console.log("Error during logout:", error);
+            console.error("Error during logout:", error);
+            // Still redirect to login even if there's an error
+            window.location.href = '/newlogin';
         }
     };
     
@@ -62,35 +58,61 @@ export default function UserProfile() {
         setIsLoadingUser(true);
         try {
             const response = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
             });
+            
+            if (response.status === 401) {
+                // Unauthorized - redirect to login
+                navigate('/newlogin');
+                return;
+            }
+            
             const data = await response.json();
             if (response.ok) {
                 setUser(data);
             } else {
-                console.log("Error fetching user data:", data);
+                console.error("Error fetching user data:", data);
+                // Handle error appropriately
             }
         } catch (error) {
-            console.log(error);
+            console.error("Error fetching user data:", error);
+            // Handle error appropriately
         } finally {
             setIsLoadingUser(false);
         }
     };
-
+    
     const fetchBookings = async () => {
         setIsLoadingBookings(true);
         try {
             const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings/userbookings`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
             });
+            
+            if (response.status === 401) {
+                // Unauthorized - redirect to login
+                navigate('/newlogin');
+                return;
+            }
+            
             const data = await response.json();
             if (response.ok) {
                 setBookings(data);
             } else {
-                console.log("Error fetching bookings:", data);
+                console.error("Error fetching bookings:", data);
+                // Handle error appropriately
             }
         } catch (error) {
-            console.log(error);
+            console.error("Error fetching bookings:", error);
+            // Handle error appropriately
         } finally {
             setIsLoadingBookings(false);
         }

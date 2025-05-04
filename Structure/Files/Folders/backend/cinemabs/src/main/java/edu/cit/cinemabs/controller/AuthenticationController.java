@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @RequestMapping("/auth")
 @RestController
@@ -81,11 +82,21 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         // Clear the JWT cookie
-        Cookie cookie = new Cookie("token", null);  // Assuming the cookie name is 'token'
-        cookie.setHttpOnly(true);  // Make sure it's not accessible via JavaScript
-        cookie.setPath("/");  // Set to the same path as the token cookie
-        cookie.setMaxAge(0);  // Set the cookie's expiration to the past to invalidate it
+        Cookie cookie = new Cookie("token", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        cookie.setDomain(request.getServerName());
         response.addCookie(cookie);
+
+        // Clear the authentication context
+        SecurityContextHolder.clearContext();
+
+        // Add cache control headers
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
 
         return ResponseEntity.noContent().build();
     }
