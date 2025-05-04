@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function PaymentResult() {
     const navigate = useNavigate();
-    const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState();
     const [status, setStatus] = useState(null);
@@ -14,41 +13,37 @@ export default function PaymentResult() {
     const calledRef = useRef(false);
 
     useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const paymentIntent = queryParams.get("payment_intent_id");
+        fetchUser();
+    }, []);
 
-        if (!paymentIntent) {
+    const fetchUser = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`, {
+                credentials: "include",
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setUsers(data);
+            }
+        } catch (error) {
+            console.error("Error fetching user:", error);
             setLoading(false);
-            setStatus("failed");
-            return;
         }
+    };
 
-        const initializePayment = async () => {
-            try {
-                const userResponse = await fetch(`${import.meta.env.VITE_DATA_URL}/users/me`, {
-                    credentials: "include",
-                });
-                
-                if (!userResponse.ok) {
-                    throw new Error("Failed to fetch user data");
-                }
+    useEffect(() => {
+        if (users && !calledRef.current) {
+            const queryParams = new URLSearchParams(location.search);
+            const paymentIntent = queryParams.get("payment_intent_id");
 
-                const userData = await userResponse.json();
-                setUsers(userData);
-
-                if (!calledRef.current) {
-                    calledRef.current = true;
-                    await retrievePaymentIntent(paymentIntent);
-                }
-            } catch (error) {
-                console.error("Error initializing payment:", error);
-                setStatus("failed");
+            if (paymentIntent) {
+                calledRef.current = true;
+                retrievePaymentIntent(paymentIntent);
+            } else {
                 setLoading(false);
             }
-        };
-
-        initializePayment();
-    }, [location.search]);
+        }
+    }, [users]);
 
     const retrievePaymentIntent = async (paymentIntentId) => {
         try {
@@ -56,80 +51,80 @@ export default function PaymentResult() {
                 credentials: 'include',
             });
 
-            if (!response.ok) {
-                throw new Error("Failed to retrieve payment intent");
-            }
-
-            const data = await response.json();
-            const paymentStatus = data.data.attributes.status;
-
-            if (paymentStatus === "succeeded") {
-                await handleBooking("success");
+            if (response.ok) {
+                const data = await response.json();
+                if (data.data.attributes.status === "succeeded") {
+                    await handleBooking("success");
+                } else {
+                    setStatus("failed");
+                    setLoading(false);
+                    await handleBooking("failed");
+                }
             } else {
                 setStatus("failed");
+                setLoading(false);
                 await handleBooking("failed");
             }
         } catch (error) {
             console.error("Error retrieving payment intent:", error);
             setStatus("failed");
-            await handleBooking("failed");
-        } finally {
             setLoading(false);
+            await handleBooking("failed");
+        }
+    };
+
+    const updateSeatAvailability = async () => {
+        try {
+            for (const seat of seats) {
+                const response = await fetch(`${import.meta.env.VITE_DATA_URL}/seats/${seat.seatId}`, {
+                    method: "PUT",
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("Seat updated: ", data);
+                }
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
 
     const handleBooking = async (bookingStatus) => {
-        if (!Array.isArray(seats) || seats.length === 0 || !showtime2 || !users) {
-            console.error("Missing required data for booking");
-            return;
-        }
-
         try {
-            for (const seat of seats) {
-                const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings`, {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        showtime: { movieCinemaId: showtime2.movieCinemaId },
-                        user: { userId: users.userId },
-                        seat: { seatId: seat.seatId },
-                        amount: showtime2.price,
-                        status: bookingStatus,
-                        paymentMethod: paymentMethod?.type
-                    }),
-                    credentials: 'include'
-                });
+            if (Array.isArray(seats) && seats.length > 0) {
+                for (const seat of seats) {
+                    const response = await fetch(`${import.meta.env.VITE_DATA_URL}/api/bookings`, {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            showtime: { movieCinemaId: showtime2.movieCinemaId },
+                            user: { userId: users?.userId },
+                            seat: { seatId: seat.seatId },
+                            amount: showtime2.price,
+                            status: bookingStatus,
+                            paymentMethod: paymentMethod?.type
+                        }),
+                        credentials: 'include'
+                    });
 
-                if (!response.ok) {
-                    console.error("Booking failed for seat:", seat.seatNo);
-                    continue;
-                }
-
-                if (bookingStatus === "success") {
-                    await updateSeatAvailability(seat);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (bookingStatus === "success") {
+                            await updateSeatAvailability();
+                        }
+                    } else {
+                        console.log("Booking failed for seat: ", seat.seatNo);
+                    }
                 }
             }
         } catch (error) {
-            console.error("Error during booking:", error);
+            console.error("Error during booking: ", error);
         } finally {
             setStatus(bookingStatus);
-        }
-    };
-
-    const updateSeatAvailability = async (seat) => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_DATA_URL}/seats/${seat.seatId}`, {
-                method: "PUT",
-                credentials: 'include'
-            });
-            
-            if (!response.ok) {
-                console.error("Failed to update seat availability:", seat.seatId);
-            }
-        } catch (error) {
-            console.error("Error updating seat:", error);
+            setLoading(false);
         }
     };
 
