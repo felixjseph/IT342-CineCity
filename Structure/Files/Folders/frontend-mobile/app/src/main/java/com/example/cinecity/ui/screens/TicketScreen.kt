@@ -21,97 +21,123 @@ import androidx.compose.material3.Card
 
 @Composable
 fun TicketScreen(
-    booking: Booking,  // Receiving booking directly from NavController
+    booking: Booking,
     onClose: () -> Unit
 ) {
-    val background = Color(0xFF1E1F25)
+    val background = Color(0xFF121212)
+    val cardColor = Color(0xFF1E1F25)
     val green = Color(0xFF33B85A)
-    val grayText = Color.Gray
+    val grayText = Color(0xFFB0B0B0)
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.4f))
+            .background(background)
             .padding(24.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = cardColor),
+            elevation = CardDefaults.cardElevation(6.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .width(320.dp)
-                .background(background)
+                .widthIn(max = 360.dp)
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                // Booking ID and Status
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .fillMaxWidth()
+            ) {
+                // Header Row
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        "Booking ID: ${booking.bookingId}",
+                        text = "Booking ID: ${booking.bookingId}",
+                        color = green,
                         fontWeight = FontWeight.Bold,
-                        color = green
+                        fontSize = 14.sp
                     )
                     Text(
-                        booking.status,
-                        color = if (booking.status == "success") green else Color.Red
+                        text = booking.status,
+                        color = if (booking.status == "success") green else Color.Red,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp
                     )
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                // Movie title and cinema name
+                // Movie & Cinema
                 Text(
-                    booking.showtime.movie.title,
-                    fontSize = 18.sp,
+                    text = booking.showtime.movie.title,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
-                Text(booking.showtime.cinema.cinema_name, color = grayText)
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Showtime date, time, and payment method
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        "${booking.showtime.date} ${booking.showtime.time}",
-                        fontSize = 14.sp,
-                        color = grayText
-                    )
-                    Text("Paid via: ${booking.paymentMethod}", fontSize = 14.sp, color = grayText)
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Display selected seat(s)
                 Text(
-                    "Seat No: ${booking.seat.seatNo}",  // Display the seat number here
-                    fontSize = 16.sp,
-                    color = Color.White
+                    text = booking.showtime.cinema.cinema_name,
+                    color = grayText,
+                    fontSize = 14.sp
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Price display
-                Text("Amount: ₱${booking.amount}", fontSize = 16.sp, color = Color.White)
+                // Date & Time + Payment Method
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "${booking.showtime.date} ${booking.showtime.time}",
+                        fontSize = 14.sp,
+                        color = grayText
+                    )
+                    Text(
+                        text = "Paid via: ${booking.paymentMethod}",
+                        fontSize = 14.sp,
+                        color = grayText
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Seat Number
+                Text(
+                    text = "Seat No: ${booking.seat.seatNo}",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Amount
+                Text(
+                    text = "Amount: ₱${booking.amount}",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White
+                )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Close button
+                // Close Button
                 Button(
                     onClick = onClose,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = green)
                 ) {
-                    Text("Close", color = Color.White)
+                    Text("Close", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 }
             }
         }
     }
 }
+
 

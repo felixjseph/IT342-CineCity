@@ -110,13 +110,17 @@ fun HomeScreen(
                         duration = showtime.movie.duration,
                         onBack = { navController.popBackStack() },
                         onCheckout = { selectedSeats, selectedShowtimeId ->
-                            // Handle checkout
+                            navController.navigate("payment")
                         },
                         repository = SeatRepository(context)
                     )
                 } else {
                     Text("Showtime not found.")
                 }
+            }
+
+            composable("payment") {
+                PaymentScreen(onBack = { navController.navigate("home") })
             }
 
 
